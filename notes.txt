@@ -1,0 +1,19 @@
+flutter 2.10.5
+
+gradle-6.7-all
+
+
+JAVA : version "11.0.15" 2022-04-19 LTS
+
+flutter.minSdkVersion=21
+flutter.targetSdkVersion=32
+
+minSdkVersion localProperties.getProperty('flutter.minSdkVersion')
+targetSdkVersion localProperties.getProperty('flutter.targetSdkVersion')
+
+
+
+ ./gradlew signingReport
+
+/// ------------------------------ Latest Books -----------------------
+// --------------------------------------------------------------------

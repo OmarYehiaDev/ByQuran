@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "592593260692",
+    "project_id": "live-by-quran-app",
+    "storage_bucket": "live-by-quran-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592593260692:android:2b220e438dbb3b44882481",
+        "android_client_info": {
+          "package_name": "com.smart.live_by_quran"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592593260692-off4jjnag3rv4qbmi7fa6g9d269vkeo7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smart.live_by_quran",
+            "certificate_hash": "9757474ee16159c369a5a00128f1962d0fb6df82"
+          }
+        },
+        {
+          "client_id": "592593260692-ene5bja7eheaj9ht0hb9ec9u56qt617n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI-o6yciSc3VmX2gecRsMrQGdG8U_Ppp0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592593260692-ene5bja7eheaj9ht0hb9ec9u56qt617n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
