@@ -6,7 +6,7 @@ import 'package:welivewithquran/Views/test_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_social_container.dart';
 
-import '../Controller/auth_controller.dart';
+import '../controllers/auth_controller.dart';
 import 'sign_up_page.dart';
 
 class LoginScreen extends StatelessWidget {

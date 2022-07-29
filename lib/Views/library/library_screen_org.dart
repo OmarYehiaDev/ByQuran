@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:welivewithquran/Controller/ebook_controller.dart';
+import 'package:welivewithquran/Controllers/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
 import 'package:welivewithquran/Views/details_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
-class LibraryScreen extends StatelessWidget {
+import '../../services/books_ctrl.dart';
 
+class LibraryScreen extends StatelessWidget {
   final BookController _controller = Get.put(BookController());
+  final Books _books = Get.put(Books());
 
   // Declare a field that holds the eBook.
   //late final Ebook books;
@@ -24,7 +26,6 @@ class LibraryScreen extends StatelessWidget {
     'assets/images/sura_image3.png',
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -35,7 +36,7 @@ class LibraryScreen extends StatelessWidget {
           );
         }
         return RefreshIndicator(
-          onRefresh: _controller.getAll ,
+          onRefresh: _controller.getAll,
           child: Container(
             padding: EdgeInsets.zero,
             margin: EdgeInsets.zero,
@@ -52,8 +53,7 @@ class LibraryScreen extends StatelessWidget {
                 SizedBox(height: 70.h),
                 CustomText(text: 'المكتبة', fontSize: 38.sp),
                 Expanded(
-                  child:
-                  Padding(
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 7.0),
                     child: GridView.builder(
                         padding: EdgeInsets.zero,
@@ -65,20 +65,21 @@ class LibraryScreen extends StatelessWidget {
                           mainAxisExtent: 200,
                         ),
                         itemBuilder: (context, index) {
-                          return
-                            GestureDetector(
+                          return GestureDetector(
                             onTap: () {
                               Get.to(() => DetailsScreen(), arguments: [
                                 {'id': _controller.bookList[index].id},
-                                {'title': _controller.bookList[index].bookTitle},
+                                {
+                                  'title': _controller.bookList[index].bookTitle
+                                },
                                 {
                                   'bookCover':
                                       _controller.bookList[index].bookCoverImg
                                 },
                                 {'bookPages': _controller.bookList[index].id},
                                 {
-                                  'bookDescription':
-                                      _controller.bookList[index].bookDescription
+                                  'bookDescription': _controller
+                                      .bookList[index].bookDescription
                                 },
                                 {
                                   'bookFile':
@@ -92,10 +93,15 @@ class LibraryScreen extends StatelessWidget {
                                   'categoryName':
                                       _controller.bookList[index].categoryName
                                 },
+                              {
+                                  "book": _books.Ebooks[index],
+                                },
+                                {
+                                  "books": _books,
+                                },
                               ]);
                               // Navigator.of(context).push(_createRoute());
                             },
-
                             child: Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: Column(
@@ -107,21 +113,23 @@ class LibraryScreen extends StatelessWidget {
                                       color: mainColor,
                                       borderRadius: BorderRadius.circular(7),
                                     ),
-                                    child:
-                                    Center(
+                                    child: Center(
                                         child: Text(
                                       _controller.bookList[index].bookTitle,
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 16.sp,height: 1.0),
+                                          color: Colors.white,
+                                          fontSize: 16.sp,
+                                          height: 1.0),
                                     )),
                                   ),
-                                  SizedBox( height: 7.h),
+                                  SizedBox(height: 7.h),
                                   Expanded(
                                     child: SizedBox(
                                       height: 210.h,
                                       width: 130.w,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(7.0),
+                                        borderRadius:
+                                            BorderRadius.circular(7.0),
                                         child: Image.network(
                                           imagesUrl +
                                               _controller
@@ -165,15 +173,16 @@ class LibraryScreen extends StatelessWidget {
   //   );
   // }
 
-
   BoxDecoration borderSide() {
     return const BoxDecoration(
       border: Border(
-        left: BorderSide( //                   <--- left side
+        left: BorderSide(
+          //                   <--- left side
           color: Colors.black,
           width: 3.0,
         ),
-        top: BorderSide( //                    <--- top side
+        top: BorderSide(
+          //                    <--- top side
           color: Colors.black,
           width: 3.0,
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Controller/auth_controller.dart';
+import '../Controllers/auth_controller.dart';
 
 
 class WelcomePage extends StatelessWidget {

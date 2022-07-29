@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:welivewithquran/Controller/ebook_controller.dart';
+import 'package:welivewithquran/controllers/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
 import 'package:welivewithquran/Views/details_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
+import '../services/books_ctrl.dart';
+
 class LibraryScreen extends StatelessWidget {
   final BookController bookController = Get.put(BookController());
+  final Books _books = Get.put(Books());
 
   @override
   Widget build(BuildContext context) {
@@ -53,25 +56,34 @@ class LibraryScreen extends StatelessWidget {
                                         bookController.bookList[index].bookTitle
                                   },
                                   {
-                                    'bookCover':
-                                        bookController.bookList[index].bookCoverImg
+                                    'bookCover': bookController
+                                        .bookList[index].bookCoverImg
                                   },
-                                  {'bookPages': bookController.bookList[index].id},
+                                  {
+                                    'bookPages':
+                                        bookController.bookList[index].id
+                                  },
                                   {
                                     'bookDescription': bookController
                                         .bookList[index].bookDescription
                                   },
                                   {
-                                    'bookFile':
-                                        bookController.bookList[index].bookFileUrl
+                                    'bookFile': bookController
+                                        .bookList[index].bookFileUrl
                                   },
                                   {
-                                    'authorName':
-                                        bookController.bookList[index].authorName
+                                    'authorName': bookController
+                                        .bookList[index].authorName
                                   },
                                   {
-                                    'categoryName':
-                                        bookController.bookList[index].categoryName
+                                    'categoryName': bookController
+                                        .bookList[index].categoryName
+                                  },
+                                  {
+                                    "book": _books.Ebooks[index],
+                                  },
+                                  {
+                                    "books": _books,
                                   },
                                 ]);
                                 // Navigator.of(context).push(_createRoute());
@@ -89,7 +101,8 @@ class LibraryScreen extends StatelessWidget {
                                       ),
                                       child: Center(
                                           child: Text(
-                                        bookController.bookList[index].bookTitle,
+                                        bookController
+                                            .bookList[index].bookTitle,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 16.sp,
@@ -100,6 +113,7 @@ class LibraryScreen extends StatelessWidget {
                                     Expanded(
                                       child: SizedBox(
                                         height: 210.h,
+
                                         /// lib book width
                                         // width: 130.w,
                                         child: ClipRRect(

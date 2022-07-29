@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:welivewithquran/Models/ebook_org.dart';
 import 'package:welivewithquran/Services/services.dart';
 import 'package:welivewithquran/Views/read_book_screen.dart';
+import 'package:welivewithquran/services/books_ctrl.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 import 'package:welivewithquran/zTools/helpers.dart';
@@ -55,6 +57,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Ebook book = argumentData[8]['book'];
+    Books _b = argumentData[9]['books'];
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -113,20 +117,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     fontSize: 20.sp),
 
                                 /// ------------------------------ Favorite Button ------------------------
-                                if (1 != 1)
-                                  IconButton(
-                                      onPressed: () {
-                                        /// add to favorite
-                                      },
-                                      icon: Icon(Icons.favorite),
-                                      color: Colors.black)
-                                else
-                                  IconButton(
-                                      onPressed: () {
-                                        /// remove from favorite
-                                      },
-                                      icon: Icon(Icons.favorite),
-                                      color: Colors.red)
+                                IconButton(
+                                  onPressed: () {
+                                    if (book.inFavorites.value) {
+                                      _b.removeEbook(book.id);
+                                    } else {
+                                      _b.addEbook(book.id);
+                                    }
+                                  },
+                                  icon: Icon(Icons.favorite),
+                                  color: book.inFavorites.value
+                                      ? Colors.red
+                                      : Colors.black,
+                                )
                               ],
                             ),
                             Expanded(

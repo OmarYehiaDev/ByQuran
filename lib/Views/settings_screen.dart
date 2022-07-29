@@ -4,13 +4,14 @@ import 'dart:io' show Platform;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:welivewithquran/Controller/SettingController.dart';
+import 'package:theme_provider/theme_provider.dart';
+import 'package:welivewithquran/Controllers/SettingController.dart';
 import 'package:welivewithquran/Views/contact_us_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_setting_item.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
-import '../Controller/auth_controller.dart';
+import '../controllers/auth_controller.dart';
 import '../zTools/helpers.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -70,13 +71,14 @@ class SettingsScreen extends StatelessWidget {
                       children: [
                         accountData.read('photoUrl') != null
                             ? CircleAvatar(
-                                child: Image.network(
-                                    accountData.read('photoUrl')),
+                                child:
+                                    Image.network(accountData.read('photoUrl')),
                                 maxRadius: 40)
-                            :CircleAvatar(
-                            child: Icon(Icons.person, color:blueColor ,size: 40.w),
-                            backgroundColor: blueBackgroundColor,
-                            maxRadius: 30),
+                            : CircleAvatar(
+                                child: Icon(Icons.person,
+                                    color: blueColor, size: 40.w),
+                                backgroundColor: blueBackgroundColor,
+                                maxRadius: 30),
                         // Container(
                         //   width: 70.w,
                         //   height: 70.h,
@@ -179,12 +181,19 @@ class SettingsScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         children: [
-                          Obx(() => Switch(
-                                activeColor: blueColor,
-                                value: settingController.isDark.value,
-                                onChanged: (bool _) =>
-                                    settingController.changeMode(),
-                              )),
+                          Switch(
+                            activeColor: blueColor,
+                            value: (ThemeProvider.themeOf(context).id ==
+                                "dark_theme"),
+                            onChanged: (bool val) {
+                              val
+                                  ? ThemeProvider.controllerOf(context)
+                                      .setTheme("dark_theme")
+                                  : ThemeProvider.controllerOf(context)
+                                      .setTheme("light_theme");
+                              // settingController.changeMode();
+                            },
+                          ),
                           CustomText(
                             text: 'الوضع الليلي',
                             color: blueColor,
