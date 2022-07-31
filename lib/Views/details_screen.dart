@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,6 +13,8 @@ import 'package:welivewithquran/Views/read_book_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 import 'package:welivewithquran/zTools/helpers.dart';
+
+import '../models/ebook_org.dart';
 
 class DetailsScreen extends StatefulWidget {
   DetailsScreen({Key? key}) : super(key: key);
@@ -56,8 +60,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int book = argumentData[8]['book'];
+    Ebook book = argumentData[8]['book'];
     BookController ctrl = Get.put(argumentData[9]['books']);
+    bool isFromFavs = argumentData[10]["condition"];
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -122,19 +127,51 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   () => IconButton(
                                     onPressed: () async {
                                       bool res = false;
-                                      if (ctrl.bookList[book].inFavorites) {
+                                      if(isFromFavs){
+                                        if (ctrl.bookMarks.value
+                                          .singleWhere((e) => e.id == book.id)
+                                          .inFavorites) {
                                         res = await ctrl.removeEbook(
-                                          ctrl.bookList[book].id,
+                                          ctrl.bookMarks.value
+                                              .singleWhere(
+                                                  (e) => e.id == book.id)
+                                              .id,
                                         );
                                       } else {
                                         res = await ctrl.addEbook(
-                                          ctrl.bookList[book].id,
+                                          ctrl.bookList.value
+                                              .singleWhere(
+                                                (e) => e.id == book.id,
+                                              )
+                                              .id,
                                         );
+                                      }
+                                      } else {
+                                        if (ctrl.bookList.value
+                                          .singleWhere((e) => e.id == book.id)
+                                          .inFavorites) {
+                                        res = await ctrl.removeEbook(
+                                          ctrl.bookList.value
+                                              .singleWhere(
+                                                  (e) => e.id == book.id)
+                                              .id,
+                                        );
+                                      } else {
+                                        res = await ctrl.addEbook(
+                                          ctrl.bookList.value
+                                              .singleWhere(
+                                                (e) => e.id == book.id,
+                                              )
+                                              .id,
+                                        );
+                                      }
                                       }
                                       res ? setState(() {}) : () {};
                                     },
                                     icon: Icon(Icons.favorite),
-                                    color: ctrl.bookList[book].inFavorites
+                                    color: ctrl.bookList.value
+                                            .singleWhere((e) => e.id == book.id)
+                                            .inFavorites
                                         ? Colors.red
                                         : Colors.black,
                                   ),

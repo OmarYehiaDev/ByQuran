@@ -23,135 +23,168 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     return Obx(
       () => bookController.isLoading.value
           ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: bookController.getBookmarks,
-              child: Container(
-                padding: EdgeInsets.zero,
-                margin: EdgeInsets.zero,
-                width: double.infinity,
-                //height: double.infinity,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/main_background1.png'),
-                    fit: BoxFit.cover,
+          : bookController.bookMarks.isEmpty
+              ? Center(
+                  child: CustomText(
+                    text: "لا توجد سور مفضلة حتى الآن",
+                    fontSize: 26.sp,
+                    color: mainColor,
                   ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: 70.h),
-                    CustomText(
-                      text: 'المفضلة',
-                      fontSize: 24.sp,
-                      color: mainColor,
+                )
+              : RefreshIndicator(
+                  onRefresh: bookController.getBookmarks,
+                  child: Container(
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.zero,
+                    width: double.infinity,
+                    //height: double.infinity,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/main_background1.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                        child: GridView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: bookController.bookList.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3, //2
-                              childAspectRatio: .5, //.7
-                              mainAxisExtent: 200,
-                            ),
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Get.to(() => DetailsScreen(), arguments: [
-                                    {
-                                      'id': bookController.bookList[index].id,
-                                    },
-                                    {
-                                      'title': bookController
-                                          .bookList[index].bookTitle,
-                                    },
-                                    {
-                                      'bookCover': bookController
-                                          .bookList[index].bookCoverImg,
-                                    },
-                                    {
-                                      'bookPages':
-                                          bookController.bookList[index].id,
-                                    },
-                                    {
-                                      'bookDescription': bookController
-                                          .bookList[index].bookDescription,
-                                    },
-                                    {
-                                      'bookFile': bookController
-                                          .bookList[index].bookFileUrl,
-                                    },
-                                    {
-                                      'authorName': bookController
-                                          .bookList[index].authorName,
-                                    },
-                                    {
-                                      'categoryName': bookController
-                                          .bookList[index].categoryName,
-                                    },
-                                    {
-                                      "book": index,
-                                    },
-                                    {
-                                      "books": bookController,
-                                    },
-                                  ]);
-                                  // Navigator.of(context).push(_createRoute());
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 30.h,
-                                        width: 100.w,
-                                        decoration: BoxDecoration(
-                                          color: mainColor,
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                        ),
-                                        child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 70.h),
+                        CustomText(
+                          text: 'المفضلة',
+                          fontSize: 24.sp,
+                          color: mainColor,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 7.0),
+                            child: GridView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: bookController.bookMarks.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3, //2
+                                childAspectRatio: .5, //.7
+                                mainAxisExtent: 200,
+                              ),
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Get.to(
+                                      () => DetailsScreen(),
+                                      arguments: [
+                                        {
+                                          'id': bookController.bookMarks
+                                              .toList()[index]
+                                              .id,
+                                        },
+                                        {
+                                          'title': bookController.bookMarks
+                                              .toList()[index]
+                                              .bookTitle,
+                                        },
+                                        {
+                                          'bookCover': bookController.bookMarks
+                                              .toList()[index]
+                                              .bookCoverImg,
+                                        },
+                                        {
+                                          'bookPages': bookController.bookMarks
+                                              .toList()[index]
+                                              .id,
+                                        },
+                                        {
+                                          'bookDescription': bookController
+                                              .bookMarks
+                                              .toList()[index]
+                                              .bookDescription,
+                                        },
+                                        {
+                                          'bookFile': bookController.bookMarks
+                                              .toList()[index]
+                                              .bookFileUrl,
+                                        },
+                                        {
+                                          'authorName': bookController.bookMarks
+                                              .toList()[index]
+                                              .authorName,
+                                        },
+                                        {
+                                          'categoryName': bookController
+                                              .bookMarks
+                                              .toList()[index]
+                                              .categoryName,
+                                        },
+                                        {
+                                          "book": bookController.bookMarks
+                                              .toList()[index],
+                                        },
+                                        {
+                                          "books": bookController,
+                                        },
+                                        {
+                                          "condition": true,
+                                        },
+                                      ],
+                                    );
+                                    // Navigator.of(context).push(_createRoute());
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 30.h,
+                                          width: 100.w,
+                                          decoration: BoxDecoration(
+                                            color: mainColor,
+                                            borderRadius: BorderRadius.circular(
+                                              7,
+                                            ),
+                                          ),
+                                          child: Center(
                                             child: Text(
-                                          bookController
-                                              .bookList[index].bookTitle,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16.sp,
-                                              height: 1.0),
-                                        )),
-                                      ),
-                                      SizedBox(height: 7.h),
-                                      Expanded(
-                                        child: SizedBox(
-                                          height: 210.h,
-
-                                          /// lib book width
-                                          // width: 130.w,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(7.0),
-                                            child: Image.network(
-                                              imagesUrl +
-                                                  bookController.bookList[index]
-                                                      .bookCoverImg,
-                                              fit: BoxFit.fill,
+                                              bookController.bookMarks
+                                                  .toList()[index]
+                                                  .bookTitle,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16.sp,
+                                                height: 1.0,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(height: 7.h),
+                                        Expanded(
+                                          child: SizedBox(
+                                            height: 210.h,
+
+                                            /// lib book width
+                                            // width: 130.w,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(7.0),
+                                              child: Image.network(
+                                                imagesUrl +
+                                                    bookController.bookMarks
+                                                        .toList()[index]
+                                                        .bookCoverImg,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }),
-                      ),
-                    )
-                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
     );
   }
 }

@@ -48,45 +48,51 @@ class LibraryScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  Get.to(() => DetailsScreen(), arguments: [
-                                    {
-                                      'id': bookController.bookList[index].id,
-                                    },
-                                    {
-                                      'title': bookController
-                                          .bookList[index].bookTitle,
-                                    },
-                                    {
-                                      'bookCover': bookController
-                                          .bookList[index].bookCoverImg,
-                                    },
-                                    {
-                                      'bookPages':
-                                          bookController.bookList[index].id,
-                                    },
-                                    {
-                                      'bookDescription': bookController
-                                          .bookList[index].bookDescription,
-                                    },
-                                    {
-                                      'bookFile': bookController
-                                          .bookList[index].bookFileUrl,
-                                    },
-                                    {
-                                      'authorName': bookController
-                                          .bookList[index].authorName,
-                                    },
-                                    {
-                                      'categoryName': bookController
-                                          .bookList[index].categoryName,
-                                    },
-                                    {
-                                      "book": index,
-                                    },
-                                    {
-                                      "books": bookController,
-                                    },
-                                  ]);
+                                  Get.to(
+                                    () => DetailsScreen(),
+                                    arguments: [
+                                      {
+                                        'id': bookController.bookList[index].id,
+                                      },
+                                      {
+                                        'title': bookController
+                                            .bookList[index].bookTitle,
+                                      },
+                                      {
+                                        'bookCover': bookController
+                                            .bookList[index].bookCoverImg,
+                                      },
+                                      {
+                                        'bookPages':
+                                            bookController.bookList[index].id,
+                                      },
+                                      {
+                                        'bookDescription': bookController
+                                            .bookList[index].bookDescription,
+                                      },
+                                      {
+                                        'bookFile': bookController
+                                            .bookList[index].bookFileUrl,
+                                      },
+                                      {
+                                        'authorName': bookController
+                                            .bookList[index].authorName,
+                                      },
+                                      {
+                                        'categoryName': bookController
+                                            .bookList[index].categoryName,
+                                      },
+                                      {
+                                        "book": bookController.bookList[index],
+                                      },
+                                      {
+                                        "books": bookController,
+                                      },
+                                      {
+                                        "condition": false,
+                                      },
+                                    ],
+                                  );
                                   // Navigator.of(context).push(_createRoute());
                                 },
                                 child: Padding(

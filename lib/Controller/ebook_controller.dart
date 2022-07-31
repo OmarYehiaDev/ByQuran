@@ -12,7 +12,7 @@ import 'package:welivewithquran/Services/services.dart';
 class BookController extends GetxController {
   var bookList = <Ebook>[].obs;
   var latestBook = <Ebook>[].obs;
-  var bookMarks = <Ebook>[].obs;
+  var bookMarks = Set<Ebook>().obs;
   var catList = <Category>[].obs;
   var isLoading = true.obs;
   var isPlaying = false.obs;
@@ -50,6 +50,8 @@ class BookController extends GetxController {
 
   Future<bool> _save(List<Ebook> books) async {
     final directory = await getApplicationDocumentsDirectory();
+    print(directory.path);
+
     final file = File('${directory.path}/favs.txt');
     final text = json.encode(
       books
@@ -72,7 +74,7 @@ class BookController extends GetxController {
     final int index = bookList.indexWhere((Ebook ebook) => ebook.id == id);
     bookList[index].inFavorites = true;
     bookMarks.add(bookList[index]);
-    bool res = await _save(bookMarks.value);
+    bool res = await _save(bookMarks.value.toList());
     return res;
   }
 
@@ -80,8 +82,8 @@ class BookController extends GetxController {
   Future<bool> removeEbook(String id) async {
     final int index = bookList.indexWhere((Ebook ebook) => ebook.id == id);
     bookList[index].inFavorites = false;
-    bookMarks.removeAt(index);
-    bool res = await _save(bookMarks);
+    bookMarks.removeWhere((Ebook ebook) => ebook.id == id);
+    bool res = await _save(bookMarks.value.toList());
     return res;
   }
 
@@ -90,7 +92,7 @@ class BookController extends GetxController {
     try {
       List<Ebook> list = await _read();
       if (list.isNotEmpty) {
-        bookMarks.value = list;
+        bookMarks.value = list.toSet();
       }
     } catch (e) {
       //log('Error while getting data is $e');
@@ -98,7 +100,7 @@ class BookController extends GetxController {
           .where(
             (Ebook ebook) => ebook.inFavorites == true,
           )
-          .toList();
+          .toSet();
       print('Error while getting data is $e');
     } finally {
       isLoading(false);
