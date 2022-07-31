@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:welivewithquran/Models/ebook_org.dart';
+import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
 import 'package:welivewithquran/Views/read_book_screen.dart';
-import 'package:welivewithquran/services/books_ctrl.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 import 'package:welivewithquran/zTools/helpers.dart';
@@ -57,8 +56,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Ebook book = argumentData[8]['book'];
-    Books _b = argumentData[9]['books'];
+    int book = argumentData[8]['book'];
+    BookController ctrl = Get.put(argumentData[9]['books']);
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -71,10 +70,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: SvgPicture.asset('assets/icons/back_arrow.svg')),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: SvgPicture.asset('assets/icons/back_arrow.svg'),
+              ),
             )
           ],
           title: Text(
@@ -113,23 +113,32 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CustomText(
-                                    text: argumentData[1]['title'].toString(),
-                                    fontSize: 20.sp),
+                                  text: argumentData[1]['title'].toString(),
+                                  fontSize: 20.sp,
+                                ),
 
                                 /// ------------------------------ Favorite Button ------------------------
-                                IconButton(
-                                  onPressed: () {
-                                    if (book.inFavorites.value) {
-                                      _b.removeEbook(book.id);
-                                    } else {
-                                      _b.addEbook(book.id);
-                                    }
-                                  },
-                                  icon: Icon(Icons.favorite),
-                                  color: book.inFavorites.value
-                                      ? Colors.red
-                                      : Colors.black,
-                                )
+                                Obx(
+                                  () => IconButton(
+                                    onPressed: () async {
+                                      bool res = false;
+                                      if (ctrl.bookList[book].inFavorites) {
+                                        res = await ctrl.removeEbook(
+                                          ctrl.bookList[book].id,
+                                        );
+                                      } else {
+                                        res = await ctrl.addEbook(
+                                          ctrl.bookList[book].id,
+                                        );
+                                      }
+                                      res ? setState(() {}) : () {};
+                                    },
+                                    icon: Icon(Icons.favorite),
+                                    color: ctrl.bookList[book].inFavorites
+                                        ? Colors.red
+                                        : Colors.black,
+                                  ),
+                                ),
                               ],
                             ),
                             Expanded(

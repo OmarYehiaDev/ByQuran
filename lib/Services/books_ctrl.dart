@@ -1,68 +1,49 @@
-// state/products.dart
-import 'dart:convert';
-import 'dart:io';
+// // state/products.dart
+// // ignore_for_file: invalid_use_of_protected_member
 
-import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:math';
+// import 'dart:convert';
+// import 'dart:io';
 
-import 'package:welivewithquran/Models/ebook_org.dart';
-import 'package:welivewithquran/services/services.dart';
+// import 'package:get/get.dart';
+// import 'package:path_provider/path_provider.dart';
 
-class Books extends GetxController {
-  _read() async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/favs.txt');
-      String text = await file.readAsString();
-      print(text);
-      return fromJsonString(text).obs;
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+// import '../Controller/ebook_controller.dart';
+// import '../models/ebook_org.dart';
 
-  _save(List<Ebook> books) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/favs.txt');
-    final text = json.encode(
-      books
-          .map(
-            (e) => e.toJson(),
-          )
-          .toList(),
-    );
-    await file.writeAsString(text, mode: FileMode.write);
-    print('saved');
-  }
+// class Books extends GetxController {
+//   final BookController _controller = Get.put(BookController());
+  
 
-  get _ebooks async {
-    var ebooks = await DataServices.getEbooks('allbook');
-      return ebooks!.toList();
-  }
+//   RxList<Ebook> get _ebooks {
+//     return _controller.bookList;
+//   }
 
-  // Use this to retrieve all EBooks
-  List<Ebook> get Ebooks {
-    return [..._ebooks as RxList<Ebook>];
-  }
+//   // Use this to retrieve all EBooks
+//   List<Ebook> get Ebooks {
+//     return _ebooks.value;
+//   }
 
-  // This will return the EBooks that were added to favorites
-  List<Ebook> get wishListEbooks {
-    return _ebooks.where((Ebook ebook) => ebook.inFavorites.value == true).toList();
-  }
+//   // This will return the EBooks that were added to favorites
+//   get wishListEbooks async {
+//     RxList<Ebook> res = (await _read());
+//     if (res.isEmpty) {
+//       return _ebooks.where((Ebook ebook) => ebook.inFavorites == true).toList();
+//     } else {
+//       return res;
+//     }
+//   }
 
-  // Add an Ebook to the favorites
-  void addEbook(String id) async {
-    final int index = _ebooks.indexWhere((Ebook ebook) => ebook.id == id);
-    _ebooks[index].inFavorites.value = true;
-    await _save(wishListEbooks);
-  }
+  // // Add an Ebook to the favorites
+  // void addEbook(String id) async {
+  //   final int index = _ebooks.indexWhere((Ebook ebook) => ebook.id == id);
+  //   _ebooks[index].inFavorites = true;
+  //   await _save(wishListEbooks);
+  // }
 
-  // Remove an Ebook from the favorites
-  void removeEbook(String id) async {
-    final int index = _ebooks.indexWhere((Ebook ebook) => ebook.id == id);
-    _ebooks[index].inFavorites.value = false;
-    await _save(wishListEbooks);
-  }
-}
+  // // Remove an Ebook from the favorites
+  // void removeEbook(String id) async {
+  //   final int index = _ebooks.indexWhere((Ebook ebook) => ebook.id == id);
+  //   _ebooks[index].inFavorites = false;
+  //   await _save(wishListEbooks);
+  // }
+// }

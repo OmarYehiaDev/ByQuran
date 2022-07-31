@@ -5,13 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:theme_provider/theme_provider.dart';
-import 'package:welivewithquran/Controllers/SettingController.dart';
+import 'package:welivewithquran/Controller/SettingController.dart';
 import 'package:welivewithquran/Views/contact_us_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_setting_item.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
-import '../controllers/auth_controller.dart';
+import '../Controller/auth_controller.dart';
 import '../zTools/helpers.dart';
 
 class SettingsScreen extends StatelessWidget {

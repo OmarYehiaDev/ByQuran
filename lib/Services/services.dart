@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:welivewithquran/Models/category.dart';
-import 'package:welivewithquran/Models/ebook.dart';
+import 'package:welivewithquran/models/ebook_org.dart';
+
+import '../models/ebook.dart';
 
 String baseUrl = 'https://smartmedia-kw.com/zbook/api.php?';
 

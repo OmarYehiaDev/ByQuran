@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 //  Entry.fromJson(Map<String, dynamic> json) => Entry(
 // ebookApp: List<EbookApp>.from(
 // json['EBOOK_APP'].map((x) => EbookApp.fromJson(x))),
@@ -11,8 +8,11 @@ import 'package:get/get.dart';
 fromJsonAPI(Map<String, dynamic> json) =>
     List<Ebook>.from(json['EBOOK_APP'].map((x) => Ebook.fromJson(x)));
 //
-List<Ebook> fromJsonString(String str) =>
-    List<Ebook>.from(json.decode(str).map((x) => Ebook.fromJson(x),),);
+List<Ebook> fromJsonString(String str) => List<Ebook>.from(
+      json.decode(str).map(
+            (x) => Ebook.fromJson(x),
+          ),
+    );
 
 String toJson(List<Ebook> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -41,7 +41,7 @@ class Ebook {
     required this.categoryImage,
     required this.categoryImageThumb,
   });
-  RxBool inFavorites;
+  bool inFavorites;
   String id;
   String catId;
   String aid;
@@ -64,7 +64,7 @@ class Ebook {
   String categoryImageThumb;
 
   factory Ebook.fromJson(Map<String, dynamic> json) => Ebook(
-        inFavorites: json['inFavorites'],
+        inFavorites: json['inFavorites'] ?? false,
         id: json['id'],
         catId: json['cat_id'],
         aid: json['aid'],

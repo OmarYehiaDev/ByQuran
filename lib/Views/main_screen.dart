@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:welivewithquran/controllers/ebook_controller.dart';
+import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
 
 import 'package:welivewithquran/zTools/colors.dart';

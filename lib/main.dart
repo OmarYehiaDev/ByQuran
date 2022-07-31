@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:theme_provider/theme_provider.dart';
 
-import 'Controllers/auth_controller.dart';
+import 'Controller/auth_controller.dart';
 import 'Views/splash_screen.dart';
 import 'zTools/tools.dart';
 

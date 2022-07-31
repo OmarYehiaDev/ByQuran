@@ -2,8 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../Controllers/auth_controller.dart';
-
+import '../Controller/auth_controller.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);
@@ -13,8 +12,6 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     List images = ['f.png', 'g.png', 't.png'];
 
     double w = MediaQuery.of(context).size.width;
@@ -153,6 +150,7 @@ class SignUpPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
+
             /// لديك حساب
             RichText(
                 text: TextSpan(
@@ -174,6 +172,7 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
             ),
+
             /// Google, Facebook
             Wrap(
               children: List<Widget>.generate(3, (index) {
@@ -209,8 +208,7 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  void googleLogin(){
+  void googleLogin() {
     AuthController.instance.googleSignUp();
   }
-
 }

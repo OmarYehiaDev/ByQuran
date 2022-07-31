@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:welivewithquran/Controllers/ebook_controller.dart';
+import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/zTools/tools.dart';
 
@@ -11,7 +11,6 @@ class ReadBookScreen extends StatelessWidget {
   ReadBookScreen({Key? key}) : super(key: key);
 
   final FlutterTts tts = FlutterTts();
-
 
   final TextEditingController textCtrl = TextEditingController(
       text: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَنِ الرَّحِيمِ');
@@ -86,8 +85,7 @@ class ReadBookScreen extends StatelessWidget {
                                 ? const Icon(Icons.stop_circle,
                                     color: mainColor)
                                 : const Icon(Icons.play_circle,
-                                    color: mainColor))
-                            )),
+                                    color: mainColor)))),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () {
@@ -102,8 +100,7 @@ class ReadBookScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const SizedBox(
-                          child: Icon(Icons.stop_circle,
-                              color: mainColor),
+                          child: Icon(Icons.stop_circle, color: mainColor),
                         ),
                       ),
                     ),
