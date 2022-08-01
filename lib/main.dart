@@ -55,21 +55,22 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: ThemeConsumer(
-          child: Builder(builder: (themeContext) {
-            return GetMaterialApp(
-              debugShowCheckedModeBanner: false,
-              // getPages: getPages,
-              //initialRoute: RouteConstant.splashScreen,
-              title: BookTools.appName,
-              theme: ThemeProvider.themeOf(themeContext).data,
-              locale: const Locale('ar'),
-              home: child,
-            );
-          }),
+          child: Builder(
+            builder: (themeContext) {
+              return GetMaterialApp(
+                debugShowCheckedModeBanner: false,
+                // getPages: getPages,
+                //initialRoute: RouteConstant.splashScreen,
+                title: BookTools.appName,
+                theme: ThemeProvider.themeOf(themeContext).data,
+                locale: const Locale('ar'),
+                home: child!,
+              );
+            },
+          ),
         ),
       ),
       child: SplashScreen(),
-      // child:  LibraryScreen(),
     );
   }
 }

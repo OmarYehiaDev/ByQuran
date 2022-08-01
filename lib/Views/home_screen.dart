@@ -52,123 +52,130 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        extendBodyBehindAppBar: true,
-        backgroundColor: backgroundColor,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          key: _scaffoldKey,
+          extendBodyBehindAppBar: true,
+          backgroundColor: backgroundColor,
 
-        /// AppBar
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          toolbarHeight: 85.h,
-          title: Text(
-            'لنحيا بالقران',
-            style: TextStyle(
-                fontSize: 24.sp, color: mainColor, fontWeight: FontWeight.w700),
-          ),
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-              child: Image.asset(
-                'assets/images/app_bar_icon_new.png',
-                width: 40.w,
-                height: 40.h,
-              ),
-            )
-          ],
-          leading: IconButton(
-            icon: Icon(Icons.list_outlined, color: mainColor, size: 40.h),
-            onPressed: () {
-              _scaffoldKey.currentState!.openDrawer();
-            },
-          ),
-        ),
-
-        /// Drawer
-        drawer: Drawer(
-          key: drawerKey,
-          child: Column(
-            children: [
-              SizedBox(
-                height: 30.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'لنحيا بالقران',
-                    style: TextStyle(
-                        fontSize: 24.sp,
-                        color: mainColor,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-                    child: Image.asset(
-                      'assets/images/app_bar_icon_new.png',
-                      width: 30.h,
-                      height: 30.h,
-                    ),
-                  )
-                ],
-              ),
+          /// AppBar
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            toolbarHeight: 85.h,
+            title: Text(
+              'لنحيا بالقران',
+              style: TextStyle(
+                  fontSize: 24.sp,
+                  color: mainColor,
+                  fontWeight: FontWeight.w700),
+            ),
+            centerTitle: true,
+            actions: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+                child: Image.asset(
+                  'assets/images/app_bar_icon_new.png',
+                  width: 40.w,
+                  height: 40.h,
+                ),
+              )
             ],
+            leading: IconButton(
+              icon: Icon(Icons.list_outlined, color: mainColor, size: 40.h),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
+            ),
           ),
-        ),
 
-        ///BottomNavigationBar
-        bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: currentIndex,
-            unselectedFontSize: 15.sp,
-            selectedFontSize: 16.sp,
-            onTap: (index) {
-              checkCurrentIndex(index);
+          /// Drawer
+          drawer: Drawer(
+            key: drawerKey,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 30.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'لنحيا بالقران',
+                      style: TextStyle(
+                          fontSize: 24.sp,
+                          color: mainColor,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+                      child: Image.asset(
+                        'assets/images/app_bar_icon_new.png',
+                        width: 30.h,
+                        height: 30.h,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          ///BottomNavigationBar
+          bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: currentIndex,
+              unselectedFontSize: 15.sp,
+              selectedFontSize: 16.sp,
+              onTap: (index) {
+                checkCurrentIndex(index);
+              },
+              // selectedItemColor: mainColor,
+
+              /// ----------- Bottom Bar Items ------------------------
+              items: [
+                BottomNavigationBarItem(
+                  label: 'الرئيسية',
+                  icon: SvgPicture.asset('assets/icons/main_icon.svg',
+                      height: 23),
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+                BottomNavigationBarItem(
+                  label: 'المكتبة',
+                  icon: SvgPicture.asset('assets/icons/library_icon.svg',
+                      height: 23),
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+                const BottomNavigationBarItem(
+                  label: 'المفضلة',
+                  icon: Icon(
+                    Icons.bookmark,
+                    color: Color(0xff305F71),
+                  ),
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+                const BottomNavigationBarItem(
+                  label: 'الاعدادات',
+                  icon: Icon(
+                    Icons.settings,
+                    color: Color(0xff305F71),
+                  ),
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+              ]),
+          // --------------------------------------------------------
+          /// Body
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() => currentIndex = index);
             },
-            // selectedItemColor: mainColor,
-
-            /// ----------- Bottom Bar Items ------------------------
-            items: [
-              BottomNavigationBarItem(
-                label: 'الرئيسية',
-                icon:
-                    SvgPicture.asset('assets/icons/main_icon.svg', height: 23),
-                // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
-              ),
-              BottomNavigationBarItem(
-                label: 'المكتبة',
-                icon: SvgPicture.asset('assets/icons/library_icon.svg',
-                    height: 23),
-                // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
-              ),
-              const BottomNavigationBarItem(
-                label: 'المفضلة',
-                icon: Icon(
-                  Icons.bookmark,
-                  color: Color(0xff305F71),
-                ),
-                // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
-              ),
-              const BottomNavigationBarItem(
-                label: 'الاعدادات',
-                icon: Icon(
-                  Icons.settings,
-                  color: Color(0xff305F71),
-                ),
-                // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
-              ),
-            ]),
-// --------------------------------------------------------
-        /// Body
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => currentIndex = index);
-          },
-          children: screen,
+            children: screen,
+          ),
         ),
       ),
     );

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "592593260692-56ggvdlk5pdju4fjtk65c2690s8gil78.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.smart.live_by_quran",
+            "certificate_hash": "373a5ff9b9b7b9f0beb6eb91df49617d91ededc3"
+          }
+        },
+        {
           "client_id": "592593260692-off4jjnag3rv4qbmi7fa6g9d269vkeo7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
