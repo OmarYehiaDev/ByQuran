@@ -325,7 +325,7 @@ class _MainScreenState extends State<MainScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 2.0.w),
                   child: CircleAvatar(
                     radius: 8.h,
-                    backgroundColor: currentPage == index ? blueBackgroundColor : blueLightColor,
+                    backgroundColor: currentPage == index ? blueColor : blueLightColor,
                   ),
                 );
               },
@@ -335,15 +335,15 @@ class _MainScreenState extends State<MainScreen> {
 
         /// ------------------------------ Latest Books -----------------------
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: Text(
             'المضاف أخيراً',
-            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w700),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 7.0,
+            horizontal: 8.0,
           ),
           child: SizedBox(
             height: 280.h,

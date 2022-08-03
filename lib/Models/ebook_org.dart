@@ -4,6 +4,8 @@ import 'dart:convert';
 // ebookApp: List<EbookApp>.from(
 // json['EBOOK_APP'].map((x) => EbookApp.fromJson(x))),
 // );
+fromJson(Map<String, dynamic> json) =>
+    List<Ebook>.from(json['EBOOK_APP'].map((x) => Ebook.fromJson(x)));
 
 fromJsonAPI(Map<String, dynamic> json) =>
     List<Ebook>.from(json['EBOOK_APP'].map((x) => Ebook.fromJson(x)));
@@ -14,8 +16,7 @@ List<Ebook> fromJsonString(String str) => List<Ebook>.from(
           ),
     );
 
-String toJson(List<Ebook> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String toJson(List<Ebook> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Ebook {
   Ebook({

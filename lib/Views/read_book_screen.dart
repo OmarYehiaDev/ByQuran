@@ -17,8 +17,7 @@ class ReadBookScreen extends StatefulWidget {
 
 enum TtsState { playing, stopped, paused, continued }
 
-class _ReadBookScreenState extends State<ReadBookScreen>
-    with WidgetsBindingObserver {
+class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObserver {
   dynamic argumentData = Get.arguments;
   String desc = BookTools.stripHtml(Get.arguments[0]['description']);
 
@@ -136,8 +135,7 @@ class _ReadBookScreenState extends State<ReadBookScreen>
       });
     });
 
-    tts.setProgressHandler(
-        (String text, int startOffset, int endOffset, String word) {
+    tts.setProgressHandler((String text, int startOffset, int endOffset, String word) {
       setState(() {
         end = endOffset;
       });
@@ -175,24 +173,28 @@ class _ReadBookScreenState extends State<ReadBookScreen>
 
       tts.setCompletionHandler(() {
         tts.stop();
-        //play = false;
       });
     }
   }
 
   Future _stop() async {
     var result = await tts.stop();
-    if (result == 1) setState(() => ttsState = TtsState.stopped);
+    if (result == 1)
+      setState(
+        () => ttsState = TtsState.stopped,
+      );
   }
 
   Future _pause() async {
     var result = await tts.pause();
-    if (result == 1) setState(() => ttsState = TtsState.paused);
+    if (result == 1)
+      setState(
+        () => ttsState = TtsState.paused,
+      );
   }
 
   @override
   Widget build(BuildContext context) {
-    // dynamic argumentData = Get.arguments;
     tts.setLanguage('ar');
     tts.setSpeechRate(0.4);
 
@@ -201,11 +203,8 @@ class _ReadBookScreenState extends State<ReadBookScreen>
       extendBodyBehindAppBar: false,
       appBar: AppBar(
         elevation: 0,
-        //backgroundColor: Colors.transparent,
         toolbarHeight: 70.h,
-        actions: const [
-          // SvgPicture.asset("assets/icons/appbar_icon.svg")
-        ],
+        actions: const [],
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: backgroundColor, size: 30.h),
           onPressed: () {
@@ -215,43 +214,41 @@ class _ReadBookScreenState extends State<ReadBookScreen>
         title: Text(
           BookTools.appName + ' - ' + argumentData[0]['title'],
           style: TextStyle(
-              fontSize: 24.sp,
-              color: backgroundColor,
-              fontWeight: FontWeight.w700),
+            fontSize: 24.sp,
+            color: backgroundColor,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Column(
           children: [
-            Text('المولف: ' + argumentData[0]['author']),
-            Text(argumentData[0]['pdf']),
-
+            Text(
+              'المولف: ' + argumentData[0]['author'],
+            ),
+            Text(
+              argumentData[0]['pdf'],
+            ),
             _btnSection(),
-
             ttsState == TtsState.playing ? _progressBar(end) : const Text(''),
-
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                //height: MediaQuery.of(context).size.height - 225.h, //550.h
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
                 child: ListView.builder(
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return Image.asset(
-                        images[index],
-                        fit: BoxFit.fill,
-                      );
-                    }),
+                  itemCount: images.length,
+                  itemBuilder: (context, index) {
+                    return Image.asset(
+                      images[index],
+                      fit: BoxFit.fill,
+                    );
+                  },
+                ),
               ),
             ),
-            // const SizedBox(height: 7.0),
-            //Html( data: (argumentData[0]['description']),),
-            //Text(argumentData[0]['pdf']),
-            // SizedBox(
-            //   child: Text(argumentData[1]['pdf'].toString()), height: 0, width: 0)
           ],
         ),
       ),
@@ -259,26 +256,29 @@ class _ReadBookScreenState extends State<ReadBookScreen>
   }
 
   Widget _progressBar(int end) => Container(
-      alignment: Alignment.topCenter,
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-      child: LinearProgressIndicator(
-        minHeight: 4,
-        backgroundColor: blueDarkColor,
-        valueColor: const AlwaysStoppedAnimation<Color>(blueColor),
-        value: end / _newVoiceText!.length,
-      ));
+        alignment: Alignment.topCenter,
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        child: LinearProgressIndicator(
+          minHeight: 4,
+          backgroundColor: blueDarkColor,
+          valueColor: const AlwaysStoppedAnimation<Color>(blueColor),
+          value: end / _newVoiceText!.length,
+        ),
+      );
 
   Widget _btnSection() {
     if (isAndroid) {
       return Container(
-          height: 60.h,
-          width: 130.w,
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: blueBackgroundColor),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        height: 60.h,
+        width: 130.w,
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: blueBackgroundColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
             Container(
               width: 42.w,
               decoration: BoxDecoration(
@@ -286,10 +286,11 @@ class _ReadBookScreenState extends State<ReadBookScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
-                  icon: const Icon(Icons.play_circle),
-                  color: mainColor,
-                  // splashColor: Colors.greenAccent,
-                  onPressed: () => _speak()),
+                icon: const Icon(Icons.play_circle),
+                color: mainColor,
+                // splashColor: Colors.greenAccent,
+                onPressed: () => _speak(),
+              ),
             ),
             Container(
               width: 42.w,
@@ -298,67 +299,67 @@ class _ReadBookScreenState extends State<ReadBookScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
-                  icon: const Icon(Icons.stop_circle),
-                  color: mainColor,
-                  onPressed: _stop),
+                icon: const Icon(Icons.stop_circle),
+                color: mainColor,
+                onPressed: _stop,
+              ),
             ),
-            //  IconButton(
-            // icon:  SvgPicture.asset('assets/icons/back_arrow.svg'),
-            // color: mainColor, onPressed: () => Get.back()),
-
-            // _buildButtonColumn(Colors.green, Colors.greenAccent, Icons.play_circle, _speak),
-            // _buildButtonColumn(Colors.red, Colors.redAccent, Icons.stop_circle, _stop),
-          ]));
+          ],
+        ),
+      );
     } else {
       return Container(
-          height: 50.h,
-          width: 160.w,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: blueBackgroundColor),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        height: 50.h,
+        width: 160.w,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: blueBackgroundColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
             Container(
               width: 42.w,
               height: 42.h,
               decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(10)),
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: IconButton(
-                  icon: const Icon(Icons.play_circle),
-                  color: mainColor,
-                  onPressed: _speak),
+                icon: const Icon(Icons.play_circle),
+                color: mainColor,
+                onPressed: _speak,
+              ),
             ),
             Container(
               width: 42.w,
               height: 42.h,
               decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(10)),
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: IconButton(
-                  icon: const Icon(Icons.pause_circle),
-                  color: mainColor,
-                  onPressed: _pause),
+                icon: const Icon(Icons.pause_circle),
+                color: mainColor,
+                onPressed: _pause,
+              ),
             ),
             Container(
               width: 42.w,
               height: 42.h,
               decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(10)),
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: IconButton(
-                  icon: const Icon(Icons.stop_circle),
-                  color: mainColor,
-                  onPressed: _stop),
+                icon: const Icon(Icons.stop_circle),
+                color: mainColor,
+                onPressed: _stop,
+              ),
             ),
-
-            // IconButton(
-            //     icon: const Icon(Icons.keyboard_backspace),
-            //     color: mainColor, onPressed: () => Get.back()),
-
-            // _buildButtonColumn(Colors.green, Colors.greenAccent, Icons.play_circle, _speak),
-            // _buildButtonColumn(Colors.red, Colors.redAccent, Icons.stop_circle, _stop),
-          ]));
+          ],
+        ),
+      );
     }
   }
 }

@@ -4,8 +4,6 @@ import 'package:welivewithquran/Models/category.dart';
 import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/models/search_query.dart' as sea;
 
-import '../models/ebook.dart';
-
 String baseUrl = 'https://smartmedia-kw.com/zbook/api.php?';
 
 String baseUrl2 = 'https://smartmedia-kw.com/zbook/';

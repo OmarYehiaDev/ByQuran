@@ -48,7 +48,6 @@ class Helper {
     return false;
   }
 
-  /// /// /// /// /// /// /// /// /// /// /// /// /// ///
   /// Download File By Dio
   static Future<String> downloadFile(url, savePath) async {
     late String download;
@@ -68,7 +67,6 @@ class Helper {
     return path;
   }
 
-  /// /// /// /// /// /// /// /// /// /// /// /// /// ///
 
   /// Check Platform
   static String? getPlatform() {
@@ -184,27 +182,6 @@ class PDFApi {
     return _storeFile(url, bytes);
   }
 
-  // static Future<File?> pickFile() async {
-  //   final result = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['pdf'],
-  //   );
-
-  //   if (result == null) return null;
-  //   return File(result.paths.first.toString());
-  // }
-
-  // static Future<File> loadFirebase(String url) async {
-  //   try {
-  //     final refPDF = FirebaseStorage.instance.ref().child(url);
-  //     final bytes = await refPDF.getData();
-
-  //     return _storeFile(url, bytes);
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
-
   static Future<File> _storeFile(String url, List<int> bytes) async {
     final filename = basename(url);
     final dir = await getApplicationDocumentsDirectory();
@@ -237,10 +214,3 @@ Future<String> getDir(String localPath) async {
   }
   return path;
 }
-
-// <uses-permission android:name="android.permission.INTERNET" />
-// <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-// <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-// <application
-// android:requestLegacyExternalStorage="true"
