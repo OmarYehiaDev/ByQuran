@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Controller/ebook_controller.dart';
-import 'package:welivewithquran/Services/services.dart';
+import 'package:welivewithquran/models/search_query.dart';
+import 'package:welivewithquran/services/services.dart';
+import 'package:html/parser.dart';
 
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
@@ -40,6 +42,8 @@ class _MainScreenState extends State<MainScreen> {
   String selectedSura = 'الفاتحة';
 
   List suraList = ['الفاتحة', 'البقرة', 'يوسف', 'الكهف'];
+  bool? isLoading = null;
+  List<SearchQuery> data = List<SearchQuery>.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +86,20 @@ class _MainScreenState extends State<MainScreen> {
                                 setState(() {});
                               },
                               controller: searchController,
+                              style: TextStyle(
+                                color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                    ? blueColor
+                                    : mainColor,
+                              ),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'أبحث هنا',
-                                hintStyle: TextStyle(fontSize: 16.sp, color: mainColor),
+                                hintStyle: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                      ? blueColor
+                                      : mainColor,
+                                ),
                                 suffixIcon: GestureDetector(
                                   onTap: () {
                                     // search
@@ -121,14 +135,14 @@ class _MainScreenState extends State<MainScreen> {
           ),
           child: Row(
             children: [
-              Radio(value: false, groupValue: true, onChanged: (value) {}),
+              Radio(value: true, groupValue: true, onChanged: (value) {}),
               const SizedBox(
                 width: 5,
               ),
               CustomText(
                 text: 'بحث فى الكل',
                 fontSize: 18.sp,
-                color: mainColor,
+                color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueColor : mainColor,
               )
             ],
           ),
@@ -139,14 +153,14 @@ class _MainScreenState extends State<MainScreen> {
           ),
           child: Row(
             children: [
-              Radio(value: true, groupValue: true, onChanged: (value) {}),
+              Radio(value: false, groupValue: true, onChanged: (value) {}),
               SizedBox(
                 width: 5.w,
               ),
               CustomText(
-                text: 'بحث فى الكل',
+                text: 'بحث فى سورة',
                 fontSize: 18.sp,
-                color: mainColor,
+                color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueColor : mainColor,
               ),
               SizedBox(
                 width: 20.w,
@@ -195,19 +209,68 @@ class _MainScreenState extends State<MainScreen> {
         ),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 20.0.h),
-          child: Container(
-            height: 40.h,
-            width: 190.w,
-            decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(10)),
-            child: Center(
-              child: CustomText(
-                text: 'بحث',
-                fontSize: 20.sp,
-                color: Colors.white,
+          child: InkWell(
+            onTap: () async {
+              List<SearchQuery> list = (await DataServices.searchBooks(
+                searchController.text.trim(),
+              ))!;
+              setState(() {
+                data = list;
+                isLoading = false;
+              });
+            },
+            child: Container(
+              height: 40.h,
+              width: 190.w,
+              decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: CustomText(
+                  text: 'بحث',
+                  fontSize: 20.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-        )
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        (isLoading != null && isLoading!)
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : (data.isEmpty && isLoading == false)
+                ? Center(
+                    child: Text("لا توجد نتائج بحث"),
+                  )
+                : ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: data.length,
+                    itemBuilder: (ctx, index) {
+                      SearchQuery item = data[index];
+                      final document = parse(item.pageText);
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          child: ListTile(
+                            leading: Text("رقم السورة: ${item.surahNum}"),
+                            title: Text("اسم السورة: ${item.surahTitle}"),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("رقم الصفحة: ${item.pageNum}"),
+                                Text(
+                                  "نتيجة البحث:  \"${parse(document.body?.text).body!.text.trim()}\"",
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
       ],
     );
   }

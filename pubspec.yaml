@@ -64,6 +64,7 @@ dependencies:
   flutter_facebook_auth: ^4.4.0
   twitter_login: ^4.2.3
   flutter_dotenv: ^5.0.2
+  html: ^0.15.0
   #change_app_package_name: ^1.1.0
 
 
