@@ -47,10 +47,13 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               GestureDetector(
-                  onTap: () {
-                    Get.offAll(() => LoginScreen());
-                  },
-                  child: SvgPicture.asset('assets/icons/splash_button.svg')),
+                onTap: () {
+                  Get.offAll(() => LoginScreen());
+                },
+                child: SvgPicture.asset(
+                  'assets/icons/splash_button.svg',
+                ),
+              ),
               SizedBox(
                 height: 50.h,
               )

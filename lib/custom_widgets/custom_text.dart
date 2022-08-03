@@ -10,14 +10,12 @@ class CustomText extends StatelessWidget {
   final int? maxLines;
 
   const CustomText(
-      {
-        this.text = '',
-        this.maxLines,
-        this.fontSize = 18,
-        this.color = mainColor,
-        this.fontWeight,
-        this.alignment}
-      );
+      {this.text = '',
+      this.maxLines,
+      this.fontSize = 18,
+      this.color = mainColor,
+      this.fontWeight,
+      this.alignment});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +24,11 @@ class CustomText extends StatelessWidget {
       child: Text(
         text,
         maxLines: maxLines,
-        style:
-        TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight),
+        style: TextStyle(
+          fontSize: fontSize,
+          color: color,
+          fontWeight: fontWeight,
+        ),
       ),
     );
   }

@@ -2,22 +2,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
 
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
-
 class MainScreen extends StatefulWidget {
-   MainScreen({Key? key}) : super(key: key);
+  MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   final BookController bookController = Get.put(BookController());
 
   List images = [
@@ -44,7 +43,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final BookController bookController = Get.put(BookController());
 
     return Obx(
@@ -55,8 +53,10 @@ class _MainScreenState extends State<MainScreen> {
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                decoration: const BoxDecoration(
-                  color: blueBackgroundColor,
+                decoration: BoxDecoration(
+                  color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                      ? blueDarkColor
+                      : blueBackgroundColor,
                   // image:  DecorationImage(
                   //   image:  AssetImage('assets/images/main_background.png'),
                   //   fit: BoxFit.cover,
@@ -74,8 +74,7 @@ class _MainScreenState extends State<MainScreen> {
                         child: Container(
                           height: 55.h,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15)),
+                              color: Colors.white, borderRadius: BorderRadius.circular(15)),
                           child: Padding(
                             padding: const EdgeInsets.only(right: 15.0),
                             child: TextFormField(
@@ -84,14 +83,19 @@ class _MainScreenState extends State<MainScreen> {
                               },
                               controller: searchController,
                               decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'أبحث هنا',
-                                  hintStyle: TextStyle(fontSize: 16.sp,color: mainColor),
-                                  suffixIcon: GestureDetector(
-                                      onTap: (){
-                                       // search
-                                      },
-                                      child: const Icon(Icons.search,color: mainColor,))),
+                                border: InputBorder.none,
+                                hintText: 'أبحث هنا',
+                                hintStyle: TextStyle(fontSize: 16.sp, color: mainColor),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    // search
+                                  },
+                                  child: const Icon(
+                                    Icons.search,
+                                    color: mainColor,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -104,25 +108,6 @@ class _MainScreenState extends State<MainScreen> {
             ),
     );
   }
-
-  // Route _createRoute() {
-  //   return PageRouteBuilder(
-  //     pageBuilder: (context, animation, secondaryAnimation) => DetailsScreen(),
-  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-  //       const begin = Offset(1.0, 1.0);
-  //       const end = Offset.zero;
-  //       const curve = Curves.ease;
-
-  //       var tween =
-  //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-  //       return SlideTransition(
-  //         position: animation.drive(tween),
-  //         child: child,
-  //       );
-  //     },
-  //   );
-  // }
 
   searchWidget() {
     return Column(
@@ -171,8 +156,7 @@ class _MainScreenState extends State<MainScreen> {
                   horizontal: 20,
                 ),
                 decoration: BoxDecoration(
-                    color: const Color(0xff305F72),
-                    borderRadius: BorderRadius.circular(10)),
+                    color: const Color(0xff305F72), borderRadius: BorderRadius.circular(10)),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     //hint:'',
@@ -199,8 +183,7 @@ class _MainScreenState extends State<MainScreen> {
                         value: valueItem,
                         child: Text(
                           valueItem,
-                          style:
-                              TextStyle(fontSize: 15.sp, color: Colors.white),
+                          style: TextStyle(fontSize: 15.sp, color: Colors.white),
                         ),
                       );
                     }).toList(),
@@ -215,8 +198,7 @@ class _MainScreenState extends State<MainScreen> {
           child: Container(
             height: 40.h,
             width: 190.w,
-            decoration: BoxDecoration(
-                color: blueColor, borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(10)),
             child: Center(
               child: CustomText(
                 text: 'بحث',
@@ -255,10 +237,11 @@ class _MainScreenState extends State<MainScreen> {
               ),
               itemBuilder: (context, index, realIdx) {
                 return Center(
-                    child: Image.asset(
-                  images[index],
-                  fit: BoxFit.fill,
-                ));
+                  child: Image.asset(
+                    images[index],
+                    fit: BoxFit.fill,
+                  ),
+                );
               },
             ),
           ),
@@ -266,139 +249,118 @@ class _MainScreenState extends State<MainScreen> {
         Center(
           child: SizedBox(
             height: 15.h,
-            width: 110.w,
+            width: 120.w,
             child: ListView.builder(
-                itemCount: images.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2.0.w),
-                    child: CircleAvatar(
-                      radius: 8.h,
-                      backgroundColor:
-                          currentPage == index ? mainColor : blueColor,
-                    ),
-                  );
-                }),
+              itemCount: images.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 2.0.w),
+                  child: CircleAvatar(
+                    radius: 8.h,
+                    backgroundColor: currentPage == index ? blueBackgroundColor : blueLightColor,
+                  ),
+                );
+              },
+            ),
           ),
         ),
-
-        /// ------------------------------ Categories -----------------------
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4),
-          child: Text(
-            'الاقسام',
-            style: TextStyle(
-                fontSize: 24.sp, color: mainColor, fontWeight: FontWeight.w700),
-          ),
-        ),
-        SizedBox(
-          height: 50.h,
-          child: Obx(() => bookController.isLoading.value
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: bookController.catList.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 3.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: mainColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Center(
-                            child: Text(
-                              bookController.catList[index].categoryName,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15.sp),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  })),
-        ),
-        // --------------------------------------------------------------------
 
         /// ------------------------------ Latest Books -----------------------
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4),
           child: Text(
             'المضاف أخيراً',
-            style: TextStyle(
-                fontSize: 24.sp, color: mainColor, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
           ),
         ),
         Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 7.0,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 7.0,
+          ),
+          child: SizedBox(
+            height: 280.h,
+            child:
+                // Get Random eBook API
+                ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: bookController.latestBook.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Image.network(
+                          imagesUrl + bookController.latestBook[index].bookCoverImg,
+                          fit: BoxFit.fill,
+                          height: 190.h,
+                          width: 120.w,
+                        ),
+                      ),
+                      Text(
+                        bookController.latestBook[index].bookTitle,
+                        style: TextStyle(fontSize: 16.sp),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-            child: SizedBox(
-              height: 280.h,
-              //height:double.infinity,
-              child:
-                  // Get Random eBook API
-                  ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: bookController.latestBook.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: Image.network(
-                                  imagesUrl +
-                                      bookController
-                                          .latestBook[index].bookCoverImg,
-                                  fit: BoxFit.fill,
-                                  height: 190.h,
-                                  width: 120.w,
+          ),
+        ),
+        // --------------------------------------------------------------------
+
+        /// ------------------------------ Categories -----------------------
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4),
+          child: Text(
+            'الاقسام',
+            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
+          ),
+        ),
+        SizedBox(
+          height: 50.h,
+          child: Obx(
+            () => bookController.isLoading.value
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: bookController.catList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 3.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                ? blueLightColor
+                                : mainColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Center(
+                              child: Text(
+                                bookController.catList[index].categoryName,
+                                style: TextStyle(
+                                  color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                      ? blueDarkColor
+                                      : Colors.white,
+                                  fontSize: 15.sp,
                                 ),
                               ),
-                              Text(
-                                bookController.latestBook[index].bookTitle,
-                                style: TextStyle(
-                                    color: mainColor, fontSize: 16.sp),
-                              ),
-                            ],
+                            ),
                           ),
-                        );
-                      }),
-            )
-            // SizedBox(
-            //   height: 210.h,
-            //   child: ListView.builder(
-            //       scrollDirection: Axis.horizontal,
-            //       itemCount: 5,
-            //       itemBuilder: (context,index){
-            //         return Padding(
-            //           padding: const EdgeInsets.all(8.0),
-            //           child:
-            //           GestureDetector(
-            //             onTap: (){
-            //               // Get.to(()=>DetailsScreen());
-            //               Navigator.of(context).push(_createRoute());
-            //             },
-            //             child:Container(
-            //               width: 120.w,
-            //               decoration: BoxDecoration(
-            //                   image: DecorationImage(
-            //                     fit: BoxFit.fill,
-            //                     image: AssetImage(images[index]),
-            //                   )
-            //
-            //               ),
-            //             ),
-            //           ),
-            //         );
-            //       }),
-            // ),
-            ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ),
         // --------------------------------------------------------------------
+        SizedBox(
+          height: 50,
+        )
       ],
     );
   }
@@ -410,7 +372,4 @@ class _MainScreenState extends State<MainScreen> {
       return mainWidget();
     }
   }
-
-
-
 }

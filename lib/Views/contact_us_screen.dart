@@ -9,28 +9,32 @@ class ContactUsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: blueColor,
+      ),
       backgroundColor: backgroundColor,
       body: Column(
         children: [
           Container(
-            height: 220.h,
+            height: 160.h,
             width: double.infinity,
             decoration: BoxDecoration(
                 color: blueColor,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
-                )
-            ),
+                )),
             child: Padding(
-              padding:  EdgeInsets.only(top: 30.h),
+              padding: EdgeInsets.only(top: 30.h),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("لنحيا بالقران",style: TextStyle(fontSize: 20,color: mainColor,
-                        fontWeight: FontWeight.w700),),
-
+                    Text(
+                      "لنحيا بالقران",
+                      style: TextStyle(fontSize: 20, color: mainColor, fontWeight: FontWeight.w700),
+                    ),
                     CustomText(
                       text: "اتصل بنا",
                       fontSize: 24.sp,
@@ -41,16 +45,16 @@ class ContactUsScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 50.h,),
+          SizedBox(
+            height: 50.h,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 30,horizontal: 5),
+              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 5),
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20)
-              ),
+              decoration:
+                  BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Column(
                 children: [
                   CustomText(
@@ -58,69 +62,92 @@ class ContactUsScreen extends StatelessWidget {
                     color: blueColor,
                     fontSize: 16.sp,
                   ),
-                 Row(
-                   children: [
-                     SizedBox(width: 15,),
-                     Icon(Icons.email,color: blueColor,),
-                     SizedBox(width: 10,),
-                     CustomText(
-                       text: "البريد الالكتروني :",
-                       color: blueColor,
-                       fontSize: 16.sp,
-                     ),
-                     SizedBox(width: 10,),
-                     CustomText(
-                       text: "quran@ee.com",
-                       color: blueColor,
-                       fontSize: 16.sp,
-                     ),
-
-                   ],
-                 ),
-                 Padding(
-                   padding: const EdgeInsets.symmetric(vertical:10.0),
-                   child: Row(
-                     children: [
-                       SizedBox(width: 15,),
-                       Icon(Icons.phone_android_outlined,color: blueColor,),
-                       SizedBox(width: 10,),
-                       CustomText(
-                         text: "الهاتف المحمول :",
-                         color: blueColor,
-                         fontSize: 16.sp,
-                       ),
-                       SizedBox(width: 10,),
-                       CustomText(
-                         text: "44006699",
-                         color: blueColor,
-                         fontSize: 16.sp,
-                       ),
-
-
-                     ],
-                   ),
-                 ),
-                 Row(
-                   children: [
-                     SizedBox(width: 15,),
-                     Icon(Icons.language_outlined,color: blueColor,),
-                     SizedBox(width: 10,),
-                     CustomText(
-                       text: "موقع الويب :",
-                       color: blueColor,
-                       fontSize: 16.sp,
-                     ),
-                     SizedBox(width: 10,),
-                     CustomText(
-                       text: "Quran-ee.com.kw",
-                       color: blueColor,
-                       fontSize: 16.sp,
-                     ),
-
-                   ],
-                 ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Icon(
+                        Icons.email,
+                        color: blueColor,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CustomText(
+                        text: "البريد الالكتروني :",
+                        color: blueColor,
+                        fontSize: 16.sp,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CustomText(
+                        text: "quran@ee.com",
+                        color: blueColor,
+                        fontSize: 16.sp,
+                      ),
+                    ],
+                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 30.0,horizontal: 40),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Icon(
+                          Icons.phone_android_outlined,
+                          color: blueColor,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        CustomText(
+                          text: "الهاتف المحمول :",
+                          color: blueColor,
+                          fontSize: 16.sp,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        CustomText(
+                          text: "44006699",
+                          color: blueColor,
+                          fontSize: 16.sp,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Icon(
+                        Icons.language_outlined,
+                        color: blueColor,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CustomText(
+                        text: "موقع الويب :",
+                        color: blueColor,
+                        fontSize: 16.sp,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CustomText(
+                        text: "Quran-ee.com.kw",
+                        color: blueColor,
+                        fontSize: 16.sp,
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40),
                     child: Divider(
                       thickness: 3,
                       color: backgroundColor,

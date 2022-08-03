@@ -5,13 +5,13 @@ import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
 class CustomSettingItem extends StatelessWidget {
-  CustomSettingItem(
-      {Key? key,
-      this.title,
-      this.image,
-      this.onPress,
-      this.icon = Icons.arrow_forward_ios})
-      : super(key: key);
+  CustomSettingItem({
+    Key? key,
+    this.title,
+    this.image,
+    this.onPress,
+    this.icon = Icons.arrow_forward_ios,
+  }) : super(key: key);
 
   final String? image;
   final String? title;
@@ -23,9 +23,11 @@ class CustomSettingItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPress,
       child: Container(
+        color: null,
         height: 55.h,
         decoration: BoxDecoration(
-            color: whiteColor, borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:welivewithquran/Views/home_screen.dart';
-import 'package:welivewithquran/Views/test_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_social_container.dart';
 
@@ -95,7 +94,9 @@ class LoginScreen extends StatelessWidget {
                     CustomSocialContainer(
                       title: 'تسجيل الدخول عبر فيسبوك',
                       containerColor: const Color(0xff507DC0),
-                      onTap: () {},
+                      onTap: () {
+                        AuthController.instance.facebookSignIn();
+                      },
                     ),
 
                     /// Login By Twitter
@@ -105,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                         title: 'تسجيل الدخول عبر تويتر',
                         containerColor: const Color(0xff1EA1F1),
                         onTap: () {
-                          Get.to(() => TestScreen());
+                          AuthController.instance.signInWithTwitter();
                         },
                       ),
                     ),
@@ -119,8 +120,7 @@ class LoginScreen extends StatelessWidget {
                       },
                     ),
                     const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12.0, horizontal: 15),
+                      padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 15),
                       child: Divider(
                         color: Color(0xffA1C3CF),
                         thickness: 2,
