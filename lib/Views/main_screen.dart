@@ -83,7 +83,11 @@ class _MainScreenState extends State<MainScreen> {
                             padding: const EdgeInsets.only(right: 15.0),
                             child: TextFormField(
                               onChanged: (v) {
-                                setState(() {});
+                                setState(() {
+                                  if (searchController.text.isEmpty) {
+                                    data = <SearchQuery>[];
+                                  }
+                                });
                               },
                               controller: searchController,
                               style: TextStyle(
