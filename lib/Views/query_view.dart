@@ -131,7 +131,6 @@ class _QueryViewState extends State<QueryView> {
                             body: PDFView(
                               filePath: _fileName,
                               enableSwipe: true,
-                              swipeHorizontal: true,
                               autoSpacing: false,
                               pageFling: false,
                               onError: (error) {
