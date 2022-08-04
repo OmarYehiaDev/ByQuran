@@ -9,12 +9,48 @@ String baseUrl = 'https://smartmedia-kw.com/zbook/api.php?';
 String baseUrl2 = 'https://smartmedia-kw.com/zbook/';
 String api = baseUrl2 + 'api.php?';
 String search = baseUrl + "find=";
+String category = "cat_id=";
+String home = "home";
 
 String imagesUrl = baseUrl2 + 'images/';
 
 class DataServices {
   static Future<List<Ebook>?> getEbooks(query) async {
     String url = baseUrl + query;
+    final response = await http.get(Uri.parse(url), headers: {
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+      // 'Content-Type': 'application/json'
+      // headers: {'app-id': '6218809df11d1d412af5bac4'}
+    });
+    if (response.statusCode == 200) {
+      ///data successfully
+      return fromJson(json.decode(response.body));
+    } else {
+      ///error
+      return null;
+    }
+  }
+
+  static Future<List<Ebook>?> getFeaturedEbooks() async {
+    String url = baseUrl + home;
+    final response = await http.get(Uri.parse(url), headers: {
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+      // 'Content-Type': 'application/json'
+      // headers: {'app-id': '6218809df11d1d412af5bac4'}
+    });
+    if (response.statusCode == 200) {
+      ///data successfully
+      return fromJsonAPI(json.decode(response.body));
+    } else {
+      ///error
+      return null;
+    }
+  }
+
+  static Future<List<Ebook>?> getEbooksFromCat(String id) async {
+    String url = baseUrl + category + id;
     final response = await http.get(Uri.parse(url), headers: {
       'Accept': 'application/json',
       'Access-Control-Allow-Origin': '*'

@@ -35,7 +35,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     currentIndex = widget.index ?? 0;
-    _pageController = PageController();
+    if (_pageController.hasClients) {
+      _pageController.jumpToPage(currentIndex);
+    }
   }
 
   @override
@@ -77,6 +79,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             /// AppBar
             appBar: AppBar(
               elevation: 0,
+              foregroundColor:
+                  (ThemeProvider.themeOf(context).id == "dark_theme") ? null : blueDarkColor,
               backgroundColor: currentIndex == 0
                   ? (ThemeProvider.themeOf(context).id == "dark_theme")
                       ? blueDarkColor
@@ -228,44 +232,49 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
             ///BottomNavigationBar
             bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                currentIndex: currentIndex,
-                unselectedFontSize: 15.sp,
-                selectedFontSize: 16.sp,
-                onTap: (index) {
-                  checkCurrentIndex(index);
-                },
-                // selectedItemColor: mainColor,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: currentIndex,
+              unselectedFontSize: 15.sp,
+              selectedFontSize: 17.sp,
+              selectedItemColor:
+                  (ThemeProvider.themeOf(context).id == "dark_theme") ? blueColor : blueDarkColor,
+              unselectedItemColor:
+                  (ThemeProvider.themeOf(context).id == "dark_theme") ? Colors.white : Colors.grey,
+              onTap: (index) {
+                checkCurrentIndex(index);
+              },
+              // selectedItemColor: mainColor,
 
-                /// ----------- Bottom Bar Items ------------------------
-                items: [
-                  BottomNavigationBarItem(
-                    label: 'الرئيسية',
-                    icon: SvgPicture.asset('assets/icons/main_icon.svg', height: 23),
-                    // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+              /// ----------- Bottom Bar Items ------------------------
+              items: [
+                BottomNavigationBarItem(
+                  label: 'الرئيسية',
+                  icon: SvgPicture.asset('assets/icons/main_icon.svg', height: 23),
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+                BottomNavigationBarItem(
+                  label: 'المكتبة',
+                  icon: SvgPicture.asset('assets/icons/library_icon.svg', height: 23),
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+                const BottomNavigationBarItem(
+                  label: 'المفضلة',
+                  icon: Icon(
+                    Icons.bookmark,
+                    color: Color(0xff305F71),
                   ),
-                  BottomNavigationBarItem(
-                    label: 'المكتبة',
-                    icon: SvgPicture.asset('assets/icons/library_icon.svg', height: 23),
-                    // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+                const BottomNavigationBarItem(
+                  label: 'الاعدادات',
+                  icon: Icon(
+                    Icons.settings,
+                    color: Color(0xff305F71),
                   ),
-                  const BottomNavigationBarItem(
-                    label: 'المفضلة',
-                    icon: Icon(
-                      Icons.bookmark,
-                      color: Color(0xff305F71),
-                    ),
-                    // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
-                  ),
-                  const BottomNavigationBarItem(
-                    label: 'الاعدادات',
-                    icon: Icon(
-                      Icons.settings,
-                      color: Color(0xff305F71),
-                    ),
-                    // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
-                  ),
-                ]),
+                  // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
+                ),
+              ],
+            ),
             // --------------------------------------------------------
             /// Body
             body: PageView(

@@ -4,6 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Controller/ebook_controller.dart';
+import 'package:welivewithquran/Views/category_view.dart';
+import 'package:welivewithquran/Views/details_screen.dart';
+import 'package:welivewithquran/Models/category.dart';
+import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/models/search_query.dart';
 import 'package:welivewithquran/services/services.dart';
 import 'package:html/parser.dart';
@@ -21,22 +25,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final BookController bookController = Get.put(BookController());
 
-  List images = [
-    'assets/images/sura_image3.png',
-    'assets/images/sura_image2.png',
-    'assets/images/sura_image3.png',
-    'assets/images/sura_image2.png',
-    'assets/images/sura_image3.png',
-    'assets/images/sura_image2.png',
-  ];
-
-  List<Widget> carouselImages = [
-    Image.asset('assets/images/sura_image3.png'),
-    Image.asset('assets/images/sura_image2.png'),
-    Image.asset('assets/images/sura_image3.png'),
-    Image.asset('assets/images/sura_image2.png'),
-  ];
-
   int currentPage = 0;
   TextEditingController searchController = TextEditingController();
   String selectedSura = 'الفاتحة';
@@ -44,6 +32,15 @@ class _MainScreenState extends State<MainScreen> {
   List suraList = ['الفاتحة', 'البقرة', 'يوسف', 'الكهف'];
   bool? isLoading = null;
   List<SearchQuery> data = List<SearchQuery>.empty();
+  List<Ebook> featuredList = List<Ebook>.empty();
+  int groupVal = 0;
+
+  Future<void> setFeatured() async {
+    var list = (await DataServices.getFeaturedEbooks())!;
+    setState(() {
+      featuredList = list;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +75,9 @@ class _MainScreenState extends State<MainScreen> {
                         child: Container(
                           height: 55.h,
                           decoration: BoxDecoration(
-                              color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.only(right: 15.0),
                             child: TextFormField(
@@ -139,7 +138,15 @@ class _MainScreenState extends State<MainScreen> {
           ),
           child: Row(
             children: [
-              Radio(value: true, groupValue: true, onChanged: (value) {}),
+              Radio<int>(
+                value: 0,
+                groupValue: groupVal,
+                onChanged: (value) {
+                  setState(() {
+                    groupVal = value!;
+                  });
+                },
+              ),
               const SizedBox(
                 width: 5,
               ),
@@ -157,7 +164,15 @@ class _MainScreenState extends State<MainScreen> {
           ),
           child: Row(
             children: [
-              Radio(value: false, groupValue: true, onChanged: (value) {}),
+              Radio<int>(
+                value: 1,
+                groupValue: groupVal,
+                onChanged: (value) {
+                  setState(() {
+                    groupVal = value!;
+                  });
+                },
+              ),
               SizedBox(
                 width: 5.w,
               ),
@@ -174,7 +189,9 @@ class _MainScreenState extends State<MainScreen> {
                   horizontal: 20,
                 ),
                 decoration: BoxDecoration(
-                    color: const Color(0xff305F72), borderRadius: BorderRadius.circular(10)),
+                  color: const Color(0xff305F72),
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     //hint:'',
@@ -226,7 +243,10 @@ class _MainScreenState extends State<MainScreen> {
             child: Container(
               height: 40.h,
               width: 190.w,
-              decoration: BoxDecoration(color: blueColor, borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(
+                color: blueColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
               child: Center(
                 child: CustomText(
                   text: 'بحث',
@@ -283,62 +303,123 @@ class _MainScreenState extends State<MainScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(7.0),
-          child: SizedBox(
-            height: 170.h,
-            width: double.infinity,
-            child: CarouselSlider.builder(
-              itemCount: images.length,
-              options: CarouselOptions(
-                onPageChanged: (page, reason) {
-                  setState(() {
-                    print(page);
-                    currentPage = page;
-                  });
-                },
-                viewportFraction: .3,
-                autoPlay: true,
-                aspectRatio: 2.0,
-                enlargeCenterPage: true,
+        bookController.featuredList.isEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(7.0),
+                      child: SizedBox(
+                        height: 170.h,
+                        width: double.infinity,
+                        child: CarouselSlider.builder(
+                          itemCount: bookController.featuredList.length,
+                          options: CarouselOptions(
+                            onPageChanged: (page, reason) {
+                              setState(() {
+                                print(page);
+                                currentPage = page;
+                              });
+                            },
+                            viewportFraction: .3,
+                            autoPlay: true,
+                            aspectRatio: 2.0,
+                            enlargeCenterPage: true,
+                          ),
+                          itemBuilder: (context, index, realIdx) {
+                            Ebook book = bookController.featuredList[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => DetailsScreen(),
+                                  arguments: [
+                                    {
+                                      'id': book.id,
+                                    },
+                                    {
+                                      'title': book.bookTitle,
+                                    },
+                                    {
+                                      'bookCover': book.bookCoverImg,
+                                    },
+                                    {
+                                      'bookPages': book.id,
+                                    },
+                                    {
+                                      'bookDescription': book.bookDescription,
+                                    },
+                                    {
+                                      'bookFile': book.bookFileUrl,
+                                    },
+                                    {
+                                      'authorName': book.authorName,
+                                    },
+                                    {
+                                      'categoryName': book.categoryName,
+                                    },
+                                    {
+                                      "book": book,
+                                    },
+                                    {
+                                      "books": bookController,
+                                    },
+                                    {
+                                      "condition": false,
+                                    },
+                                  ],
+                                );
+                                // Navigator.of(context).push(_createRoute());
+                              },
+                              child: Center(
+                                child: Image.network(
+                                  imagesUrl + book.bookCoverImg,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: SizedBox(
+                        height: 15.h,
+                        width: 120.w,
+                        child: ListView.builder(
+                          itemCount: bookController.featuredList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 2.0.w),
+                              child: CircleAvatar(
+                                radius: 8.h,
+                                backgroundColor: currentPage == index ? blueColor : blueLightColor,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              itemBuilder: (context, index, realIdx) {
-                return Center(
-                  child: Image.asset(
-                    images[index],
-                    fit: BoxFit.fill,
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        Center(
-          child: SizedBox(
-            height: 15.h,
-            width: 120.w,
-            child: ListView.builder(
-              itemCount: images.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 2.0.w),
-                  child: CircleAvatar(
-                    radius: 8.h,
-                    backgroundColor: currentPage == index ? blueColor : blueLightColor,
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
 
         /// ------------------------------ Latest Books -----------------------
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: Text(
-            'المضاف أخيراً',
-            style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w700),
+            "المضاف أخيرًا",
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
         Padding(
@@ -353,23 +434,66 @@ class _MainScreenState extends State<MainScreen> {
               scrollDirection: Axis.horizontal,
               itemCount: bookController.latestBook.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Image.network(
-                          imagesUrl + bookController.latestBook[index].bookCoverImg,
-                          fit: BoxFit.fill,
-                          height: 190.h,
-                          width: 120.w,
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(
+                      () => DetailsScreen(),
+                      arguments: [
+                        {
+                          'id': bookController.bookList[index].id,
+                        },
+                        {
+                          'title': bookController.bookList[index].bookTitle,
+                        },
+                        {
+                          'bookCover': bookController.bookList[index].bookCoverImg,
+                        },
+                        {
+                          'bookPages': bookController.bookList[index].id,
+                        },
+                        {
+                          'bookDescription': bookController.bookList[index].bookDescription,
+                        },
+                        {
+                          'bookFile': bookController.bookList[index].bookFileUrl,
+                        },
+                        {
+                          'authorName': bookController.bookList[index].authorName,
+                        },
+                        {
+                          'categoryName': bookController.bookList[index].categoryName,
+                        },
+                        {
+                          "book": bookController.bookList[index],
+                        },
+                        {
+                          "books": bookController,
+                        },
+                        {
+                          "condition": false,
+                        },
+                      ],
+                    );
+                    // Navigator.of(context).push(_createRoute());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Image.network(
+                            imagesUrl + bookController.latestBook[index].bookCoverImg,
+                            fit: BoxFit.fill,
+                            height: 190.h,
+                            width: 120.w,
+                          ),
                         ),
-                      ),
-                      Text(
-                        bookController.latestBook[index].bookTitle,
-                        style: TextStyle(fontSize: 16.sp),
-                      ),
-                    ],
+                        Text(
+                          bookController.latestBook[index].bookTitle,
+                          style: TextStyle(fontSize: 16.sp),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -392,28 +516,44 @@ class _MainScreenState extends State<MainScreen> {
             () => bookController.isLoading.value
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
+                    shrinkWrap: true,
                     itemCount: bookController.catList.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
+                      Category cat = bookController.catList[index];
                       return Padding(
-                        padding: const EdgeInsets.only(right: 3.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                ? blueLightColor
-                                : mainColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Center(
-                              child: Text(
-                                bookController.catList[index].categoryName,
-                                style: TextStyle(
-                                  color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                      ? blueDarkColor
-                                      : Colors.white,
-                                  fontSize: 15.sp,
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: InkWell(
+                          onTap: () async {
+                            print("Pressed");
+                            List<Ebook> list = (await DataServices.getEbooksFromCat(cat.cid))!;
+                            print(list.length);
+                            Get.to(
+                              () => CategoryScreen(
+                                cat: cat,
+                                bookList: list,
+                                ctrl: bookController,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                  ? blueLightColor
+                                  : mainColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Center(
+                                child: Text(
+                                  bookController.catList[index].categoryName,
+                                  style: TextStyle(
+                                    color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                        ? blueDarkColor
+                                        : Colors.white,
+                                    fontSize: 15.sp,
+                                  ),
                                 ),
                               ),
                             ),

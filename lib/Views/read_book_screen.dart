@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/zTools/tools.dart';
 
@@ -25,7 +26,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
 
   double volume = 0.5;
   double pitch = 1.0;
-  double rate = 0.5;
+  double rate = 1;
   //bool play = false;
 
   int end = 0;
@@ -154,20 +155,22 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   Future _speak() async {
     int chars;
     desc.length > 4000 ? chars = 4000 : chars = desc.length;
-    setState(() => _newVoiceText = desc.substring(0, chars));
+    setState(() {
+      _newVoiceText = desc.substring(0, chars);
+    });
     if (_newVoiceText != null) {
       await tts.awaitSpeakCompletion(true);
       await tts.setQueueMode(1);
 
-      var count = desc.length;
+      var count = _newVoiceText!.length;
       var max = 2000;
       var loopCount = count ~/ max;
       for (var i = 0; i <= loopCount; i++) {
         if (i != loopCount) {
-          await tts.speak(desc.substring(i * max, (i + 1) * max));
+          await tts.speak(_newVoiceText!.substring(i * max, (i + 1) * max));
         } else {
           var end = (count - ((i * max)) + (i * max));
-          await tts.speak(desc.substring(i * max, end));
+          await tts.speak(_newVoiceText!.substring(i * max, end));
         }
       }
 
@@ -196,12 +199,15 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   @override
   Widget build(BuildContext context) {
     tts.setLanguage('ar');
-    tts.setSpeechRate(0.4);
+    tts.setSpeechRate(1);
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor:
+          (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : backgroundColor,
       extendBodyBehindAppBar: false,
       appBar: AppBar(
+        backgroundColor:
+            (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : mainColor,
         elevation: 0,
         toolbarHeight: 70.h,
         actions: const [],
@@ -225,7 +231,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
         child: Column(
           children: [
             Text(
-              'المولف: ' + argumentData[0]['author'],
+              'المؤلف: ' + argumentData[0]['author'],
             ),
             Text(
               argumentData[0]['pdf'],
@@ -234,7 +240,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
             ttsState == TtsState.playing ? _progressBar(end) : const Text(''),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
@@ -274,7 +280,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
         padding: const EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: blueBackgroundColor,
+          color:
+              (ThemeProvider.themeOf(context).id == "dark_theme") ? blueColor : blueBackgroundColor,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

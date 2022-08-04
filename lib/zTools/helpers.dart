@@ -13,7 +13,7 @@ class Helper {
   static Future<String> getDir(String localPath) async {
     String path = '';
     if (Platform.isAndroid) {
-      path = '/sdcard/' + localPath;
+      path = localPath;
     } else {
       var directory = await getApplicationDocumentsDirectory();
       path = directory.path + Platform.pathSeparator + localPath;
@@ -67,7 +67,6 @@ class Helper {
     return path;
   }
 
-
   /// Check Platform
   static String? getPlatform() {
     if (Platform.isAndroid) {
@@ -95,8 +94,7 @@ class zTools {
       var request = await httpClient.getUrl(Uri.parse(url));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
-      final dir =
-          await getTemporaryDirectory(); //(await getApplicationDocumentsDirectory()).path;
+      final dir = await getApplicationDocumentsDirectory();
       File file = File('${dir.path}/$filename');
       await file.writeAsBytes(bytes);
       print('downloaded file path = ${file.path}');
@@ -117,8 +115,7 @@ class zTools {
     return file;
   }
 
-  static Future<String> downloadFile3(
-      String url, String fileName, String dir) async {
+  static Future<String> downloadFile3(String url, String fileName, String dir) async {
     HttpClient httpClient = HttpClient();
     File file;
     String filePath = '';
@@ -143,8 +140,7 @@ class zTools {
   }
 
   // Share Function
-  static Future<void> share(
-      String title, String text, String linkUrl, String chooserTitle) async {
+  static Future<void> share(String title, String text, String linkUrl, String chooserTitle) async {
     await FlutterShare.share(
         title: title, text: text, linkUrl: linkUrl, chooserTitle: chooserTitle);
   }
@@ -159,8 +155,7 @@ class zTools {
         directory = Directory('/storage/emulated/0/Download');
         // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
         // ignore: avoid_slow_async_io
-        if (!await directory.exists())
-          directory = await getExternalStorageDirectory();
+        if (!await directory.exists()) directory = await getExternalStorageDirectory();
       }
     } catch (err) {
       print('Cannot get download folder path');

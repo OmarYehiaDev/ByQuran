@@ -34,11 +34,11 @@ class AuthController extends GetxController {
   }
 
   _startScreen(User? user) {
-    if (user?.email! != GetStorage().read("email")) {
-      Get.offAll(() => LoginScreen());
-    } else {
-      // Get.offAll(() => WelcomePage( email: user.email ?? 'Not Found',));
+    bool? res = GetStorage().read("logged");
+    if (res != null && res) {
       Get.offAll(() => HomeScreen());
+    } else {
+      Get.offAll(() => LoginScreen());
     }
   }
 
@@ -52,6 +52,7 @@ class AuthController extends GetxController {
       accountData.write('email', cred.user!.email);
       accountData.write('displayName', cred.user!.displayName);
       accountData.write('photoUrl', cred.user!.photoURL);
+      accountData.write("logged", true);
     } catch (e) {
       Get.snackbar(
         'About User',
@@ -81,6 +82,7 @@ class AuthController extends GetxController {
       accountData.write('email', null);
       accountData.write('displayName', "مستخدم مجهول");
       accountData.write('photoUrl', null);
+      accountData.write("logged", true);
     } catch (e) {
       print(e);
       rethrow;
@@ -116,6 +118,9 @@ class AuthController extends GetxController {
   }
 
   void logOut() async {
+    GetStorage accountData = GetStorage();
+    accountData.write("logged", true);
+
     await authFirebase.signOut();
     await googleSignIn.signOut();
     await facebookAuth.logOut();
@@ -153,6 +158,7 @@ class AuthController extends GetxController {
       'photoUrl',
       cred.user!.photoURL,
     );
+    accountData.write("logged", true);
   }
 
   void facebookSignIn() async {
@@ -180,6 +186,7 @@ class AuthController extends GetxController {
       'photoUrl',
       cred.user!.photoURL,
     );
+    accountData.write("logged", true);
   }
 
   void signInWithTwitter() async {
@@ -207,8 +214,7 @@ class AuthController extends GetxController {
       'photoUrl',
       cred.user!.photoURL,
     );
+    accountData.write("logged", true);
   }
 }
-
-  // auth2 is initialized with gapi.auth2.init() and a user is signed in.
 

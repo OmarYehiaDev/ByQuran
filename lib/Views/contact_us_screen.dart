@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
@@ -9,18 +10,22 @@ class ContactUsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        foregroundColor: (ThemeProvider.themeOf(context).id == "dark_theme") ? null : blueDarkColor,
         elevation: 0,
-        backgroundColor: blueColor,
+        backgroundColor: Colors.transparent,
       ),
-      backgroundColor: backgroundColor,
+      backgroundColor:
+          (ThemeProvider.themeOf(context).id == "dark_theme") ? mainColor : backgroundColor,
       body: Column(
         children: [
           Container(
-            height: 160.h,
+            height: 220.h,
             width: double.infinity,
             decoration: BoxDecoration(
-                color: blueColor,
+                color:
+                    (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : blueColor,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
@@ -33,12 +38,19 @@ class ContactUsScreen extends StatelessWidget {
                   children: [
                     Text(
                       "لنحيا بالقران",
-                      style: TextStyle(fontSize: 20, color: mainColor, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                              ? null
+                              : mainColor,
+                          fontWeight: FontWeight.w700),
                     ),
                     CustomText(
                       text: "اتصل بنا",
                       fontSize: 24.sp,
-                      color: mainColor,
+                      color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                          ? Colors.white
+                          : mainColor,
                     ),
                   ],
                 ),
@@ -53,13 +65,19 @@ class ContactUsScreen extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 30, horizontal: 5),
               width: double.infinity,
-              decoration:
-                  BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(
+                color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                    ? blueDarkColor
+                    : whiteColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: Column(
                 children: [
                   CustomText(
                     text: "وسائل الاتصال",
-                    color: blueColor,
+                    color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                        ? whiteColor
+                        : blueColor,
                     fontSize: 16.sp,
                   ),
                   Row(
@@ -69,14 +87,18 @@ class ContactUsScreen extends StatelessWidget {
                       ),
                       Icon(
                         Icons.email,
-                        color: blueColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : blueColor,
                       ),
                       SizedBox(
                         width: 10,
                       ),
                       CustomText(
                         text: "البريد الالكتروني :",
-                        color: blueColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : blueColor,
                         fontSize: 16.sp,
                       ),
                       SizedBox(
@@ -84,7 +106,9 @@ class ContactUsScreen extends StatelessWidget {
                       ),
                       CustomText(
                         text: "quran@ee.com",
-                        color: blueColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : blueColor,
                         fontSize: 16.sp,
                       ),
                     ],
@@ -98,14 +122,18 @@ class ContactUsScreen extends StatelessWidget {
                         ),
                         Icon(
                           Icons.phone_android_outlined,
-                          color: blueColor,
+                          color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                              ? whiteColor
+                              : blueColor,
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         CustomText(
                           text: "الهاتف المحمول :",
-                          color: blueColor,
+                          color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                              ? whiteColor
+                              : blueColor,
                           fontSize: 16.sp,
                         ),
                         SizedBox(
@@ -113,7 +141,9 @@ class ContactUsScreen extends StatelessWidget {
                         ),
                         CustomText(
                           text: "44006699",
-                          color: blueColor,
+                          color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                              ? whiteColor
+                              : blueColor,
                           fontSize: 16.sp,
                         ),
                       ],
@@ -126,14 +156,18 @@ class ContactUsScreen extends StatelessWidget {
                       ),
                       Icon(
                         Icons.language_outlined,
-                        color: blueColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : blueColor,
                       ),
                       SizedBox(
                         width: 10,
                       ),
                       CustomText(
                         text: "موقع الويب :",
-                        color: blueColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : blueColor,
                         fontSize: 16.sp,
                       ),
                       SizedBox(
@@ -141,7 +175,9 @@ class ContactUsScreen extends StatelessWidget {
                       ),
                       CustomText(
                         text: "Quran-ee.com.kw",
-                        color: blueColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : blueColor,
                         fontSize: 16.sp,
                       ),
                     ],
@@ -155,13 +191,17 @@ class ContactUsScreen extends StatelessWidget {
                   ),
                   CustomText(
                     text: "لنحيا بالقرآن",
-                    color: mainColor,
+                    color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                        ? whiteColor
+                        : mainColor,
                     fontWeight: FontWeight.w700,
                     fontSize: 50.sp,
                   ),
                   CustomText(
                     text: "د. فاطمة بنت عمر نصيف",
-                    color: Color(0xff4F9DBC),
+                    color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                        ? whiteColor
+                        : blueLightColor,
                     fontSize: 26.sp,
                   ),
                 ],

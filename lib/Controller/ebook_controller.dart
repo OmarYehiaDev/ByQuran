@@ -4,12 +4,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:welivewithquran/Models/category.dart';
 import 'package:welivewithquran/models/ebook_org.dart';
-import 'package:welivewithquran/Services/services.dart';
+import 'package:welivewithquran/services/services.dart';
 
 class BookController extends GetxController {
+  var featuredList = <Ebook>[].obs;
+  var downloadedList = <Ebook>[].obs;
   var bookList = <Ebook>[].obs;
   var latestBook = <Ebook>[].obs;
   var bookMarks = Set<Ebook>().obs;
@@ -24,6 +27,8 @@ class BookController extends GetxController {
     getLatest();
     getCats();
     getBookmarks();
+    getFeatured();
+    getDownloaded();
     super.onInit();
   }
 
@@ -125,6 +130,38 @@ class BookController extends GetxController {
     try {
       var ebooks = await DataServices.getEbooks('latest');
       latestBook.value = ebooks!.toList();
+    } catch (e) {
+      //log('Error while getting data is $e');
+      print('Error while getting data is $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> getFeatured() async {
+    isLoading(true);
+    try {
+      var ebooks = await DataServices.getFeaturedEbooks();
+      featuredList.value = ebooks!.toList();
+    } catch (e) {
+      //log('Error while getting data is $e');
+      print('Error while getting data is $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> getDownloaded() async {
+    GetStorage storage = GetStorage();
+    isLoading(true);
+    await getAll();
+    try {
+      for (Ebook book in bookList.value) {
+        bool? isDownloaded = storage.read(book.bookTitle);
+        if (isDownloaded != null && isDownloaded) {
+          downloadedList.value.add(book);
+        }
+      }
     } catch (e) {
       //log('Error while getting data is $e');
       print('Error while getting data is $e');

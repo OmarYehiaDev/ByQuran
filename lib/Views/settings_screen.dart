@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Controller/SettingController.dart';
+import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Views/contact_us_screen.dart';
-import 'package:welivewithquran/Views/home_screen.dart';
+import 'package:welivewithquran/Views/downloads_view.dart';
+import 'package:welivewithquran/Views/library_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_setting_item.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
@@ -20,8 +22,12 @@ class SettingsScreen extends StatelessWidget {
   final accountData = GetStorage();
   final String email = '';
 
-  final SettingController settingController =
-      GetInstance().put<SettingController>(SettingController());
+  final SettingController settingController = GetInstance().put<SettingController>(
+    SettingController(),
+  );
+  final BookController bookController = GetInstance().put<BookController>(
+    BookController(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +112,20 @@ class SettingsScreen extends StatelessWidget {
                     title: 'المكتبة',
                     onPress: () {
                       Get.to(
-                        () => HomeScreen(
-                          index: 1,
+                        () => Scaffold(
+                          extendBodyBehindAppBar: true,
+                          body: LibraryScreen(),
+                          appBar: AppBar(
+                            foregroundColor: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                ? null
+                                : blueDarkColor,
+                            elevation: 0,
+                            backgroundColor: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                ? blueDarkColor
+                                : Colors.transparent,
+                          ),
                         ),
-                        preventDuplicates: false,
+                        preventDuplicates: true,
                       );
                     },
                     image: 'assets/icons/library_icon.svg',
@@ -119,7 +135,14 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   CustomSettingItem(
                     title: 'التحميلات',
-                    onPress: () {},
+                    onPress: () {
+                      Get.to(
+                        () => DownloadsScreen(
+                          bookList: bookController.downloadedList,
+                          ctrl: bookController,
+                        ),
+                      );
+                    },
                     image: 'assets/icons/down_arrow.svg',
                   ),
                   const SizedBox(

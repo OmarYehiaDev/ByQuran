@@ -2,11 +2,12 @@
 
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
 import 'package:welivewithquran/Views/read_book_screen.dart';
@@ -27,9 +28,11 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   dynamic argumentData = Get.arguments;
+  GetStorage storage = GetStorage();
 
   /// -------- Download Vars ---------------
   bool downloading = false;
+  bool? isDownloaded;
   String progress = '';
   String savePath = '';
   late bool fileExists;
@@ -37,7 +40,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   /// ---------------------------------------
 
   String fileUrl = '';
-  String fileName = '';
+  String _fileName = '';
 
   List images = [
     'assets/images/sura_image3.png',
@@ -48,13 +51,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   void initState() {
     super.initState();
+    isDownloaded = storage.read(argumentData[8]['book'].bookTitle) ?? false;
     fileUrl = argumentData[5]['bookFile'].toString();
-    fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-    var pdf = File('/sdcard/Quran PDF/$fileName');
+    _fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    var pdf = File('/sdcard/Quran PDF/$_fileName');
     if (Platform.isAndroid) {
       fileExists = (pdf.existsSync());
       print(fileExists);
-      print(fileName);
+      print(_fileName);
     } else if (Platform.isIOS) {}
   }
 
@@ -85,18 +89,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
           title: Text(
             'تفاصيل',
             style: TextStyle(
-                fontSize: 24.sp, color: mainColor, fontWeight: FontWeight.bold),
+              fontSize: 24.sp,
+              color: (ThemeProvider.themeOf(context).id == "dark_theme") ? whiteColor : mainColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
         ),
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/main_background1.png'),
-              fit: BoxFit.cover,
-            ),
+          decoration: BoxDecoration(
+            color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : mainColor,
+            image: (ThemeProvider.themeOf(context).id == "dark_theme")
+                ? null
+                : DecorationImage(
+                    image: AssetImage('assets/images/main_background1.png'),
+                    fit: BoxFit.cover,
+                  ),
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -120,6 +130,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 CustomText(
                                   text: argumentData[1]['title'].toString(),
                                   fontSize: 20.sp,
+                                  color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                      ? whiteColor
+                                      : mainColor,
                                 ),
 
                                 /// ------------------------------ Favorite Button ------------------------
@@ -127,44 +140,42 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   () => IconButton(
                                     onPressed: () async {
                                       bool res = false;
-                                      if(isFromFavs){
+                                      if (isFromFavs) {
                                         if (ctrl.bookMarks.value
-                                          .singleWhere((e) => e.id == book.id)
-                                          .inFavorites) {
-                                        res = await ctrl.removeEbook(
-                                          ctrl.bookMarks.value
-                                              .singleWhere(
-                                                  (e) => e.id == book.id)
-                                              .id,
-                                        );
-                                      } else {
-                                        res = await ctrl.addEbook(
-                                          ctrl.bookList.value
-                                              .singleWhere(
-                                                (e) => e.id == book.id,
-                                              )
-                                              .id,
-                                        );
-                                      }
+                                            .singleWhere((e) => e.id == book.id)
+                                            .inFavorites) {
+                                          res = await ctrl.removeEbook(
+                                            ctrl.bookMarks.value
+                                                .singleWhere((e) => e.id == book.id)
+                                                .id,
+                                          );
+                                        } else {
+                                          res = await ctrl.addEbook(
+                                            ctrl.bookList.value
+                                                .singleWhere(
+                                                  (e) => e.id == book.id,
+                                                )
+                                                .id,
+                                          );
+                                        }
                                       } else {
                                         if (ctrl.bookList.value
-                                          .singleWhere((e) => e.id == book.id)
-                                          .inFavorites) {
-                                        res = await ctrl.removeEbook(
-                                          ctrl.bookList.value
-                                              .singleWhere(
-                                                  (e) => e.id == book.id)
-                                              .id,
-                                        );
-                                      } else {
-                                        res = await ctrl.addEbook(
-                                          ctrl.bookList.value
-                                              .singleWhere(
-                                                (e) => e.id == book.id,
-                                              )
-                                              .id,
-                                        );
-                                      }
+                                            .singleWhere((e) => e.id == book.id)
+                                            .inFavorites) {
+                                          res = await ctrl.removeEbook(
+                                            ctrl.bookList.value
+                                                .singleWhere((e) => e.id == book.id)
+                                                .id,
+                                          );
+                                        } else {
+                                          res = await ctrl.addEbook(
+                                            ctrl.bookList.value
+                                                .singleWhere(
+                                                  (e) => e.id == book.id,
+                                                )
+                                                .id,
+                                          );
+                                        }
                                       }
                                       res ? setState(() {}) : () {};
                                     },
@@ -172,8 +183,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     color: ctrl.bookList.value
                                             .singleWhere((e) => e.id == book.id)
                                             .inFavorites
-                                        ? Colors.red
-                                        : Colors.black,
+                                        ? (ThemeProvider.themeOf(context).id == "dark_theme")
+                                            ? blueLightColor
+                                            : blueDarkColor
+                                        : Colors.grey,
                                   ),
                                 ),
                               ],
@@ -182,8 +195,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(7.0),
                                 child: Image.network(
-                                  imagesUrl +
-                                      argumentData[2]['bookCover'].toString(),
+                                  imagesUrl + argumentData[2]['bookCover'].toString(),
                                   // height: 210.h, //210
                                   // width: 120.w,
                                   fit: BoxFit.fill,
@@ -200,24 +212,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Row(
                                         children: [
                                           CustomText(
-                                              text: 'الصفحات: ',
-                                              fontSize: 16.sp),
+                                            text: 'الصفحات: ',
+                                            fontSize: 16.sp,
+                                            color:
+                                                (ThemeProvider.themeOf(context).id == "dark_theme")
+                                                    ? whiteColor
+                                                    : mainColor,
+                                          ),
                                           const SizedBox(width: 5),
                                           CustomText(
-                                            text: argumentData[3]['bookPages']
-                                                .toString(),
+                                            text: argumentData[3]['bookPages'].toString(),
                                             fontSize: 15.sp,
-                                            color: mainColor,
+                                            color:
+                                                (ThemeProvider.themeOf(context).id == "dark_theme")
+                                                    ? whiteColor
+                                                    : mainColor,
                                           ),
                                         ],
                                       ),
@@ -232,10 +249,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           //   width: 5,
                                           // ),
                                           CustomText(
-                                            text: argumentData[6]['authorName']
-                                                .toString(),
+                                            text: argumentData[6]['authorName'].toString(),
                                             fontSize: 15.sp,
-                                            color: mainColor,
+                                            color:
+                                                (ThemeProvider.themeOf(context).id == "dark_theme")
+                                                    ? whiteColor
+                                                    : mainColor,
                                           ),
                                         ],
                                       ),
@@ -253,11 +272,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           //   width: 5,
                                           // ),
                                           CustomText(
-                                            text: argumentData[7]
-                                                    ['categoryName']
-                                                .toString(),
+                                            text: argumentData[7]['categoryName'].toString(),
                                             fontSize: 15.sp,
-                                            color: mainColor,
+                                            color:
+                                                (ThemeProvider.themeOf(context).id == "dark_theme")
+                                                    ? whiteColor
+                                                    : mainColor,
                                           ),
                                         ],
                                       ),
@@ -267,26 +287,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             //(progress != 'Completed' || fileExists == false)
-                            (progress != 'Completed' && fileExists == false)
+                            (isDownloaded == null || !isDownloaded!)
 
                                 /// ------------------------------ Download Book ------------------------
                                 ? Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: GestureDetector(
                                       onTap: () async {
-                                        Helper.getStoragePermission();
+                                        await Helper.getStoragePermission();
                                         print(fileUrl);
                                         await downloadFile(fileUrl);
                                       },
                                       child: Container(
                                         height: 50.h,
                                         decoration: BoxDecoration(
-                                            color: mainColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
+                                          color: mainColor,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
                                         child: Center(
                                           child: CustomText(
-                                            text: 'تحميل الكتاب $progress',
+                                            text: 'تحميل الكتاب',
                                             fontSize: 18.sp,
                                             color: Colors.white,
                                           ),
@@ -300,27 +320,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: GestureDetector(
                                       onTap: () {
-                                        Get.to(() => const ReadBookScreen(),
-                                            arguments: [
-                                              {
-                                                'title': argumentData[1]
-                                                        ['title']
-                                                    .toString(),
-                                                'description': argumentData[4]
-                                                    ['bookDescription'],
-                                                'pdf': fileName,
-                                                'author': argumentData[6]
-                                                        ['authorName']
-                                                    .toString(),
-                                              },
-                                            ]);
+                                        Get.to(() => const ReadBookScreen(), arguments: [
+                                          {
+                                            'title': argumentData[1]['title'].toString(),
+                                            'description': argumentData[4]['bookDescription'],
+                                            'pdf': _fileName,
+                                            'author': argumentData[6]['authorName'].toString(),
+                                          },
+                                        ]);
                                       },
                                       child: Container(
                                         height: 50.h,
                                         decoration: BoxDecoration(
                                             color: mainColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
+                                            borderRadius: BorderRadius.circular(10)),
                                         child: Center(
                                           child: CustomText(
                                             text: 'قراءة الكتاب',
@@ -342,13 +355,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
                 /// ------------------------------ Divider ------------------------
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                  child: Divider(
-                      indent: 1.0,
-                      endIndent: 1.0,
-                      thickness: 2,
-                      color: blueLightColor),
+                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  child: Divider(indent: 1.0, endIndent: 1.0, thickness: 2, color: blueLightColor),
                 ),
 // ----------------------------------------------------------------
 
@@ -361,11 +369,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       CustomText(
                         text: 'اقرأ ايضا',
                         fontSize: 18.sp,
-                        color: mainColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : mainColor,
                       ),
-                      const Icon(
+                      Icon(
                         Icons.more_horiz_outlined,
-                        color: mainColor,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? whiteColor
+                            : mainColor,
                       )
                     ],
                   ),
@@ -380,25 +392,36 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           scrollDirection: Axis.horizontal,
                           itemCount: images.length,
                           itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Expanded(
-                                  child: Image.asset(images[index],
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Image.asset(
+                                      images[index],
                                       fit: BoxFit.fill,
                                       height: 190.h,
-                                      width: 120.w),
-                                ),
-                                Text(
-                                  'د. فاطمة بنت عمر نصيف',
-                                  style: TextStyle(
-                                      color: blueColor, fontSize: 12.sp),
-                                ),
-                                Text(
-                                  'سورة الفاتحة',
-                                  style: TextStyle(
-                                      color: mainColor, fontSize: 16.sp),
-                                ),
-                              ],
+                                      width: 120.w,
+                                    ),
+                                  ),
+                                  Text(
+                                    'د. فاطمة بنت عمر نصيف',
+                                    style: TextStyle(
+                                      color: blueColor,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                  Text(
+                                    'سورة الفاتحة',
+                                    style: TextStyle(
+                                      color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                          ? whiteColor
+                                          : mainColor,
+                                      fontSize: 16.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             );
                           }),
                 )
@@ -413,24 +436,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<void> downloadFile(String url) async {
     try {
-      Dio dio = Dio();
       String fileName = url.substring(url.lastIndexOf('/') + 1);
       await Helper.getStoragePermission();
 
-      var dirPath = await Helper.getDir('Quran PDF');
+      var dirPath = await Helper.getDir("");
       savePath = dirPath + '/' + fileName;
-
-      await dio.download(url, savePath, onReceiveProgress: (received, total) {
-        print('Received: $received , Total: $total');
-        setState(() {
-          downloading = true;
-          progress = ((received / total) * 100).toStringAsFixed(1) + '%';
-        });
+      setState(() {
+        downloading = true;
       });
+      File finalFile = await zTools.downloadFile(url, fileName);
+      // await dio.download(url, savePath, onReceiveProgress: (received, total) {
+      //   print('Received: $received , Total: $total');
+      //   setState(() {
+      //     downloading = true;
+      //     progress = ((received / total) * 100).toStringAsFixed(1) + '%';
+      //   });
+      // });
       setState(() {
         downloading = false;
         progress = 'Completed';
+        _fileName = finalFile.path;
+        isDownloaded = true;
       });
+      await storage.write(argumentData[8]['book'].bookTitle, true);
     } catch (e) {
       print(e.toString());
     }
