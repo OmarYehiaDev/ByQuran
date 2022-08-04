@@ -7,8 +7,10 @@ import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Views/category_view.dart';
 import 'package:welivewithquran/Views/details_screen.dart';
 import 'package:welivewithquran/Models/category.dart';
+import 'package:welivewithquran/Views/query_view.dart';
 import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/models/search_query.dart';
+import 'package:welivewithquran/models/surah.dart';
 import 'package:welivewithquran/services/services.dart';
 import 'package:html/parser.dart';
 
@@ -27,9 +29,8 @@ class _MainScreenState extends State<MainScreen> {
 
   int currentPage = 0;
   TextEditingController searchController = TextEditingController();
-  String selectedSura = 'الفاتحة';
+  int selectedSura = 1;
 
-  List suraList = ['الفاتحة', 'البقرة', 'يوسف', 'الكهف'];
   bool? isLoading = null;
   List<SearchQuery> data = List<SearchQuery>.empty();
   List<Ebook> featuredList = List<Ebook>.empty();
@@ -184,47 +185,60 @@ class _MainScreenState extends State<MainScreen> {
               SizedBox(
                 width: 20.w,
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xff305F72),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    //hint:'',
-                    dropdownColor: const Color(0xff305F72),
-                    icon: Padding(
-                      padding: EdgeInsetsDirectional.only(start: 30.w),
-                      child: const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.white,
-                      ),
-                    ),
-                    style: TextStyle(
-                      fontSize: 18.0.sp,
-                      color: Colors.white,
-                    ),
-                    value: selectedSura,
-                    onChanged: (newValue) {
-                      setState(() {
-                        selectedSura = newValue!;
-                      });
-                    },
-                    items: suraList.map<DropdownMenuItem<String>>((valueItem) {
-                      return DropdownMenuItem(
-                        value: valueItem,
-                        child: Text(
-                          valueItem,
-                          style: TextStyle(fontSize: 15.sp, color: Colors.white),
+              FutureBuilder<List<Surah>?>(
+                  future: DataServices.getSurahs(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+                      List<Surah> surahList = snapshot.data!;
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xff305F72),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<int>(
+                            dropdownColor: const Color(0xff305F72),
+                            icon: Padding(
+                              padding: EdgeInsetsDirectional.only(start: 30.w),
+                              child: const Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.white,
+                              ),
+                            ),
+                            style: TextStyle(
+                              fontSize: 18.0.sp,
+                              color: Colors.white,
+                            ),
+                            value: selectedSura,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedSura = newValue!;
+                              });
+                            },
+                            items: surahList.map<DropdownMenuItem<int>>((valueItem) {
+                              return DropdownMenuItem(
+                                value: int.parse(valueItem.id),
+                                child: Text(
+                                  valueItem.surah,
+                                  style: TextStyle(
+                                    fontSize: 15.sp,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
                       );
-                    }).toList(),
-                  ),
-                ),
-              ),
+                    }
+                    return Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
             ],
           ),
         ),
@@ -275,20 +289,27 @@ class _MainScreenState extends State<MainScreen> {
                     itemBuilder: (ctx, index) {
                       SearchQuery item = data[index];
                       final document = parse(item.pageText);
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          child: ListTile(
-                            leading: Text("رقم السورة: ${item.surahNum}"),
-                            title: Text("اسم السورة: ${item.surahTitle}"),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("رقم الصفحة: ${item.pageNum}"),
-                                Text(
-                                  "نتيجة البحث:  \"${parse(document.body?.text).body!.text.trim()}\"",
-                                ),
-                              ],
+                      return GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => QueryView(item: item, query: searchController.text),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            child: ListTile(
+                              leading: Text("رقم السورة: ${item.surahNum}"),
+                              title: Text("اسم السورة: ${item.surahTitle}"),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("رقم الصفحة: ${item.pageNum}"),
+                                  Text(
+                                    "نتيجة البحث:  \"${parse(document.body?.text).body!.text.trim()}\"",
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

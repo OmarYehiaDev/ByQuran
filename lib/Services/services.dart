@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:welivewithquran/Models/category.dart';
 import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/models/search_query.dart' as sea;
+import 'package:welivewithquran/models/surah.dart';
 
 String baseUrl = 'https://smartmedia-kw.com/zbook/api.php?';
 
@@ -11,6 +12,7 @@ String api = baseUrl2 + 'api.php?';
 String search = baseUrl + "find=";
 String category = "cat_id=";
 String home = "home";
+String surahs = "surah_list";
 
 String imagesUrl = baseUrl2 + 'images/';
 
@@ -97,6 +99,21 @@ class DataServices {
     if (response.statusCode == 200) {
       ///data successfully
       return fromCatsJson(json.decode(response.body));
+    } else {
+      ///error
+      return null;
+    }
+  }
+
+  static Future<List<Surah>?> getSurahs() async {
+    String url = baseUrl + surahs;
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {'Accept': 'application/json', 'Access-Control-Allow-Origin': '*'},
+    );
+    if (response.statusCode == 200) {
+      ///data successfully
+      return fromSurahsJson(json.decode(response.body));
     } else {
       ///error
       return null;

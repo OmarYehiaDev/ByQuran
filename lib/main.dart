@@ -22,7 +22,7 @@ Future<void> main() async {
   //Remove this method to stop OneSignal Debugging
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
-  OneSignal.shared.setAppId("36b3e7b9-a2bd-47b2-b0fa-56d655172380");
+  OneSignal.shared.setAppId(dotenv.env["ONESIGNAL_APP_ID"]!);
 
 // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {

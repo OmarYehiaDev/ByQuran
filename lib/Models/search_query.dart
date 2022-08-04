@@ -19,13 +19,13 @@ class SearchQuery {
   String mainFile;
 
   factory SearchQuery.fromJson(Map<String, dynamic> json) => SearchQuery(
-        mainFile: json['main_file'],
+        mainFile: json['main_file'] ?? "",
         pageFile: json['page_file'],
         pageImg: json['page_img'],
         pageNum: json['page_number'],
         pageText: json['page_text'],
-        surahNum: json['surah_no'],
-        surahTitle: json['book_title'],
+        surahNum: json['surah_no'] ?? "",
+        surahTitle: json['book_title'] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
