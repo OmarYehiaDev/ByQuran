@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 import 'package:welivewithquran/Views/favourite_screen.dart';
@@ -30,6 +31,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var androidLink = 'https://play.google.com/store/apps/details?id=com.smart.live_by_quran';
   var iOSLink = 'https://apps.apple.com';
+
+  Future<bool> setPushState() async {
+    var device = await OneSignal.shared.getDeviceState();
+    return !device!.pushDisabled;
+  }
 
   @override
   void initState() {
@@ -111,123 +117,145 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             ),
 
             /// Drawer
-            drawer: Drawer(
-              key: drawerKey,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'لنحيا بالقران',
-                        style: TextStyle(
-                            fontSize: 24.sp, color: mainColor, fontWeight: FontWeight.w700),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-                        child: Image.asset(
-                          'assets/images/app_bar_icon_new.png',
-                          width: 30.h,
+            drawer: FutureBuilder<bool>(
+              future: setPushState(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+                  bool isListening = snapshot.data!;
+                  return Drawer(
+                    key: drawerKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
                           height: 30.h,
                         ),
-                      )
-                    ],
-                  ),
-                  CustomSettingItem(
-                    title: 'مشاركة التطبيق',
-                    onPress: () {
-                      if (Platform.isAndroid)
-                        zTools.share(
-                          'لنحيا بالقرآن',
-                          'لنحيا بالقرآن\n د. فاطمة بنت عمر نصيف',
-                          androidLink,
-                          'مشاركة: لنحيا بالقرآن',
-                        );
-                      else if (Platform.isIOS)
-                        zTools.share(
-                          'لنحيا بالقرآن',
-                          'لنحيا بالقرآن\n د. فاطمة بنت عمر نصيف',
-                          iOSLink,
-                          'مشاركة: لنحيا بالقرآن',
-                        );
-                    },
-                    image: 'assets/icons/share.svg',
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 55.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Switch(
-                            activeColor: blueColor,
-                            value: true,
-                            onChanged: (value) {},
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'لنحيا بالقران',
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                    ? blueLightColor
+                                    : mainColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+                              child: Image.asset(
+                                'assets/images/app_bar_icon_new.png',
+                                width: 30.h,
+                                height: 30.h,
+                              ),
+                            )
+                          ],
+                        ),
+                        CustomSettingItem(
+                          title: 'مشاركة التطبيق',
+                          onPress: () {
+                            if (Platform.isAndroid)
+                              zTools.share(
+                                'لنحيا بالقرآن',
+                                'لنحيا بالقرآن\n د. فاطمة بنت عمر نصيف',
+                                androidLink,
+                                'مشاركة: لنحيا بالقرآن',
+                              );
+                            else if (Platform.isIOS)
+                              zTools.share(
+                                'لنحيا بالقرآن',
+                                'لنحيا بالقرآن\n د. فاطمة بنت عمر نصيف',
+                                iOSLink,
+                                'مشاركة: لنحيا بالقرآن',
+                              );
+                          },
+                          image: 'assets/icons/share.svg',
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 55.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                Switch(
+                                  activeColor: blueColor,
+                                  value: isListening,
+                                  onChanged: (value) async {
+                                    await OneSignal.shared.disablePush(!value);
+                                    setState(() {});
+                                  },
+                                ),
+                                CustomText(
+                                  text: 'تفعيل الاشعارات',
+                                  color: blueColor,
+                                  fontSize: 17.sp,
+                                )
+                              ],
+                            ),
                           ),
-                          CustomText(
-                            text: 'تفعيل الاشعارات',
-                            color: blueColor,
-                            fontSize: 17.sp,
-                          )
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 55.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                Switch(
+                                  activeColor: blueColor,
+                                  value: (ThemeProvider.themeOf(context).id == "dark_theme"),
+                                  onChanged: (bool val) {
+                                    val
+                                        ? ThemeProvider.controllerOf(context).setTheme("dark_theme")
+                                        : ThemeProvider.controllerOf(context)
+                                            .setTheme("light_theme");
+                                    // settingController.changeMode();
+                                  },
+                                ),
+                                CustomText(
+                                  text: 'الوضع الليلي',
+                                  color: blueColor,
+                                  fontSize: 17.sp,
+                                ),
+                                // Obx(() => CupertinoSwitch(
+                                //     onChanged: (bool _) => settingController.changeMode(),
+                                //     value: settingController.isDark.value,
+                                //   ),),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        CustomSettingItem(
+                          image: 'assets/icons/exit.svg',
+                          title: 'تسجيل خروج',
+                          onPress: () {
+                            logoutDialog(context);
+                          },
+                          icon: null,
+                        )
+                      ],
                     ),
+                  );
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: blueColor,
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 55.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Switch(
-                            activeColor: blueColor,
-                            value: (ThemeProvider.themeOf(context).id == "dark_theme"),
-                            onChanged: (bool val) {
-                              val
-                                  ? ThemeProvider.controllerOf(context).setTheme("dark_theme")
-                                  : ThemeProvider.controllerOf(context).setTheme("light_theme");
-                              // settingController.changeMode();
-                            },
-                          ),
-                          CustomText(
-                            text: 'الوضع الليلي',
-                            color: blueColor,
-                            fontSize: 17.sp,
-                          ),
-                          // Obx(() => CupertinoSwitch(
-                          //     onChanged: (bool _) => settingController.changeMode(),
-                          //     value: settingController.isDark.value,
-                          //   ),),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  CustomSettingItem(
-                    image: 'assets/icons/exit.svg',
-                    title: 'تسجيل خروج',
-                    onPress: () {
-                      logoutDialog(context);
-                    },
-                    icon: null,
-                  )
-                ],
-              ),
+                );
+              },
             ),
 
             ///BottomNavigationBar

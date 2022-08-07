@@ -49,7 +49,11 @@ class _MainScreenState extends State<MainScreen> {
 
     return Obx(
       () => bookController.isLoading.value
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: blueColor,
+              ),
+            )
           : RefreshIndicator(
               onRefresh: bookController.getCats,
               child: Container(
@@ -186,59 +190,62 @@ class _MainScreenState extends State<MainScreen> {
                 width: 20.w,
               ),
               FutureBuilder<List<Surah>?>(
-                  future: DataServices.getSurahs(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-                      List<Surah> surahList = snapshot.data!;
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xff305F72),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<int>(
-                            dropdownColor: const Color(0xff305F72),
-                            icon: Padding(
-                              padding: EdgeInsetsDirectional.only(start: 30.w),
-                              child: const Icon(
-                                Icons.arrow_drop_down,
-                                color: Colors.white,
-                              ),
-                            ),
-                            style: TextStyle(
-                              fontSize: 18.0.sp,
+                future: DataServices.getSurahs(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
+                    List<Surah> surahList = snapshot.data!;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xff305F72),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<int>(
+                          dropdownColor: const Color(0xff305F72),
+                          icon: Padding(
+                            padding: EdgeInsetsDirectional.only(start: 30.w),
+                            child: const Icon(
+                              Icons.arrow_drop_down,
                               color: Colors.white,
                             ),
-                            value: selectedSura,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedSura = newValue!;
-                              });
-                            },
-                            items: surahList.map<DropdownMenuItem<int>>((valueItem) {
-                              return DropdownMenuItem(
-                                value: int.parse(valueItem.id),
-                                child: Text(
-                                  valueItem.surah,
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
                           ),
+                          style: TextStyle(
+                            fontSize: 18.0.sp,
+                            color: Colors.white,
+                          ),
+                          value: selectedSura,
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectedSura = newValue!;
+                            });
+                          },
+                          items: surahList.map<DropdownMenuItem<int>>((valueItem) {
+                            return DropdownMenuItem(
+                              value: int.parse(valueItem.id),
+                              child: Text(
+                                valueItem.surah,
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      );
-                    }
-                    return Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
+                      ),
                     );
-                  }),
+                  }
+                  return Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(
+                      color: blueColor,
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -276,7 +283,9 @@ class _MainScreenState extends State<MainScreen> {
         ),
         (isLoading != null && isLoading!)
             ? Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: blueColor,
+                ),
               )
             : (data.isEmpty && isLoading == false)
                 ? Center(
@@ -297,18 +306,20 @@ class _MainScreenState extends State<MainScreen> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            child: ListTile(
-                              leading: Text("رقم السورة: ${item.surahNum}"),
-                              title: Text("اسم السورة: ${item.surahTitle}"),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("رقم الصفحة: ${item.pageNum}"),
-                                  Text(
-                                    "نتيجة البحث:  \"${parse(document.body?.text).body!.text.trim()}\"",
-                                  ),
-                                ],
+                          child: SizedBox(
+                            child: Card(
+                              child: ListTile(
+                                leading: Text("رقم السورة: ${item.surahNum}"),
+                                title: Text("اسم السورة: ${item.surahTitle}"),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("رقم الصفحة: ${item.pageNum}"),
+                                    Text(
+                                      "نتيجة البحث:  \"${parse(document.body?.text).body!.text.trim()}\"",
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -328,7 +339,9 @@ class _MainScreenState extends State<MainScreen> {
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: blueColor,
+                  ),
                 ),
               )
             : Container(
@@ -338,7 +351,7 @@ class _MainScreenState extends State<MainScreen> {
                     Padding(
                       padding: const EdgeInsets.all(7.0),
                       child: SizedBox(
-                        height: 170.h,
+                        height: 170,
                         width: double.infinity,
                         child: CarouselSlider.builder(
                           itemCount: bookController.featuredList.length,
@@ -448,7 +461,7 @@ class _MainScreenState extends State<MainScreen> {
             horizontal: 8.0,
           ),
           child: SizedBox(
-            height: 280.h,
+            height: 0.275.sh,
             child:
                 // Get Random eBook API
                 ListView.builder(
@@ -505,7 +518,6 @@ class _MainScreenState extends State<MainScreen> {
                           child: Image.network(
                             imagesUrl + bookController.latestBook[index].bookCoverImg,
                             fit: BoxFit.fill,
-                            height: 190.h,
                             width: 120.w,
                           ),
                         ),
@@ -535,7 +547,11 @@ class _MainScreenState extends State<MainScreen> {
           height: 50.h,
           child: Obx(
             () => bookController.isLoading.value
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: blueColor,
+                    ),
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
                     itemCount: bookController.catList.length,

@@ -34,11 +34,10 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # Login - SignUp
-  firebase_core: ^1.20.0 #1.18.0
-  firebase_auth: ^3.5.0 #3.3.20
+  firebase_core: ^1.20.0 
+  firebase_auth: ^3.5.0 
   google_sign_in: ^5.4.0
   flutter_login_facebook: ^1.5.0+1
-#  flutter_facebook_auth: 4.3.4
 
   get: ^4.6.5
   get_storage: 2.0.3
@@ -68,13 +67,13 @@ dependencies:
   onesignal_flutter: ^3.4.0
   shared_preferences: ^2.0.15
   flutter_pdfview: ^1.2.3
-  #change_app_package_name: ^1.1.0
 
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^2.2.0
 
 #  #  Icon
 #  flutter_launcher_icons: ^0.9.3

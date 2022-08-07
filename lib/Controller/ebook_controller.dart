@@ -76,8 +76,10 @@ class BookController extends GetxController {
 
   // Add an Ebook to the favorites
   Future<bool> addEbook(String id) async {
+    GetStorage storage = GetStorage();
     final int index = bookList.indexWhere((Ebook ebook) => ebook.id == id);
     bookList[index].inFavorites = true;
+    await storage.write(bookList[index].bookTitle + bookList[index].id, true);
     bookMarks.add(bookList[index]);
     bool res = await _save(bookMarks.value.toList());
     return res;
@@ -85,8 +87,11 @@ class BookController extends GetxController {
 
   // Remove an Ebook from the favorites
   Future<bool> removeEbook(String id) async {
+    GetStorage storage = GetStorage();
+
     final int index = bookList.indexWhere((Ebook ebook) => ebook.id == id);
     bookList[index].inFavorites = false;
+    await storage.write(bookList[index].bookTitle + bookList[index].id, false);
     bookMarks.removeWhere((Ebook ebook) => ebook.id == id);
     bool res = await _save(bookMarks.value.toList());
     return res;

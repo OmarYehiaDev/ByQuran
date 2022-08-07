@@ -1,14 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:html/parser.dart';
 import 'package:theme_provider/theme_provider.dart';
+import 'package:welivewithquran/Views/read_book_screen.dart';
 import 'package:welivewithquran/models/search_query.dart';
-import 'package:welivewithquran/services/services.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/zTools/helpers.dart';
 
@@ -32,40 +30,31 @@ class _QueryViewState extends State<QueryView> {
   bool downloading = false;
   bool? isDownloaded;
   String progress = '';
-  String savePath = '';
   String _fileName = '';
 
   @override
   void initState() {
     super.initState();
-    isDownloaded = storage.read(widget.item.surahTitle) ?? false;
+    isDownloaded = storage.read(widget.item.surahTitle + "search") ?? false;
+    _fileName = storage.read(widget.item.pageFile + widget.item.surahTitle + "search") ?? "";
   }
 
   Future<void> downloadFile(String url) async {
     try {
       String fileName = url.substring(url.lastIndexOf('/') + 1);
       await Helper.getStoragePermission();
-
-      var dirPath = await Helper.getDir("");
-      savePath = dirPath + '/' + fileName;
       setState(() {
         downloading = true;
       });
       File finalFile = await zTools.downloadFile(url, fileName);
-      // await dio.download(url, savePath, onReceiveProgress: (received, total) {
-      //   print('Received: $received , Total: $total');
-      //   setState(() {
-      //     downloading = true;
-      //     progress = ((received / total) * 100).toStringAsFixed(1) + '%';
-      //   });
-      // });
       setState(() {
         downloading = false;
         progress = 'Completed';
         _fileName = finalFile.path;
         isDownloaded = true;
       });
-      await storage.write(widget.item.surahTitle, true);
+      await storage.write(widget.item.surahTitle + "search", true);
+      await storage.write(widget.item.pageFile + widget.item.surahTitle + "search", finalFile.path);
     } catch (e) {
       print(e.toString());
     }
@@ -96,51 +85,39 @@ class _QueryViewState extends State<QueryView> {
               title: Text("سورة " + widget.item.surahTitle),
               trailing: Text("رقم السورة: " + widget.item.surahNum),
             ),
-            SizedBox(
-              height: 0.3.sh,
-              child: Card(
-                child: Image.network(
-                  imagesUrl + widget.item.pageImg,
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 0.3.sh,
+            //   child: Card(
+            //     child: Image.network(
+            //       imagesUrl + widget.item.pageImg,
+            //     ),
+            //   ),
+            // ),
             ListTile(
-              leading: downloading ? CircularProgressIndicator() : null,
+              leading: downloading
+                  ? CircularProgressIndicator(
+                      color: blueColor,
+                    )
+                  : null,
               title: Text("نتيجة البحث:"),
               subtitle: Text("\"${parse(document.body?.text).body!.text.trim()}\""),
               trailing: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(blueColor),
                 ),
-                child: _fileName.isEmpty ? Text("تحميل") : Text("قراءة"),
+                child: (isDownloaded != null && isDownloaded!) ? Text("قراءة") : Text("تحميل"),
                 onPressed: () {
                   (isDownloaded != null && isDownloaded!)
                       ? Get.off(
-                          () => Scaffold(
-                            appBar: AppBar(
-                              title: Text("سورة " + widget.item.surahTitle),
-                              centerTitle: true,
-                              foregroundColor: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                  ? null
-                                  : blueDarkColor,
-                              elevation: 0,
-                              backgroundColor: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                  ? blueDarkColor
-                                  : Colors.transparent,
-                            ),
-                            body: PDFView(
-                              filePath: _fileName,
-                              enableSwipe: true,
-                              autoSpacing: false,
-                              pageFling: false,
-                              onError: (error) {
-                                print(error.toString());
-                              },
-                              onPageError: (page, error) {
-                                print('$page: ${error.toString()}');
-                              },
-                            ),
-                          ),
+                          () => const ReadBookScreen(),
+                          arguments: [
+                            {
+                              'title': widget.item.surahTitle,
+                              'description': parse(document.body?.text).body!.text.trim(),
+                              'pdf': _fileName,
+                              'author': "د. فاطمة بنت عمر نصيف",
+                            },
+                          ],
                         )
                       : downloadFile(widget.item.pageFile);
                 },

@@ -48,101 +48,118 @@ class DownloadsScreen extends StatelessWidget {
               color:
                   (ThemeProvider.themeOf(context).id == "dark_theme") ? blueLightColor : mainColor,
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7.0),
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: bookList.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, //2
-                    childAspectRatio: .5, //.7
-                    mainAxisExtent: 200,
-                  ),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.to(
-                          () => DetailsScreen(),
-                          arguments: [
-                            {
-                              'id': bookList[index].id,
+            bookList.isEmpty
+                ? Container(
+                    color:
+                        (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : null,
+                    child: Center(
+                      child: CustomText(
+                        text: "لا توجد تحميلات حتى الآن",
+                        fontSize: 26.sp,
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? blueLightColor
+                            : mainColor,
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7.0),
+                      child: GridView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: bookList.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, //2
+                          childAspectRatio: .5, //.7
+                          mainAxisExtent: 200,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => DetailsScreen(),
+                                arguments: [
+                                  {
+                                    'id': bookList[index].id,
+                                  },
+                                  {
+                                    'title': bookList[index].bookTitle,
+                                  },
+                                  {
+                                    'bookCover': bookList[index].bookCoverImg,
+                                  },
+                                  {
+                                    'bookPages': bookList[index].id,
+                                  },
+                                  {
+                                    'bookDescription': bookList[index].bookDescription,
+                                  },
+                                  {
+                                    'bookFile': bookList[index].bookFileUrl,
+                                  },
+                                  {
+                                    'authorName': bookList[index].authorName,
+                                  },
+                                  {
+                                    'categoryName': bookList[index].categoryName,
+                                  },
+                                  {
+                                    "book": bookList[index],
+                                  },
+                                  {
+                                    "books": ctrl,
+                                  },
+                                  {
+                                    "condition": false,
+                                  },
+                                ],
+                              );
+                              // Navigator.of(context).push(_createRoute());
                             },
-                            {
-                              'title': bookList[index].bookTitle,
-                            },
-                            {
-                              'bookCover': bookList[index].bookCoverImg,
-                            },
-                            {
-                              'bookPages': bookList[index].id,
-                            },
-                            {
-                              'bookDescription': bookList[index].bookDescription,
-                            },
-                            {
-                              'bookFile': bookList[index].bookFileUrl,
-                            },
-                            {
-                              'authorName': bookList[index].authorName,
-                            },
-                            {
-                              'categoryName': bookList[index].categoryName,
-                            },
-                            {
-                              "book": bookList[index],
-                            },
-                            {
-                              "books": ctrl,
-                            },
-                            {
-                              "condition": false,
-                            },
-                          ],
-                        );
-                        // Navigator.of(context).push(_createRoute());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 30.h,
-                              width: 100.w,
-                              decoration: BoxDecoration(
-                                color: mainColor,
-                                borderRadius: BorderRadius.circular(7),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                bookList[index].bookTitle,
-                                style: TextStyle(color: Colors.white, fontSize: 16.sp, height: 1.0),
-                              )),
-                            ),
-                            SizedBox(height: 7.h),
-                            Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
                               child: SizedBox(
-                                height: 210.h,
-
-                                /// lib book width
-                                // width: 130.w,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(7.0),
-                                  child: Image.network(
-                                    imagesUrl + bookList[index].bookCoverImg,
-                                    fit: BoxFit.fill,
-                                  ),
+                                height: 0.1.sh,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 0.035.sh,
+                                      width: 100.w,
+                                      decoration: BoxDecoration(
+                                        color: mainColor,
+                                        borderRadius: BorderRadius.circular(7),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          bookList[index].bookTitle,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 16.sp, height: 1.0),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Expanded(
+                                      child: SizedBox(
+                                        /// lib book width
+                                        // width: 130.w,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(7.0),
+                                          child: Image.network(
+                                            imagesUrl + bookList[index].bookCoverImg,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
-            )
+                    ),
+                  )
           ],
         ),
       ),

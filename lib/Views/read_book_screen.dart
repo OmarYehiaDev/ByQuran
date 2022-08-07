@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
@@ -30,11 +31,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   //bool play = false;
 
   int end = 0;
-
-  List images = [
-    'assets/images/s1.png',
-    'assets/images/s2.png',
-  ];
 
   String? _newVoiceText;
   TtsState ttsState = TtsState.stopped;
@@ -244,13 +240,16 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: ListView.builder(
-                  itemCount: images.length,
-                  itemBuilder: (context, index) {
-                    return Image.asset(
-                      images[index],
-                      fit: BoxFit.fill,
-                    );
+                child: PDFView(
+                  filePath: argumentData[0]['pdf'],
+                  enableSwipe: true,
+                  autoSpacing: false,
+                  pageFling: false,
+                  onError: (error) {
+                    print(error.toString());
+                  },
+                  onPageError: (page, error) {
+                    print('$page: ${error.toString()}');
                   },
                 ),
               ),

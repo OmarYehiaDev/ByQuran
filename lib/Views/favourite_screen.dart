@@ -23,15 +23,22 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   Widget build(BuildContext context) {
     return Obx(
       () => bookController.isLoading.value
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: blueColor,
+              ),
+            )
           : bookController.bookMarks.isEmpty
-              ? Center(
-                  child: CustomText(
-                    text: "لا توجد سور مفضلة حتى الآن",
-                    fontSize: 26.sp,
-                    color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                        ? blueLightColor
-                        : mainColor,
+              ? Container(
+                  color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : null,
+                  child: Center(
+                    child: CustomText(
+                      text: "لا توجد سور مفضلة حتى الآن",
+                      fontSize: 26.sp,
+                      color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                          ? blueLightColor
+                          : mainColor,
+                    ),
                   ),
                 )
               : RefreshIndicator(
@@ -124,49 +131,52 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                     // Navigator.of(context).push(_createRoute());
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 30.h,
-                                          width: 100.w,
-                                          decoration: BoxDecoration(
-                                            color: mainColor,
-                                            borderRadius: BorderRadius.circular(
-                                              7,
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: SizedBox(
+                                      height: 0.1.sh,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 0.035.sh,
+                                            width: 100.w,
+                                            decoration: BoxDecoration(
+                                              color: mainColor,
+                                              borderRadius: BorderRadius.circular(
+                                                7,
+                                              ),
                                             ),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              bookController.bookMarks.toList()[index].bookTitle,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16.sp,
-                                                height: 1.0,
+                                            child: Center(
+                                              child: Text(
+                                                bookController.bookMarks.toList()[index].bookTitle,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.sp,
+                                                  height: 1.0,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(height: 7.h),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 210.h,
+                                          SizedBox(height: 7.h),
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: 210.h,
 
-                                            /// lib book width
-                                            // width: 130.w,
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(7.0),
-                                              child: Image.network(
-                                                imagesUrl +
-                                                    bookController.bookMarks
-                                                        .toList()[index]
-                                                        .bookCoverImg,
-                                                fit: BoxFit.fill,
+                                              /// lib book width
+                                              // width: 130.w,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(7.0),
+                                                child: Image.network(
+                                                  imagesUrl +
+                                                      bookController.bookMarks
+                                                          .toList()[index]
+                                                          .bookCoverImg,
+                                                  fit: BoxFit.fill,
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

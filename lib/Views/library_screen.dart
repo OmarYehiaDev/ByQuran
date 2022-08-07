@@ -16,7 +16,11 @@ class LibraryScreen extends StatelessWidget {
     print(bookController.bookList.isEmpty);
     return Obx(
       () => bookController.isLoading.value
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: blueColor,
+              ),
+            )
           : RefreshIndicator(
               onRefresh: bookController.getAll,
               child: Container(
@@ -101,40 +105,44 @@ class LibraryScreen extends StatelessWidget {
                                 // Navigator.of(context).push(_createRoute());
                               },
                               child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 30.h,
-                                      width: 100.w,
-                                      decoration: BoxDecoration(
-                                        color: mainColor,
-                                        borderRadius: BorderRadius.circular(7),
+                                padding: const EdgeInsets.all(5.0),
+                                child: SizedBox(
+                                  height: 0.1.sh,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 0.035.sh,
+                                        width: 100.w,
+                                        decoration: BoxDecoration(
+                                          color: mainColor,
+                                          borderRadius: BorderRadius.circular(7),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          bookController.bookList[index].bookTitle,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 16.sp, height: 1.0),
+                                        )),
                                       ),
-                                      child: Center(
-                                          child: Text(
-                                        bookController.bookList[index].bookTitle,
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16.sp, height: 1.0),
-                                      )),
-                                    ),
-                                    SizedBox(height: 7.h),
-                                    Expanded(
-                                      child: SizedBox(
-                                        height: 210.h,
+                                      SizedBox(height: 7.h),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 210.h,
 
-                                        /// lib book width
-                                        // width: 130.w,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(7.0),
-                                          child: Image.network(
-                                            imagesUrl + bookController.bookList[index].bookCoverImg,
-                                            fit: BoxFit.fill,
+                                          /// lib book width
+                                          // width: 130.w,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(7.0),
+                                            child: Image.network(
+                                              imagesUrl +
+                                                  bookController.bookList[index].bookCoverImg,
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

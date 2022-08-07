@@ -34,8 +34,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool downloading = false;
   bool? isDownloaded;
   String progress = '';
-  String savePath = '';
-  late bool fileExists;
 
   /// ---------------------------------------
 
@@ -51,15 +49,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   void initState() {
     super.initState();
-    isDownloaded = storage.read(argumentData[8]['book'].bookTitle) ?? false;
+    isDownloaded = storage.read(
+          argumentData[8]['book'].bookTitle,
+        ) ??
+        false;
     fileUrl = argumentData[5]['bookFile'].toString();
-    _fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-    var pdf = File('/sdcard/Quran PDF/$_fileName');
-    if (Platform.isAndroid) {
-      fileExists = (pdf.existsSync());
-      print(fileExists);
-      print(_fileName);
-    } else if (Platform.isIOS) {}
+    _fileName = storage.read(
+          argumentData[5]['bookFile'].toString() + argumentData[8]['book'].bookTitle,
+        ) ??
+        "";
   }
 
   @override
@@ -117,7 +115,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
                 /// ------------------------------ Details ------------------------
                 SizedBox(
-                  height: 290.h,
+                  height: 0.34.sh,
                   width: double.infinity,
                   child: Row(
                     children: [
@@ -141,9 +139,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () async {
                                       bool res = false;
                                       if (isFromFavs) {
-                                        if (ctrl.bookMarks.value
-                                            .singleWhere((e) => e.id == book.id)
-                                            .inFavorites) {
+                                        if (storage.read(
+                                                  ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .bookTitle +
+                                                      ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .id,
+                                                ) !=
+                                                null &&
+                                            storage.read(
+                                              ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .bookTitle +
+                                                  ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .id,
+                                            )) {
                                           res = await ctrl.removeEbook(
                                             ctrl.bookMarks.value
                                                 .singleWhere((e) => e.id == book.id)
@@ -180,9 +192,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       res ? setState(() {}) : () {};
                                     },
                                     icon: Icon(Icons.favorite),
-                                    color: ctrl.bookList.value
-                                            .singleWhere((e) => e.id == book.id)
-                                            .inFavorites
+                                    color: storage.read(
+                                                  ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .bookTitle +
+                                                      ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .id,
+                                                ) !=
+                                                null &&
+                                            storage.read(
+                                              ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .bookTitle +
+                                                  ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .id,
+                                            )
                                         ? (ThemeProvider.themeOf(context).id == "dark_theme")
                                             ? blueLightColor
                                             : blueDarkColor
@@ -384,7 +410,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 SizedBox(height: 5.h),
                 SizedBox(
-                  height: 250.h, //180
+                  height: 0.3.sh, //180
                   //height:double.infinity,
                   child:
                       // Get Random eBook API
@@ -438,20 +464,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
     try {
       String fileName = url.substring(url.lastIndexOf('/') + 1);
       await Helper.getStoragePermission();
-
-      var dirPath = await Helper.getDir("");
-      savePath = dirPath + '/' + fileName;
       setState(() {
         downloading = true;
       });
       File finalFile = await zTools.downloadFile(url, fileName);
-      // await dio.download(url, savePath, onReceiveProgress: (received, total) {
-      //   print('Received: $received , Total: $total');
-      //   setState(() {
-      //     downloading = true;
-      //     progress = ((received / total) * 100).toStringAsFixed(1) + '%';
-      //   });
-      // });
       setState(() {
         downloading = false;
         progress = 'Completed';
@@ -459,6 +475,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
         isDownloaded = true;
       });
       await storage.write(argumentData[8]['book'].bookTitle, true);
+      await storage.write(
+        argumentData[5]['bookFile'].toString() + argumentData[8]['book'].bookTitle,
+        finalFile.path,
+      );
     } catch (e) {
       print(e.toString());
     }
