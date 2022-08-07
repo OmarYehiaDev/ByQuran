@@ -67,13 +67,14 @@ dependencies:
   onesignal_flutter: ^3.4.0
   shared_preferences: ^2.0.15
   flutter_pdfview: ^1.2.3
+  flutter_native_splash: ^2.2.0
+  flutter_lints: ^2.0.1
 
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^2.2.0
 
 #  #  Icon
 #  flutter_launcher_icons: ^0.9.3
@@ -88,6 +89,19 @@ dev_dependencies:
 ##  adaptive_icon_background: "assets/images/christmas-background.png" # only available for Android 8.0 devices and above
 ##  adaptive_icon_foreground: "assets/images/icon-foreground-432x432.png" # only available for Android 8.0 devices and above
 
+flutter_native_splash:
+  background_image: "assets/images/splash_image.png"
+  background_image_dark: "assets/images/splash_image.png"
+  
+  android_12:
+    background_image_dark: "assets/images/splash_image.png"
+    background_image: "assets/images/splash_image.png"
+    
+  background_image_android: "assets/background-android.png"
+  background_image_dark_android: "assets/dark-background-android.png"
+  background_image_ios: "assets/background-ios.png"
+  background_image_dark_ios: "assets/dark-background-ios.png"
+  fullscreen: true
 
 # flutter pub run flutter_launcher_icons:main
 
