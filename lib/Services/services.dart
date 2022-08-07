@@ -13,6 +13,7 @@ String search = baseUrl + "find=";
 String category = "cat_id=";
 String home = "home";
 String surahs = "surah_list";
+String details = "app_details";
 
 String imagesUrl = baseUrl2 + 'images/';
 
@@ -92,6 +93,24 @@ class DataServices {
     }
   }
 
+  static Future<List<sea.SearchQuery>?> searchBooksSpecific(String query, Surah surah) async {
+    String url = baseUrl + "srch=$query" + "&surah=${surah.surah}";
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    );
+    if (response.statusCode == 200) {
+      ///data successfully
+      return sea.fromJsonAPI(json.decode(response.body));
+    } else {
+      ///error
+      return null;
+    }
+  }
+
   static Future<List<Category>?> getCategories() async {
     String url = baseUrl + 'cat_list';
     final response = await http.get(Uri.parse(url),
@@ -114,6 +133,22 @@ class DataServices {
     if (response.statusCode == 200) {
       ///data successfully
       return fromSurahsJson(json.decode(response.body));
+    } else {
+      ///error
+      return null;
+    }
+  }
+
+  static Future<Map<String, String>?> getAppDetails() async {
+    String url = baseUrl + details;
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {'Accept': 'application/json', 'Access-Control-Allow-Origin': '*'},
+    );
+    if (response.statusCode == 200) {
+      ///data successfully
+      var data = json.decode(response.body);
+      return Map<String, String>.from(data['EBOOK_APP'][0]);
     } else {
       ///error
       return null;

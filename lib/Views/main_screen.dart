@@ -32,6 +32,7 @@ class _MainScreenState extends State<MainScreen> {
   int selectedSura = 1;
 
   bool? isLoading = null;
+  Surah? surah;
   List<SearchQuery> data = List<SearchQuery>.empty();
   List<Ebook> featuredList = List<Ebook>.empty();
   int groupVal = 0;
@@ -220,6 +221,9 @@ class _MainScreenState extends State<MainScreen> {
                           onChanged: (newValue) {
                             setState(() {
                               selectedSura = newValue!;
+                              surah = surahList.firstWhere(
+                                (element) => int.parse(element.id) == newValue,
+                              );
                             });
                           },
                           items: surahList.map<DropdownMenuItem<int>>((valueItem) {
@@ -253,9 +257,14 @@ class _MainScreenState extends State<MainScreen> {
           padding: EdgeInsets.symmetric(vertical: 20.0.h),
           child: InkWell(
             onTap: () async {
-              List<SearchQuery> list = (await DataServices.searchBooks(
-                searchController.text.trim(),
-              ))!;
+              List<SearchQuery> list = (groupVal == 0 && surah == null)
+                  ? (await DataServices.searchBooks(
+                      searchController.text.trim(),
+                    ))!
+                  : (await DataServices.searchBooksSpecific(
+                      searchController.text.trim(),
+                      surah!,
+                    ))!;
               setState(() {
                 data = list;
                 isLoading = false;

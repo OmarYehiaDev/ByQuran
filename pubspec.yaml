@@ -75,6 +75,20 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.10.0"
+
+flutter_icons:
+  android: true
+  ios: true
+  web:
+    generate: false
+  windows:
+    generate: false
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  # adaptive_icon_foreground: "assets/images/logo.png"
+  # adaptive_icon_background: "#0a80c2"
 
 #  #  Icon
 #  flutter_launcher_icons: ^0.9.3

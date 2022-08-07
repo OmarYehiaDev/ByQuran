@@ -8,6 +8,7 @@ class CustomText extends StatelessWidget {
   final FontWeight? fontWeight;
   final Alignment? alignment;
   final int? maxLines;
+  final TextDirection? textDirection;
 
   const CustomText(
       {this.text = '',
@@ -15,6 +16,7 @@ class CustomText extends StatelessWidget {
       this.fontSize = 18,
       this.color = mainColor,
       this.fontWeight,
+      this.textDirection = TextDirection.rtl,
       this.alignment});
 
   @override
@@ -24,6 +26,7 @@ class CustomText extends StatelessWidget {
       child: Text(
         text,
         maxLines: maxLines,
+        textDirection: textDirection,
         style: TextStyle(
           fontSize: fontSize,
           color: color,
