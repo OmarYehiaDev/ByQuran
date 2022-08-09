@@ -346,14 +346,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: GestureDetector(
                                       onTap: () {
-                                        Get.to(() => const ReadBookScreen(), arguments: [
-                                          {
-                                            'title': argumentData[1]['title'].toString(),
-                                            'description': argumentData[4]['bookDescription'],
-                                            'pdf': _fileName,
-                                            'author': argumentData[6]['authorName'].toString(),
-                                          },
-                                        ]);
+                                        Get.to(
+                                            () => const ReadBookScreen(
+                                                  fromSearch: false,
+                                                ),
+                                            arguments: [
+                                              {
+                                                'title': argumentData[1]['title'].toString(),
+                                                'description': argumentData[4]['bookDescription'],
+                                                'pdf': _fileName,
+                                                'author': argumentData[6]['authorName'].toString(),
+                                              },
+                                            ]);
                                       },
                                       child: Container(
                                         height: 50.h,
@@ -461,6 +465,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Future<void> downloadFile(String url) async {
+    BookController ctrl = Get.put(argumentData[9]['books']);
     try {
       String fileName = url.substring(url.lastIndexOf('/') + 1);
       await Helper.getStoragePermission();
@@ -479,6 +484,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         argumentData[5]['bookFile'].toString() + argumentData[8]['book'].bookTitle,
         finalFile.path,
       );
+      await ctrl.getDownloaded();
     } catch (e) {
       print(e.toString());
     }

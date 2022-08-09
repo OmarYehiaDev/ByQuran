@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/zTools/tools.dart';
 
 class ReadBookScreen extends StatefulWidget {
-  const ReadBookScreen({Key? key}) : super(key: key);
+  final bool fromSearch;
+  const ReadBookScreen({Key? key, required this.fromSearch}) : super(key: key);
 
   @override
   State<ReadBookScreen> createState() => _ReadBookScreenState();
@@ -229,8 +230,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
             Text(
               'المؤلف: ' + argumentData[0]['author'],
             ),
-            Text(
-              argumentData[0]['pdf'],
+            SizedBox(
+              height: 15,
             ),
             _btnSection(),
             ttsState == TtsState.playing ? _progressBar(end) : const Text(''),
@@ -240,18 +241,19 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: PDFView(
-                  filePath: argumentData[0]['pdf'],
-                  enableSwipe: true,
-                  autoSpacing: false,
-                  pageFling: false,
-                  onError: (error) {
-                    print(error.toString());
-                  },
-                  onPageError: (page, error) {
-                    print('$page: ${error.toString()}');
-                  },
-                ),
+                child: widget.fromSearch
+                    ? SfPdfViewer.network(
+                        argumentData[0]['pdf'],
+                        onDocumentLoadFailed: (details) {
+                          print(details.description);
+                        },
+                      )
+                    : SfPdfViewer.file(
+                        File(argumentData[0]['pdf']),
+                        onDocumentLoadFailed: (details) {
+                          print(details.description);
+                        },
+                      ),
               ),
             ),
           ],

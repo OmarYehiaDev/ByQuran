@@ -12,7 +12,6 @@ import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/models/search_query.dart';
 import 'package:welivewithquran/models/surah.dart';
 import 'package:welivewithquran/services/services.dart';
-import 'package:html/parser.dart';
 
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
@@ -306,7 +305,6 @@ class _MainScreenState extends State<MainScreen> {
                     itemCount: data.length,
                     itemBuilder: (ctx, index) {
                       SearchQuery item = data[index];
-                      final document = parse(item.pageText);
                       return GestureDetector(
                         onTap: () {
                           Get.to(
@@ -318,15 +316,12 @@ class _MainScreenState extends State<MainScreen> {
                           child: SizedBox(
                             child: Card(
                               child: ListTile(
-                                leading: Text("رقم السورة: ${item.surahNum}"),
-                                title: Text("اسم السورة: ${item.surahTitle}"),
+                                leading: Text("اسم السورة: ${item.surahTitle}"),
+                                title: Text("${item.surahTitle} و ترتيبها رقم: ${item.surahNum}"),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("رقم الصفحة: ${item.pageNum}"),
-                                    Text(
-                                      "نتيجة البحث:  \"${parse(document.body?.text).body!.text.trim()}\"",
-                                    ),
                                   ],
                                 ),
                               ),
@@ -571,13 +566,9 @@ class _MainScreenState extends State<MainScreen> {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: InkWell(
                           onTap: () async {
-                            print("Pressed");
-                            List<Ebook> list = (await DataServices.getEbooksFromCat(cat.cid))!;
-                            print(list.length);
                             Get.to(
                               () => CategoryScreen(
                                 cat: cat,
-                                bookList: list,
                                 ctrl: bookController,
                               ),
                             );

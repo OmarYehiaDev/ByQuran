@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,10 +11,28 @@ import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 
-class DownloadsScreen extends StatelessWidget {
-  final List<Ebook> bookList;
+class DownloadsScreen extends StatefulWidget {
   final BookController ctrl;
-  DownloadsScreen({required this.bookList, required this.ctrl});
+  DownloadsScreen({required this.ctrl});
+
+  @override
+  State<DownloadsScreen> createState() => _DownloadsScreenState();
+}
+
+class _DownloadsScreenState extends State<DownloadsScreen> {
+  Set<Ebook> bookSet = Set<Ebook>();
+
+  void setValue() {
+    setState(() {
+      bookSet = widget.ctrl.downloadedList.value;
+    });
+  }
+
+  @override
+  void initState() {
+    setValue();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +68,7 @@ class DownloadsScreen extends StatelessWidget {
               color:
                   (ThemeProvider.themeOf(context).id == "dark_theme") ? blueLightColor : mainColor,
             ),
-            bookList.isEmpty
+            bookSet.isEmpty
                 ? Container(
                     color:
                         (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : null,
@@ -67,7 +87,7 @@ class DownloadsScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 7.0),
                       child: GridView.builder(
                         padding: EdgeInsets.zero,
-                        itemCount: bookList.length,
+                        itemCount: bookSet.length,
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3, //2
                           childAspectRatio: .5, //.7
@@ -80,34 +100,34 @@ class DownloadsScreen extends StatelessWidget {
                                 () => DetailsScreen(),
                                 arguments: [
                                   {
-                                    'id': bookList[index].id,
+                                    'id': bookSet.toList()[index].id,
                                   },
                                   {
-                                    'title': bookList[index].bookTitle,
+                                    'title': bookSet.toList()[index].bookTitle,
                                   },
                                   {
-                                    'bookCover': bookList[index].bookCoverImg,
+                                    'bookCover': bookSet.toList()[index].bookCoverImg,
                                   },
                                   {
-                                    'bookPages': bookList[index].id,
+                                    'bookPages': bookSet.toList()[index].id,
                                   },
                                   {
-                                    'bookDescription': bookList[index].bookDescription,
+                                    'bookDescription': bookSet.toList()[index].bookDescription,
                                   },
                                   {
-                                    'bookFile': bookList[index].bookFileUrl,
+                                    'bookFile': bookSet.toList()[index].bookFileUrl,
                                   },
                                   {
-                                    'authorName': bookList[index].authorName,
+                                    'authorName': bookSet.toList()[index].authorName,
                                   },
                                   {
-                                    'categoryName': bookList[index].categoryName,
+                                    'categoryName': bookSet.toList()[index].categoryName,
                                   },
                                   {
-                                    "book": bookList[index],
+                                    "book": bookSet.toList()[index],
                                   },
                                   {
-                                    "books": ctrl,
+                                    "books": widget.ctrl,
                                   },
                                   {
                                     "condition": false,
@@ -131,7 +151,7 @@ class DownloadsScreen extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          bookList[index].bookTitle,
+                                          bookSet.toList()[index].bookTitle,
                                           style: TextStyle(
                                               color: Colors.white, fontSize: 16.sp, height: 1.0),
                                         ),
@@ -145,7 +165,7 @@ class DownloadsScreen extends StatelessWidget {
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.circular(7.0),
                                           child: Image.network(
-                                            imagesUrl + bookList[index].bookCoverImg,
+                                            imagesUrl + bookSet.toList()[index].bookCoverImg,
                                             fit: BoxFit.fill,
                                           ),
                                         ),
@@ -167,24 +187,6 @@ class DownloadsScreen extends StatelessWidget {
   }
 
   // Route _createRoute() {
-  //   return PageRouteBuilder(
-  //     pageBuilder: (context, animation, secondaryAnimation) => DetailsScreen(),
-  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-  //       const begin = Offset(1.0, 1.0);
-  //       const end = Offset.zero;
-  //       const curve = Curves.ease;
-
-  //       var tween =
-  //           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-  //       return SlideTransition(
-  //         position: animation.drive(tween),
-  //         child: child,
-  //       );
-  //     },
-  //   );
-  // }
-
   BoxDecoration borderSide() {
     return const BoxDecoration(
       border: Border(

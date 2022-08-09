@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,7 +6,6 @@ import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Views/read_book_screen.dart';
 import 'package:welivewithquran/models/search_query.dart';
 import 'package:welivewithquran/zTools/colors.dart';
-import 'package:welivewithquran/zTools/helpers.dart';
 
 class QueryView extends StatefulWidget {
   final SearchQuery item;
@@ -30,36 +27,33 @@ class _QueryViewState extends State<QueryView> {
   bool downloading = false;
   bool? isDownloaded;
   String progress = '';
-  String _fileName = '';
 
   @override
   void initState() {
     super.initState();
     isDownloaded = storage.read(widget.item.surahTitle + "search") ?? false;
-    _fileName = storage.read(widget.item.pageFile + widget.item.surahTitle + "search") ?? "";
   }
 
-  Future<void> downloadFile(String url) async {
-    try {
-      String fileName = url.substring(url.lastIndexOf('/') + 1);
-      await Helper.getStoragePermission();
-      setState(() {
-        downloading = true;
-      });
-      File finalFile = await zTools.downloadFile(url, fileName);
-      setState(() {
-        downloading = false;
-        progress = 'Completed';
-        _fileName = finalFile.path;
-        isDownloaded = true;
-      });
-      await storage.write(widget.item.surahTitle + "search", true);
-      await storage.write(widget.item.pageFile + widget.item.surahTitle + "search", finalFile.path);
-    } catch (e) {
-      print(e.toString());
-    }
-    print('Download completed');
-  }
+  // Future<void> downloadFile(String url) async {
+  //   try {
+  //     String fileName = url.substring(url.lastIndexOf('/') + 1);
+  //     await Helper.getStoragePermission();
+  //     setState(() {
+  //       downloading = true;
+  //     });
+  //     File finalFile = await zTools.downloadFile(url, fileName);
+  //     setState(() {
+  //       downloading = false;
+  //       progress = 'Completed';
+  //       isDownloaded = true;
+  //     });
+  //     await storage.write(widget.item.surahTitle + "search", true);
+  //     await storage.write(widget.item.pageFile + widget.item.surahTitle + "search", finalFile.path);
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  //   print('Download completed');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -106,20 +100,20 @@ class _QueryViewState extends State<QueryView> {
                   backgroundColor: MaterialStateProperty.all(blueColor),
                 ),
                 child: (isDownloaded != null && isDownloaded!) ? Text("قراءة") : Text("تحميل"),
-                onPressed: () {
-                  (isDownloaded != null && isDownloaded!)
-                      ? Get.off(
-                          () => const ReadBookScreen(),
-                          arguments: [
-                            {
-                              'title': widget.item.surahTitle,
-                              'description': parse(document.body?.text).body!.text.trim(),
-                              'pdf': _fileName,
-                              'author': "د. فاطمة بنت عمر نصيف",
-                            },
-                          ],
-                        )
-                      : downloadFile(widget.item.pageFile);
+                onPressed: () async {
+                  Get.off(
+                    () => const ReadBookScreen(
+                      fromSearch: true,
+                    ),
+                    arguments: [
+                      {
+                        'title': widget.item.surahTitle,
+                        'description': parse(document.body?.text).body!.text.trim(),
+                        'pdf': widget.item.pageFile,
+                        'author': "د. فاطمة بنت عمر نصيف",
+                      },
+                    ],
+                  );
                 },
               ),
             )

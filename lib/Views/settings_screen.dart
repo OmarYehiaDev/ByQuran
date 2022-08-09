@@ -140,7 +140,7 @@ class SettingsScreen extends StatelessWidget {
                     onPress: () {
                       Get.to(
                         () => DownloadsScreen(
-                          bookList: bookController.downloadedList,
+                          // bookList: bookController.downloadedList.toList(),
                           ctrl: bookController,
                         ),
                       );

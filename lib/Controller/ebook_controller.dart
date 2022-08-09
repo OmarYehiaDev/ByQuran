@@ -12,7 +12,7 @@ import 'package:welivewithquran/services/services.dart';
 
 class BookController extends GetxController {
   var featuredList = <Ebook>[].obs;
-  var downloadedList = <Ebook>[].obs;
+  var downloadedList = Set<Ebook>().obs;
   var bookList = <Ebook>[].obs;
   var latestBook = <Ebook>[].obs;
   var bookMarks = Set<Ebook>().obs;
@@ -159,14 +159,16 @@ class BookController extends GetxController {
   Future<void> getDownloaded() async {
     GetStorage storage = GetStorage();
     isLoading(true);
+    List<Ebook> _list = [];
     await getAll();
     try {
       for (Ebook book in bookList.value) {
         bool? isDownloaded = storage.read(book.bookTitle);
         if (isDownloaded != null && isDownloaded) {
-          downloadedList.value.add(book);
+          _list.add(book);
         }
       }
+      downloadedList.value = _list.toSet();
     } catch (e) {
       //log('Error while getting data is $e');
       print('Error while getting data is $e');

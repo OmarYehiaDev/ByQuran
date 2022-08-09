@@ -69,6 +69,7 @@ dependencies:
   flutter_pdfview: ^1.2.3
   flutter_native_splash: ^2.2.0
   flutter_lints: ^2.0.1
+  syncfusion_flutter_pdfviewer: ^20.2.43-beta
 
 
 

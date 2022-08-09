@@ -6,7 +6,7 @@ class CustomText extends StatelessWidget {
   final double fontSize;
   final Color color;
   final FontWeight? fontWeight;
-  final Alignment? alignment;
+  final TextAlign? alignment;
   final int? maxLines;
   final TextDirection? textDirection;
 
@@ -22,11 +22,11 @@ class CustomText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: alignment,
       child: Text(
         text,
         maxLines: maxLines,
         textDirection: textDirection,
+        textAlign: alignment,
         style: TextStyle(
           fontSize: fontSize,
           color: color,
