@@ -279,13 +279,13 @@ class SignUpPage extends StatelessWidget {
                 3,
                 (index) {
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       if (index == 0) {
-                        print('Facebook');
+                        AuthController.instance.facebookSignIn();
                       } else if (index == 1) {
-                        googleLogin();
+                        AuthController.instance.googleSignUp();
                       } else {
-                        print('Twitter');
+                        AuthController.instance.signInWithTwitter();
                       }
                     },
                     child: Padding(
@@ -309,9 +309,5 @@ class SignUpPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void googleLogin() {
-    AuthController.instance.googleSignUp();
   }
 }

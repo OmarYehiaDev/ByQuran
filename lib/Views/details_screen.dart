@@ -39,13 +39,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   String fileUrl = '';
   String _fileName = '';
-
-  List images = [
-    'assets/images/sura_image3.png',
-    'assets/images/sura_image2.png',
-    'assets/images/sura_image2.png',
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -413,36 +406,35 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ),
                 SizedBox(height: 5.h),
-                SizedBox(
-                  height: 0.3.sh, //180
-                  //height:double.infinity,
-                  child:
-                      // Get Random eBook API
-                      ListView.builder(
+                ctrl.featuredList.isNotEmpty
+                    ? SizedBox(
+                        height: 0.3.sh,
+                        child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: images.length,
+                          itemCount: ctrl.featuredList.length,
                           itemBuilder: (context, index) {
+                            Ebook book = ctrl.featuredList.value[index];
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
                                   Expanded(
-                                    child: Image.asset(
-                                      images[index],
+                                    child: Image.network(
+                                      imagesUrl + book.bookCoverImg,
                                       fit: BoxFit.fill,
                                       height: 190.h,
                                       width: 120.w,
                                     ),
                                   ),
                                   Text(
-                                    'د. فاطمة بنت عمر نصيف',
+                                    book.authorName,
                                     style: TextStyle(
                                       color: blueColor,
                                       fontSize: 12.sp,
                                     ),
                                   ),
                                   Text(
-                                    'سورة الفاتحة',
+                                    book.bookTitle,
                                     style: TextStyle(
                                       color: (ThemeProvider.themeOf(context).id == "dark_theme")
                                           ? whiteColor
@@ -453,8 +445,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 ],
                               ),
                             );
-                          }),
-                )
+                          },
+                        ),
+                      )
+                    : Container(
+                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                            ? blueDarkColor
+                            : null,
+                        child: Center(
+                          child: CustomText(
+                            alignment: TextAlign.center,
+                            text: "لا توجد مقترحات",
+                            fontSize: 16.sp,
+                            color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                ? blueLightColor
+                                : mainColor,
+                          ),
+                        ),
+                      ),
 // ----------------------------------------------------------------
               ],
             ),
