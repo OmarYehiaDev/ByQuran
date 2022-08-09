@@ -414,35 +414,79 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           itemCount: ctrl.featuredList.length,
                           itemBuilder: (context, index) {
                             Ebook book = ctrl.featuredList.value[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Image.network(
-                                      imagesUrl + book.bookCoverImg,
-                                      fit: BoxFit.fill,
-                                      height: 190.h,
-                                      width: 120.w,
+                            return GestureDetector(
+                              onTap: () {
+                                Get.back();
+                                Get.to(
+                                  () => DetailsScreen(),
+                                  arguments: [
+                                    {
+                                      'id': book.id,
+                                    },
+                                    {
+                                      'title': book.bookTitle,
+                                    },
+                                    {
+                                      'bookCover': book.bookCoverImg,
+                                    },
+                                    {
+                                      'bookPages': book.id,
+                                    },
+                                    {
+                                      'bookDescription': book.bookDescription,
+                                    },
+                                    {
+                                      'bookFile': book.bookFileUrl,
+                                    },
+                                    {
+                                      'authorName': book.authorName,
+                                    },
+                                    {
+                                      'categoryName': book.categoryName,
+                                    },
+                                    {
+                                      "book": book,
+                                    },
+                                    {
+                                      "books": ctrl,
+                                    },
+                                    {
+                                      "condition": false,
+                                    },
+                                  ],
+                                );
+                                // Navigator.of(context).push(_createRoute());
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Image.network(
+                                        imagesUrl + book.bookCoverImg,
+                                        fit: BoxFit.fill,
+                                        height: 190.h,
+                                        width: 120.w,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    book.authorName,
-                                    style: TextStyle(
-                                      color: blueColor,
-                                      fontSize: 12.sp,
+                                    Text(
+                                      book.authorName,
+                                      style: TextStyle(
+                                        color: blueColor,
+                                        fontSize: 12.sp,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    book.bookTitle,
-                                    style: TextStyle(
-                                      color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                          ? whiteColor
-                                          : mainColor,
-                                      fontSize: 16.sp,
+                                    Text(
+                                      book.bookTitle,
+                                      style: TextStyle(
+                                        color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                            ? whiteColor
+                                            : mainColor,
+                                        fontSize: 16.sp,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

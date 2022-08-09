@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:io' show File, Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
@@ -248,10 +250,16 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                           print(details.description);
                         },
                       )
-                    : SfPdfViewer.file(
-                        File(argumentData[0]['pdf']),
-                        onDocumentLoadFailed: (details) {
-                          print(details.description);
+                    : PDFView(
+                        filePath: argumentData[0]['pdf'],
+                        enableSwipe: true,
+                        autoSpacing: false,
+                        pageFling: false,
+                        onError: (error) {
+                          print(error.toString());
+                        },
+                        onPageError: (page, error) {
+                          print('$page: ${error.toString()}');
                         },
                       ),
               ),

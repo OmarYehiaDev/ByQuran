@@ -316,7 +316,7 @@ class _MainScreenState extends State<MainScreen> {
                           child: SizedBox(
                             child: Card(
                               child: ListTile(
-                                leading: Text("اسم السورة: ${item.surahTitle}"),
+                                leading: Text("${item.surahTitle}"),
                                 title: Text("${item.surahTitle} و ترتيبها رقم: ${item.surahNum}"),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -76,17 +76,9 @@ class _QueryViewState extends State<QueryView> {
           mainAxisSize: MainAxisSize.max,
           children: [
             ListTile(
-              title: Text("سورة " + widget.item.surahTitle),
-              trailing: Text("رقم السورة: " + widget.item.surahNum),
+              title: Text(widget.item.surahTitle),
+              trailing: Text("ترتيب السورة: " + widget.item.surahNum),
             ),
-            // SizedBox(
-            //   height: 0.3.sh,
-            //   child: Card(
-            //     child: Image.network(
-            //       imagesUrl + widget.item.pageImg,
-            //     ),
-            //   ),
-            // ),
             ListTile(
               leading: downloading
                   ? CircularProgressIndicator(
@@ -99,7 +91,7 @@ class _QueryViewState extends State<QueryView> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(blueColor),
                 ),
-                child: (isDownloaded != null && isDownloaded!) ? Text("قراءة") : Text("تحميل"),
+                child: Text("قراءة"),
                 onPressed: () async {
                   Get.off(
                     () => const ReadBookScreen(
