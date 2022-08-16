@@ -478,31 +478,31 @@ class _MainScreenState extends State<MainScreen> {
                       () => DetailsScreen(),
                       arguments: [
                         {
-                          'id': bookController.bookList[index].id,
+                          'id': bookController.latestBook[index].id,
                         },
                         {
-                          'title': bookController.bookList[index].bookTitle,
+                          'title': bookController.latestBook[index].bookTitle,
                         },
                         {
-                          'bookCover': bookController.bookList[index].bookCoverImg,
+                          'bookCover': bookController.latestBook[index].bookCoverImg,
                         },
                         {
-                          'bookPages': bookController.bookList[index].id,
+                          'bookPages': bookController.latestBook[index].id,
                         },
                         {
-                          'bookDescription': bookController.bookList[index].bookDescription,
+                          'bookDescription': bookController.latestBook[index].bookDescription,
                         },
                         {
-                          'bookFile': bookController.bookList[index].bookFileUrl,
+                          'bookFile': bookController.latestBook[index].bookFileUrl,
                         },
                         {
-                          'authorName': bookController.bookList[index].authorName,
+                          'authorName': bookController.latestBook[index].authorName,
                         },
                         {
-                          'categoryName': bookController.bookList[index].categoryName,
+                          'categoryName': bookController.latestBook[index].categoryName,
                         },
                         {
-                          "book": bookController.bookList[index],
+                          "book": bookController.latestBook[index],
                         },
                         {
                           "books": bookController,

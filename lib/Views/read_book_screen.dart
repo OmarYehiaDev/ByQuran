@@ -30,7 +30,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
 
   double volume = 0.5;
   double pitch = 1.0;
-  double rate = 1;
+  double rate = 0.5;
   //bool play = false;
 
   int end = 0;
@@ -198,7 +198,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   @override
   Widget build(BuildContext context) {
     tts.setLanguage('ar');
-    tts.setSpeechRate(1);
+    tts.setSpeechRate(0.5);
 
     return Scaffold(
       backgroundColor:

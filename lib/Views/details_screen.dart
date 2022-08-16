@@ -465,7 +465,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       child: Image.network(
                                         imagesUrl + book.bookCoverImg,
                                         fit: BoxFit.fill,
-                                        height: 190.h,
                                         width: 120.w,
                                       ),
                                     ),
