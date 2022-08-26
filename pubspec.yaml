@@ -70,6 +70,7 @@ dependencies:
   flutter_native_splash: ^2.2.0
   flutter_lints: ^2.0.1
   syncfusion_flutter_pdfviewer: ^20.2.43-beta
+  firebase_app_check: ^0.0.7
 
 
 
