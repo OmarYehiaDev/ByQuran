@@ -324,11 +324,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: Center(
-                                          child: CustomText(
-                                            text: 'تحميل الكتاب',
-                                            fontSize: 18.sp,
-                                            color: Colors.white,
-                                          ),
+                                          child: downloading
+                                              ? Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: CircularProgressIndicator(
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(Colors.white)),
+                                                )
+                                              : CustomText(
+                                                  text: 'تحميل الكتاب',
+                                                  fontSize: 18.sp,
+                                                  color: Colors.white,
+                                                ),
                                         ),
                                       ),
                                     ),

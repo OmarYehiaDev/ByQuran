@@ -26,6 +26,12 @@ class AuthController extends GetxController {
   );
 
   @override
+  void onInit() {
+    loginAnon();
+    super.onInit();
+  }
+
+  @override
   void onReady() {
     GetStorage storage = GetStorage();
 
@@ -40,11 +46,13 @@ class AuthController extends GetxController {
   }
 
   _startScreen(bool? logged) {
-    if (logged != null && logged) {
-      Get.offAll(() => HomeScreen());
-    } else {
-      Get.offAll(() => LoginScreen());
-    }
+    loginAnon();
+    Get.offAll(() => HomeScreen());
+    // if (logged != null && logged) {
+    //   Get.offAll(() => HomeScreen());
+    // } else {
+    //   Get.offAll(() => LoginScreen());
+    // }
   }
 
   void register(String email, password) async {

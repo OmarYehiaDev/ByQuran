@@ -28,7 +28,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
 
   FlutterTts tts = FlutterTts();
 
-  double volume = 0.5;
+  double volume = 1.0;
   double pitch = 1.0;
   double rate = 0.5;
   //bool play = false;
@@ -72,9 +72,9 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
 
   @override
   initState() {
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
     initTts();
+    super.initState();
   }
 
   @override
@@ -85,8 +85,12 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
     super.dispose();
   }
 
-  initTts() {
-    tts = FlutterTts();
+  initTts() async {
+    await tts.setLanguage('ar');
+    await tts.setSpeechRate(rate);
+    await tts.setPitch(1.5);
+    await tts.setVolume(volume);
+    await tts.setVoice(TTSVoice(name: "Ahmed", locale: 'ar-KW', gender: TTSVoiceGender.male));
     if (isAndroid) {
       _getEngines();
     }
@@ -197,9 +201,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    tts.setLanguage('ar');
-    tts.setSpeechRate(0.5);
-
     return Scaffold(
       backgroundColor:
           (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : backgroundColor,

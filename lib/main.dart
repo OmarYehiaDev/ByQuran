@@ -46,7 +46,7 @@ Future<void> main() async {
   // SharedPreferences pref = await SharedPreferences.getInstance();
   // var email = pref.getString('email');
   await GetStorage.init();
-  await Future.delayed(Duration(seconds: 3));
+  await Future.delayed(Duration(seconds: 4));
   runApp(const MyApp());
 }
 
