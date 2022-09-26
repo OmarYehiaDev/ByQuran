@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 
@@ -46,6 +47,7 @@ Future<void> main() async {
   // SharedPreferences pref = await SharedPreferences.getInstance();
   // var email = pref.getString('email');
   await GetStorage.init();
+  Get.put(await SharedPreferences.getInstance(),permanent: true);
   await Future.delayed(Duration(seconds: 4));
   runApp(const MyApp());
 }

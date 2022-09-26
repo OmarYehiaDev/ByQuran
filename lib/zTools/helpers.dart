@@ -95,7 +95,9 @@ class zTools {
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       final dir = await getApplicationDocumentsDirectory();
+
       File file = File('${dir.path}/$filename');
+
       await file.writeAsBytes(bytes);
       print('downloaded file path = ${file.path}');
       return file;

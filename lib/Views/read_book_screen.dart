@@ -90,7 +90,8 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
     await tts.setSpeechRate(rate);
     await tts.setPitch(1.5);
     await tts.setVolume(volume);
-    await tts.setVoice(TTSVoice(name: "Ahmed", locale: 'ar-KW', gender: TTSVoiceGender.male));
+    await tts.setVoice((await tts.getVoices)[20]);
+
     if (isAndroid) {
       _getEngines();
     }

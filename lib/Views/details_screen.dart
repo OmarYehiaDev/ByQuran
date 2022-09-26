@@ -2,11 +2,14 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
@@ -27,6 +30,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final prefs = Get.find<SharedPreferences>();
+
   dynamic argumentData = Get.arguments;
   GetStorage storage = GetStorage();
 
@@ -45,6 +50,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     isDownloaded = storage.read(
           argumentData[8]['book'].bookTitle,
         ) ??
+        prefs.getBool(argumentData[8]['book'].bookTitle) ??
         false;
     fileUrl = argumentData[5]['bookFile'].toString();
     _fileName = storage.read(
@@ -318,7 +324,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         await downloadFile(fileUrl);
                                       },
                                       child: Container(
-                                        height: 50.h,
+                                        height: 70.h,
                                         decoration: BoxDecoration(
                                           color: mainColor,
                                           borderRadius: BorderRadius.circular(10),
@@ -327,9 +333,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           child: downloading
                                               ? Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: CircularProgressIndicator(
-                                                      valueColor:
-                                                          AlwaysStoppedAnimation(Colors.white)),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Text(
+                                                          "${progress.isEmpty ? 0 : progress} %",
+                                                          style: TextStyle(color: Colors.white),
+                                                        ),
+                                                      ),
+                                                      progress != "100.0"
+                                                          ? SizedBox(
+                                                              height: 25,
+                                                              width: 25,
+                                                              child: CircularProgressIndicator(
+                                                                color: Colors.white,
+                                                              ),
+                                                            )
+                                                          : SizedBox.shrink(),
+                                                    ],
+                                                  ),
                                                 )
                                               : CustomText(
                                                   text: 'تحميل الكتاب',
@@ -523,14 +549,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Future<void> downloadFile(String url) async {
+    if (url.contains("localhost")) {
+      Get.snackbar("خطأ", "لا يمكن تحميل هذا الملف");
+      return;
+    }
+
     BookController ctrl = Get.put(argumentData[9]['books']);
     try {
+      var httpClient = HttpClient();
       String fileName = url.substring(url.lastIndexOf('/') + 1);
+      final dir = await getApplicationDocumentsDirectory();
       await Helper.getStoragePermission();
       setState(() {
         downloading = true;
       });
-      File finalFile = await zTools.downloadFile(url, fileName);
+      var request = await httpClient.getUrl(Uri.parse(url));
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(
+        response,
+        onBytesReceived: (received, total) {
+          print('Received: $received , Total: $total');
+          setState(() {
+            progress = ((received / total!) * 100).toStringAsFixed(1);
+          });
+        },
+      );
+      File file = File('${dir.path}/$fileName');
+      final finalFile = await file.writeAsBytes(bytes);
+      // File finalFile = await zTools.downloadFile(url, fileName);
       setState(() {
         downloading = false;
         progress = 'Completed';
@@ -538,6 +584,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
         isDownloaded = true;
       });
       await storage.write(argumentData[8]['book'].bookTitle, true);
+
+      await prefs.setBool(argumentData[8]['book'].bookTitle, true);
       await storage.write(
         argumentData[5]['bookFile'].toString() + argumentData[8]['book'].bookTitle,
         finalFile.path,
