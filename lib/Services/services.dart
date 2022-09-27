@@ -5,9 +5,9 @@ import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/models/search_query.dart' as sea;
 import 'package:welivewithquran/models/surah.dart';
 
-String baseUrl = 'https://smartmedia-kw.com/zbook/api.php?';
+String baseUrl = 'https://smartmediakw.com/zbook/api.php?';
 
-String baseUrl2 = 'https://smartmedia-kw.com/zbook/';
+String baseUrl2 = 'https://smartmediakw.com/zbook/';
 String api = baseUrl2 + 'api.php?';
 String search = baseUrl + "find=";
 String category = "cat_id=";
