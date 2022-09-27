@@ -90,6 +90,24 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
     final defaultV = await tts.getDefaultVoice;
     final List voices = await tts.getVoices;
     log(defaultV.toString());
+    log(
+      Map.from(
+        voices
+            .where(
+              (element) => element["name"]!.contains("ar"),
+            )
+            .toList()[1],
+      ).toString(),
+    );
+    log(
+      Map.from(
+        voices
+            .where(
+              (element) => element["name"]!.contains("ar"),
+            )
+            .toList()[0],
+      ).toString(),
+    );
     await tts.setLanguage('ar');
     await tts.setSpeechRate(rate);
     await tts.setPitch(pitch);
