@@ -41,8 +41,7 @@ dependencies:
 
   get: ^4.6.5
   get_storage: 2.0.3
-  flutter_tts: 
-    git: git@github.com:SlowTalkUs/flutter_tts.git
+  flutter_tts: 3.5.3
 
   flutter_svg: ^0.23.0+1
   cached_network_image: ^3.2.1

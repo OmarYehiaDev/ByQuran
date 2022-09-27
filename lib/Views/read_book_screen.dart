@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -86,11 +87,22 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   }
 
   initTts() async {
+    final defaultV = await tts.getDefaultVoice;
+    final List voices = await tts.getVoices;
+    log(defaultV.toString());
     await tts.setLanguage('ar');
     await tts.setSpeechRate(rate);
-    await tts.setPitch(1.5);
+    await tts.setPitch(pitch);
     await tts.setVolume(volume);
-    await tts.setVoice((await tts.getVoices)[20]);
+    await tts.setVoice(
+      Map.from(
+        voices
+            .where(
+              (element) => element["name"]!.contains("ar"),
+            )
+            .toList()[1],
+      ),
+    );
 
     if (isAndroid) {
       _getEngines();
