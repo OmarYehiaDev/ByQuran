@@ -35,9 +35,7 @@ class SettingsScreen extends StatelessWidget {
     User? user = FirebaseAuth.instance.currentUser;
     return Container(
       decoration: BoxDecoration(
-        color: (ThemeProvider.themeOf(context).id == "dark_theme")
-            ? ThemeProvider.themeOf(context).data.colorScheme.background
-            : null,
+        color: ThemeProvider.themeOf(context).data.colorScheme.background,
       ),
       child: SingleChildScrollView(
         child: Column(

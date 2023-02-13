@@ -103,21 +103,11 @@ class ContactUsScreen extends StatelessWidget {
                               width: 10,
                             ),
                             CustomText(
-                              text: "البريد الالكتروني :",
+                              text: "البريد الالكتروني :\n ${data["app_email"]!}",
                               color: (ThemeProvider.themeOf(context).id == "dark_theme")
                                   ? whiteColor
                                   : blueColor,
-                              fontSize: 16.sp,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            CustomText(
-                              text: data["app_email"]!,
-                              color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                  ? whiteColor
-                                  : blueColor,
-                              fontSize: 16.sp,
+                              fontSize: 14.sp,
                             ),
                           ],
                         ),
@@ -173,21 +163,11 @@ class ContactUsScreen extends StatelessWidget {
                               width: 10,
                             ),
                             CustomText(
-                              text: "موقع الويب :",
+                              text: "موقع الويب :\n${data["app_website"]!}",
                               color: (ThemeProvider.themeOf(context).id == "dark_theme")
                                   ? whiteColor
                                   : blueColor,
-                              fontSize: 16.sp,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            CustomText(
-                              text: data["app_website"]!,
-                              color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                  ? whiteColor
-                                  : blueColor,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                           ],
                         ),

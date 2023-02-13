@@ -10,14 +10,16 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Services/services.dart';
+import 'package:welivewithquran/Views/read_book_online.dart';
 import 'package:welivewithquran/Views/read_book_screen.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
 import 'package:welivewithquran/zTools/helpers.dart';
-
+// import 'package:webview_flutter/webview_flutter.dart';
 import '../models/ebook_org.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -53,10 +55,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
         prefs.getBool(argumentData[8]['book'].bookTitle) ??
         false;
     fileUrl = argumentData[5]['bookFile'].toString();
-    _fileName = storage.read(
-          argumentData[5]['bookFile'].toString() + argumentData[8]['book'].bookTitle,
-        ) ??
-        "";
+    Future.microtask(
+      () async => _fileName = storage.read(
+            argumentData[5]['bookFile'].toString() + argumentData[8]['book'].bookTitle,
+          ) ??
+          await getFilePath(fileUrl),
+    );
   }
 
   @override
@@ -97,13 +101,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(
-            color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : mainColor,
-            image: (ThemeProvider.themeOf(context).id == "dark_theme")
-                ? null
-                : DecorationImage(
-                    image: AssetImage('assets/images/main_background1.png'),
-                    fit: BoxFit.cover,
-                  ),
+            color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : whiteColor,
+            // image: (ThemeProvider.themeOf(context).id == "dark_theme")
+            //     ? null
+            //     : DecorationImage(
+            //         image: AssetImage('assets/images/main_background1.png'),
+            //         fit: BoxFit.cover,
+            //       ),
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -312,95 +316,130 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             //(progress != 'Completed' || fileExists == false)
-                            (isDownloaded == null || !isDownloaded!)
+                            Column(
+                              children: [
+                                (isDownloaded == null || !isDownloaded!)
 
-                                /// ------------------------------ Download Book ------------------------
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        await Helper.getStoragePermission();
-                                        print(fileUrl);
-                                        await downloadFile(fileUrl);
-                                      },
-                                      child: Container(
-                                        height: 70.h,
-                                        decoration: BoxDecoration(
-                                          color: mainColor,
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Center(
-                                          child: downloading
-                                              ? Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Text(
-                                                          "${progress.isEmpty ? 0 : progress} %",
-                                                          style: TextStyle(color: Colors.white),
-                                                        ),
+                                    /// ------------------------------ Download Book ------------------------
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            await Helper.getStoragePermission();
+                                            print(fileUrl);
+                                            await downloadFile(fileUrl);
+                                          },
+                                          child: Container(
+                                            height: 70.h,
+                                            decoration: BoxDecoration(
+                                              color: mainColor,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Center(
+                                              child: downloading
+                                                  ? Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.max,
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment.center,
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Text(
+                                                              "${progress.isEmpty ? 0 : progress} %",
+                                                              style: TextStyle(color: Colors.white),
+                                                            ),
+                                                          ),
+                                                          progress != "100.0"
+                                                              ? SizedBox(
+                                                                  height: 25,
+                                                                  width: 25,
+                                                                  child: CircularProgressIndicator(
+                                                                    color: Colors.white,
+                                                                  ),
+                                                                )
+                                                              : SizedBox.shrink(),
+                                                        ],
                                                       ),
-                                                      progress != "100.0"
-                                                          ? SizedBox(
-                                                              height: 25,
-                                                              width: 25,
-                                                              child: CircularProgressIndicator(
-                                                                color: Colors.white,
-                                                              ),
-                                                            )
-                                                          : SizedBox.shrink(),
-                                                    ],
-                                                  ),
-                                                )
-                                              : CustomText(
-                                                  text: 'تحميل الكتاب',
-                                                  fontSize: 18.sp,
-                                                  color: Colors.white,
-                                                ),
+                                                    )
+                                                  : CustomText(
+                                                      text: 'تحميل الكتاب',
+                                                      fontSize: 18.sp,
+                                                      color: Colors.white,
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+
+                                    /// --------------------------------  Read Book --------------------------
+                                    : Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Get.to(
+                                                () => const ReadBookScreen(
+                                                      fromSearch: false,
+                                                    ),
+                                                arguments: [
+                                                  {
+                                                    'id': argumentData[0]['id'],
+                                                    'title': argumentData[1]['title'].toString(),
+                                                    'description': argumentData[4]
+                                                        ['bookDescription'],
+                                                    'pdf': _fileName,
+                                                    'author':
+                                                        argumentData[6]['authorName'].toString(),
+                                                    'condition': argumentData[10]["condition"],
+                                                    'book': argumentData[8]["book"],
+                                                    'books': argumentData[9]["books"],
+                                                  },
+                                                ]);
+                                          },
+                                          child: Container(
+                                            height: 50.h,
+                                            decoration: BoxDecoration(
+                                                color: mainColor,
+                                                borderRadius: BorderRadius.circular(10)),
+                                            child: Center(
+                                              child: CustomText(
+                                                text: 'قراءة الكتاب',
+                                                fontSize: 18.sp,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )
-
-                                /// --------------------------------  Read Book --------------------------
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Get.to(
-                                            () => const ReadBookScreen(
-                                                  fromSearch: false,
-                                                ),
-                                            arguments: [
-                                              {
-                                                'title': argumentData[1]['title'].toString(),
-                                                'description': argumentData[4]['bookDescription'],
-                                                'pdf': _fileName,
-                                                'author': argumentData[6]['authorName'].toString(),
-                                              },
-                                            ]);
-                                      },
-                                      child: Container(
-                                        height: 50.h,
-                                        decoration: BoxDecoration(
-                                            color: mainColor,
-                                            borderRadius: BorderRadius.circular(10)),
-                                        child: Center(
-                                          child: CustomText(
-                                            text: 'قراءة الكتاب',
-                                            fontSize: 18.sp,
-                                            color: Colors.white,
-                                          ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => ReadOnlineScreen(fileURL: fileUrl),
+                                        fullscreenDialog: true,
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 50.h,
+                                      decoration: BoxDecoration(
+                                          color: mainColor,
+                                          borderRadius: BorderRadius.circular(10)),
+                                      child: Center(
+                                        child: CustomText(
+                                          text: 'قراءة الكتاب أونلاين',
+                                          fontSize: 18.sp,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
                                   ),
-                            const SizedBox(height: 20)
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 0)
                           ],
                         ),
                       ),
@@ -548,6 +587,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
+  Future<String> getFilePath(String url) async {
+    String fileName = url.substring(url.lastIndexOf('/') + 1);
+    final dir = await getExternalStorageDirectory();
+    File file = File('${dir!.path}/$fileName');
+    return file.path;
+  }
+
   Future<void> downloadFile(String url) async {
     if (url.contains("localhost")) {
       Get.snackbar("خطأ", "لا يمكن تحميل هذا الملف");
@@ -558,7 +604,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     try {
       var httpClient = HttpClient();
       String fileName = url.substring(url.lastIndexOf('/') + 1);
-      final dir = await getApplicationDocumentsDirectory();
+      final dir = await getExternalStorageDirectory();
       await Helper.getStoragePermission();
       setState(() {
         downloading = true;
@@ -574,7 +620,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           });
         },
       );
-      File file = File('${dir.path}/$fileName');
+      File file = File('${dir!.path}/$fileName');
       final finalFile = await file.writeAsBytes(bytes);
       // File finalFile = await zTools.downloadFile(url, fileName);
       setState(() {

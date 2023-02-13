@@ -30,7 +30,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             )
           : bookController.bookMarks.isEmpty
               ? Container(
-                  color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : null,
+                  color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                      ? blueDarkColor
+                      : whiteColor,
                   child: Center(
                     child: CustomText(
                       text: "لا توجد سور مفضلة حتى الآن",
@@ -51,13 +53,13 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                     decoration: BoxDecoration(
                       color: (ThemeProvider.themeOf(context).id == "dark_theme")
                           ? blueDarkColor
-                          : mainColor,
-                      image: (ThemeProvider.themeOf(context).id == "dark_theme")
-                          ? null
-                          : DecorationImage(
-                              image: AssetImage('assets/images/main_background1.png'),
-                              fit: BoxFit.cover,
-                            ),
+                          : whiteColor,
+                      // image: (ThemeProvider.themeOf(context).id == "dark_theme")
+                      //     ? null
+                      //     : DecorationImage(
+                      //         image: AssetImage('assets/images/main_background1.png'),
+                      //         fit: BoxFit.cover,
+                      //       ),
                     ),
                     child: Column(
                       children: [

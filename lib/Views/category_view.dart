@@ -32,13 +32,13 @@ class CategoryScreen extends StatelessWidget {
         width: double.infinity,
         //height: double.infinity,
         decoration: BoxDecoration(
-          color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : mainColor,
-          image: (ThemeProvider.themeOf(context).id == "dark_theme")
-              ? null
-              : DecorationImage(
-                  image: AssetImage('assets/images/main_background1.png'),
-                  fit: BoxFit.cover,
-                ),
+          color: (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : whiteColor,
+          // image: (ThemeProvider.themeOf(context).id == "dark_theme")
+          //     ? null
+          //     : DecorationImage(
+          //         image: AssetImage('assets/images/main_background1.png'),
+          //         fit: BoxFit.cover,
+          //       ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

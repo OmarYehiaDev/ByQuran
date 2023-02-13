@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
                 decoration: BoxDecoration(
                   color: (ThemeProvider.themeOf(context).id == "dark_theme")
                       ? blueDarkColor
-                      : blueBackgroundColor,
+                      : whiteColor,
                   // image:  DecorationImage(
                   //   image:  AssetImage('assets/images/main_background.png'),
                   //   fit: BoxFit.cover,
@@ -259,11 +259,11 @@ class _MainScreenState extends State<MainScreen> {
               List<SearchQuery> list = (groupVal == 0 && surah == null)
                   ? (await DataServices.searchBooks(
                       searchController.text.trim(),
-                    ))!
+                    )) ?? []
                   : (await DataServices.searchBooksSpecific(
                       searchController.text.trim(),
                       surah!,
-                    ))!;
+                    ))?? [];
               setState(() {
                 data = list;
                 isLoading = false;

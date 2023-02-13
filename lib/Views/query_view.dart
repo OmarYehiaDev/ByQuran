@@ -61,7 +61,7 @@ class _QueryViewState extends State<QueryView> {
 
     return Scaffold(
       backgroundColor:
-          (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : blueBackgroundColor,
+          (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : whiteColor,
       appBar: AppBar(
         title: Text("نتيجة البحث عن كلمة: ${widget.query}"),
         centerTitle: true,
@@ -100,6 +100,8 @@ class _QueryViewState extends State<QueryView> {
                     arguments: [
                       {
                         'title': widget.item.surahTitle,
+                        'id': widget.item.surahNum,
+                        'page': int.parse(widget.item.pageNum),
                         'description': parse(document.body?.text).body!.text.trim(),
                         'pdf': widget.item.pageFile,
                         'author': "د. فاطمة بنت عمر نصيف",

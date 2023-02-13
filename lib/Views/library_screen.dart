@@ -31,13 +31,13 @@ class LibraryScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: (ThemeProvider.themeOf(context).id == "dark_theme")
                       ? blueDarkColor
-                      : mainColor,
-                  image: (ThemeProvider.themeOf(context).id == "dark_theme")
-                      ? null
-                      : DecorationImage(
-                          image: AssetImage('assets/images/main_background1.png'),
-                          fit: BoxFit.cover,
-                        ),
+                      : whiteColor,
+                  // image: (ThemeProvider.themeOf(context).id == "dark_theme")
+                  //     ? null
+                  //     : DecorationImage(
+                  //         image: AssetImage('assets/images/main_background1.png'),
+                  //         fit: BoxFit.cover,
+                  //       ),
                 ),
                 child: Column(
                   children: [

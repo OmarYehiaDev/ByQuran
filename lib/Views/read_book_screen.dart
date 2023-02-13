@@ -1,17 +1,22 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/zTools/tools.dart';
+
+import '../Controller/ebook_controller.dart';
+import '../models/ebook_org.dart';
 
 class ReadBookScreen extends StatefulWidget {
   final bool fromSearch;
@@ -25,6 +30,8 @@ enum TtsState { playing, stopped, paused, continued }
 
 class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObserver {
   dynamic argumentData = Get.arguments;
+  GetStorage storage = GetStorage();
+
   String desc = BookTools.stripHtml(Get.arguments[0]['description']);
 
   FlutterTts tts = FlutterTts();
@@ -47,6 +54,9 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   bool get isIOS => !kIsWeb && Platform.isIOS;
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
   bool get isWeb => kIsWeb;
+
+  int currentPage = 0;
+  List<int> savedPages = [];
 
   @override
 
@@ -75,6 +85,17 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   initState() {
     WidgetsBinding.instance.addObserver(this);
     initTts();
+    if (!widget.fromSearch) {
+      BookController ctrl = Get.put(argumentData[0]['books']);
+      Future.microtask(
+        () async {
+          final pages = await ctrl.getSavedPages(argumentData[0]["id"]);
+          setState(() {
+            savedPages = pages;
+          });
+        },
+      );
+    }
     super.initState();
   }
 
@@ -232,6 +253,12 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
+    String? id = argumentData[0]["id"];
+    int? page = argumentData[0]["page"];
+    // bool isFromFavs = argumentData[0]["condition"] as bool;
+    Ebook? book = argumentData[0]['book'];
+    BookController ctrl = Get.put(argumentData[0]['books'] ?? BookController());
+
     return Scaffold(
       backgroundColor:
           (ThemeProvider.themeOf(context).id == "dark_theme") ? blueDarkColor : backgroundColor,
@@ -267,33 +294,96 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
             SizedBox(
               height: 15,
             ),
-            _btnSection(),
-            ttsState == TtsState.playing ? _progressBar(end) : const Text(''),
+            // _btnSection(),
+            // ttsState == TtsState.playing ? _progressBar(end) : const Text(''),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: widget.fromSearch
-                    ? SfPdfViewer.network(
-                        argumentData[0]['pdf'],
-                        onDocumentLoadFailed: (details) {
-                          print(details.description);
-                        },
-                      )
-                    : PDFView(
-                        filePath: argumentData[0]['pdf'],
-                        enableSwipe: true,
-                        autoSpacing: false,
-                        pageFling: false,
-                        onError: (error) {
-                          print(error.toString());
-                        },
-                        onPageError: (page, error) {
-                          print('$page: ${error.toString()}');
-                        },
+                child: Stack(
+                  children: [
+                    widget.fromSearch
+                        ? SfPdfViewer.network(
+                            argumentData[0]['pdf'],
+                            onDocumentLoadFailed: (details) {
+                              print(details.description);
+                            },
+                            onPageChanged: (details) {
+                              log(details.newPageNumber.toString());
+                              setState(() {
+                                currentPage = details.newPageNumber;
+                              });
+                            },
+                            onTextSelectionChanged: (details) {
+                              log(details.selectedText ?? "NULL");
+                            },
+                          )
+                        : SfPdfViewer.file(
+                            File(argumentData[0]['pdf']),
+                            pageLayoutMode: PdfPageLayoutMode.single,
+                            onPageChanged: (details) {
+                              log(details.newPageNumber.toString());
+                              setState(() {
+                                currentPage = details.newPageNumber;
+                              });
+                            },
+                            onDocumentLoadFailed: (details) {
+                              print(details.description);
+                            },
+                            onTextSelectionChanged: (details) {
+                              log(details.selectedText ?? "");
+                            },
+                          ),
+                    Positioned.directional(
+                      textDirection: TextDirection.rtl,
+                      start: 16,
+                      top: 16,
+                      child: ButtonBar(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                              onPressed: () async {
+                                await ctrl.share(page??currentPage, book?.id?? id!);
+                              },
+                              icon: Icon(Icons.share),
+                              color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                  ? blueLightColor
+                                  : blueDarkColor
+                              // : Colors.grey,
+                              ),
+                          !widget.fromSearch
+                              ? IconButton(
+                                  onPressed: () async {
+                                    final isBookmarked =
+                                        await ctrl.isPageBookmarked(id!, currentPage);
+                                    bool? res;
+                                    if (isBookmarked) {
+                                      res = await ctrl.removeBookmarkPage(id, currentPage);
+                                    } else {
+                                      res = await ctrl.bookmarkPage(id, currentPage);
+                                    }
+                                    final data = await ctrl.getSavedPages(id);
+                                    setState(() {
+                                      log(res.toString());
+                                      savedPages = data;
+                                    });
+                                  },
+                                  icon: Icon(Icons.bookmark),
+                                  color: savedPages.contains(currentPage)
+                                      ? (ThemeProvider.themeOf(context).id == "dark_theme")
+                                          ? blueLightColor
+                                          : blueDarkColor
+                                      : whiteColor
+                                  // : Colors.grey,
+                                  )
+                              : SizedBox(),
+                        ],
                       ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

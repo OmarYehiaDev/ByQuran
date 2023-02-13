@@ -14,6 +14,7 @@ String category = "cat_id=";
 String home = "home";
 String surahs = "surah_list";
 String details = "app_details";
+String images = "images/";
 
 String imagesUrl = baseUrl2 + 'images/';
 
@@ -105,6 +106,24 @@ class DataServices {
     if (response.statusCode == 200) {
       ///data successfully
       return sea.fromJsonAPI(json.decode(response.body));
+    } else {
+      ///error
+      return null;
+    }
+  }
+
+  static Future<String?> getPageImage(int pageNum, String surah) async {
+    String url = baseUrl + "surah_no=$surah&pid=$pageNum";
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+    );
+    if (response.statusCode == 200) {
+      ///data successfully
+      return json.decode(response.body)["EBOOK_APP"][0]["page_img"];
     } else {
       ///error
       return null;

@@ -47,7 +47,7 @@ Future<void> main() async {
   // SharedPreferences pref = await SharedPreferences.getInstance();
   // var email = pref.getString('email');
   await GetStorage.init();
-  Get.put(await SharedPreferences.getInstance(),permanent: true);
+  Get.put(await SharedPreferences.getInstance(), permanent: true);
   await Future.delayed(Duration(seconds: 4));
   runApp(const MyApp());
 }
@@ -78,9 +78,12 @@ class _MyAppState extends State<MyApp> {
           AppTheme.light().copyWith(
             id: "light_theme",
             data: ThemeData(
+              // primaryColor: mainColor,
               primaryColor: mainColor,
-              colorScheme: ColorScheme.light(),
               fontFamily: 'Janna',
+              colorScheme: ColorScheme.light().copyWith(
+                background: whiteColor,
+              ),
             ),
           ),
           AppTheme.dark().copyWith(
