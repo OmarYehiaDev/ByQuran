@@ -51,53 +51,61 @@ class SettingsScreen extends StatelessWidget {
                   bottomRight: Radius.circular(50),
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.only(top: 40.h),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomText(
-                          text: accountData.read('displayName') ?? 'مستخدم',
-                          fontSize: 14.sp,
-                          color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                              ? blueColor
-                              : mainColor,
-                        ),
-                        CustomText(
-                          text: accountData.read('email') ?? 'لم تسجل الدخول',
-                          fontSize: 14.sp,
-                          color: blueLightColor,
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: 24.w),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        accountData.read('photoUrl') != null
-                            ? CircleAvatar(
-                                child: Image.network(
-                                  accountData.read(
-                                    'photoUrl',
-                                  ),
-                                ),
-                                maxRadius: 40,
-                              )
-                            : CircleAvatar(
-                                child: Icon(
-                                  Icons.person,
-                                  color: blueColor,
-                                  size: 40.w,
-                                ),
-                                backgroundColor: blueBackgroundColor,
-                                maxRadius: 30,
-                              ),
-                      ],
-                    ),
-                  ],
+              child: Align(
+                alignment: AlignmentDirectional.center,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 40.h),
+                  child: CustomText(
+                    text: "الإعدادات",
+                    fontSize: 30,
+                    color: whiteColor,
+                  ),
+                  // child: Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Column(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         CustomText(
+                  //           text: accountData.read('displayName') ?? 'مستخدم',
+                  //           fontSize: 14.sp,
+                  //           color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                  //               ? blueColor
+                  //               : mainColor,
+                  //         ),
+                  //         CustomText(
+                  //           text: accountData.read('email') ?? 'لم تسجل الدخول',
+                  //           fontSize: 14.sp,
+                  //           color: blueLightColor,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     SizedBox(width: 24.w),
+                  //     Column(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         accountData.read('photoUrl') != null
+                  //             ? CircleAvatar(
+                  //                 child: Image.network(
+                  //                   accountData.read(
+                  //                     'photoUrl',
+                  //                   ),
+                  //                 ),
+                  //                 maxRadius: 40,
+                  //               )
+                  //             : CircleAvatar(
+                  //                 child: Icon(
+                  //                   Icons.person,
+                  //                   color: blueColor,
+                  //                   size: 40.w,
+                  //                 ),
+                  //                 backgroundColor: blueBackgroundColor,
+                  //                 maxRadius: 30,
+                  //               ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ),
             ),

@@ -56,9 +56,8 @@ class LibraryScreen extends StatelessWidget {
                           padding: EdgeInsets.zero,
                           itemCount: bookController.bookList.length,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, //2
-                            childAspectRatio: .5, //.7
-                            mainAxisExtent: 200,
+                            crossAxisCount: 2, //2
+                            childAspectRatio: .9, //.7
                           ),
                           itemBuilder: (context, index) {
                             return GestureDetector(
@@ -111,18 +110,22 @@ class LibraryScreen extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       Container(
-                                        height: 0.035.sh,
-                                        width: 100.w,
+                                        padding: EdgeInsets.all(8),
                                         decoration: BoxDecoration(
                                           color: mainColor,
                                           borderRadius: BorderRadius.circular(7),
                                         ),
                                         child: Center(
-                                            child: Text(
-                                          bookController.bookList[index].bookTitle,
-                                          style: TextStyle(
-                                              color: Colors.white, fontSize: 16.sp, height: 1.0),
-                                        )),
+                                          child: Text(
+                                            bookController.bookList[index].bookTitle,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16.sp,
+                                              height: 1.0,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
                                       ),
                                       SizedBox(height: 7.h),
                                       Expanded(

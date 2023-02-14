@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:welivewithquran/zTools/colors.dart';
@@ -55,7 +56,6 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
   bool get isWeb => kIsWeb;
 
-  int currentPage = 0;
   List<int> savedPages = [];
 
   @override
@@ -251,8 +251,12 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
       );
   }
 
+  final prefs = Get.find<SharedPreferences>();
+  final PdfViewerController _controller = PdfViewerController();
+
   @override
   Widget build(BuildContext context) {
+    bool isHorizontal = argumentData[0]["isHorizontal"];
     String? id = argumentData[0]["id"];
     int? page = argumentData[0]["page"];
     // bool isFromFavs = argumentData[0]["condition"] as bool;
@@ -307,14 +311,18 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                     widget.fromSearch
                         ? SfPdfViewer.network(
                             argumentData[0]['pdf'],
+                            controller: _controller,
+                            pageLayoutMode: isHorizontal
+                                ? PdfPageLayoutMode.single
+                                : PdfPageLayoutMode.continuous,
+                            enableDoubleTapZooming: true,
                             onDocumentLoadFailed: (details) {
                               print(details.description);
                             },
-                            onPageChanged: (details) {
+                            onPageChanged: (details) async {
                               log(details.newPageNumber.toString());
-                              setState(() {
-                                currentPage = details.newPageNumber;
-                              });
+                              await prefs.setInt("currentPage", details.newPageNumber);
+                              setState(() {});
                             },
                             onTextSelectionChanged: (details) {
                               log(details.selectedText ?? "NULL");
@@ -322,12 +330,15 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                           )
                         : SfPdfViewer.file(
                             File(argumentData[0]['pdf']),
-                            pageLayoutMode: PdfPageLayoutMode.single,
-                            onPageChanged: (details) {
+                            pageLayoutMode: isHorizontal
+                                ? PdfPageLayoutMode.single
+                                : PdfPageLayoutMode.continuous,
+                            enableDoubleTapZooming: true,
+                            controller: _controller,
+                            onPageChanged: (details) async {
                               log(details.newPageNumber.toString());
-                              setState(() {
-                                currentPage = details.newPageNumber;
-                              });
+                              await prefs.setInt("currentPage", details.newPageNumber);
+                              setState(() {});
                             },
                             onDocumentLoadFailed: (details) {
                               print(details.description);
@@ -345,7 +356,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                         children: [
                           IconButton(
                               onPressed: () async {
-                                await ctrl.share(page??currentPage, book?.id?? id!);
+                                await ctrl.share(page ?? _controller.pageNumber, book?.id ?? id!);
                               },
                               icon: Icon(Icons.share),
                               color: (ThemeProvider.themeOf(context).id == "dark_theme")
@@ -356,13 +367,15 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                           !widget.fromSearch
                               ? IconButton(
                                   onPressed: () async {
-                                    final isBookmarked =
-                                        await ctrl.isPageBookmarked(id!, currentPage);
+                                    final isBookmarked = await ctrl.isPageBookmarked(
+                                        id!, prefs.getInt("currentPage") ?? 0);
                                     bool? res;
                                     if (isBookmarked) {
-                                      res = await ctrl.removeBookmarkPage(id, currentPage);
+                                      res = await ctrl.removeBookmarkPage(
+                                          id, prefs.getInt("currentPage") ?? 0);
                                     } else {
-                                      res = await ctrl.bookmarkPage(id, currentPage);
+                                      res = await ctrl.bookmarkPage(
+                                          id, prefs.getInt("currentPage") ?? 0);
                                     }
                                     final data = await ctrl.getSavedPages(id);
                                     setState(() {
@@ -370,14 +383,16 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                                       savedPages = data;
                                     });
                                   },
-                                  icon: Icon(Icons.bookmark),
-                                  color: savedPages.contains(currentPage)
+                                  icon: !savedPages.contains(prefs.getInt("currentPage") ?? 0)
+                                      ? Icon(Icons.bookmark_outline)
+                                      : Icon(Icons.bookmark),
+                                  color: savedPages.contains(prefs.getInt("currentPage") ?? 0)
                                       ? (ThemeProvider.themeOf(context).id == "dark_theme")
                                           ? blueLightColor
                                           : blueDarkColor
-                                      : whiteColor
+                                      : blueDarkColor,
                                   // : Colors.grey,
-                                  )
+                                )
                               : SizedBox(),
                         ],
                       ),

@@ -7,6 +7,7 @@ import 'package:welivewithquran/Controller/ebook_controller.dart';
 import 'package:welivewithquran/Views/category_view.dart';
 import 'package:welivewithquran/Views/details_screen.dart';
 import 'package:welivewithquran/Models/category.dart';
+import 'package:welivewithquran/Views/moshaf_screen.dart';
 import 'package:welivewithquran/Views/query_view.dart';
 import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/models/search_query.dart';
@@ -258,12 +259,14 @@ class _MainScreenState extends State<MainScreen> {
             onTap: () async {
               List<SearchQuery> list = (groupVal == 0 && surah == null)
                   ? (await DataServices.searchBooks(
-                      searchController.text.trim(),
-                    )) ?? []
+                        searchController.text.trim(),
+                      )) ??
+                      []
                   : (await DataServices.searchBooksSpecific(
-                      searchController.text.trim(),
-                      surah!,
-                    ))?? [];
+                        searchController.text.trim(),
+                        surah!,
+                      )) ??
+                      [];
               setState(() {
                 data = list;
                 isLoading = false;
@@ -351,12 +354,12 @@ class _MainScreenState extends State<MainScreen> {
             : Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(7.0),
                       child: SizedBox(
-                        height: 170,
-                        width: double.infinity,
                         child: CarouselSlider.builder(
                           itemCount: bookController.featuredList.length,
                           options: CarouselOptions(
@@ -366,7 +369,7 @@ class _MainScreenState extends State<MainScreen> {
                                 currentPage = page;
                               });
                             },
-                            viewportFraction: .3,
+                            viewportFraction: .5,
                             autoPlay: true,
                             aspectRatio: 2.0,
                             enlargeCenterPage: true,
@@ -411,6 +414,9 @@ class _MainScreenState extends State<MainScreen> {
                                     {
                                       "condition": false,
                                     },
+                                    {
+                                      "condition": false,
+                                    },
                                   ],
                                 );
                                 // Navigator.of(context).push(_createRoute());
@@ -426,10 +432,11 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                     ),
-                    Center(
+                    Align(
+                      alignment: AlignmentDirectional.center,
                       child: SizedBox(
                         height: 15.h,
-                        width: 120.w,
+                        width: 70,
                         child: ListView.builder(
                           itemCount: bookController.featuredList.length,
                           scrollDirection: Axis.horizontal,
@@ -515,19 +522,33 @@ class _MainScreenState extends State<MainScreen> {
                     // Navigator.of(context).push(_createRoute());
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Column(
                       children: [
                         Expanded(
                           child: Image.network(
                             imagesUrl + bookController.latestBook[index].bookCoverImg,
-                            fit: BoxFit.fill,
-                            width: 120.w,
+                            fit: BoxFit.contain,
                           ),
                         ),
                         Text(
-                          bookController.latestBook[index].bookTitle,
+                          bookController.latestBook[index].bookTitle.split(" ").length > 4
+                              ? bookController.latestBook[index].bookTitle
+                                      .split(" ")
+                                      .getRange(0, 4)
+                                      .join(" ") +
+                                  "\n" +
+                                  bookController.latestBook[index].bookTitle
+                                      .split(" ")
+                                      .getRange(
+                                          4,
+                                          bookController.latestBook[index].bookTitle
+                                              .split(" ")
+                                              .length)
+                                      .join(" ")
+                              : bookController.latestBook[index].bookTitle,
                           style: TextStyle(fontSize: 16.sp),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
@@ -603,8 +624,38 @@ class _MainScreenState extends State<MainScreen> {
         ),
         // --------------------------------------------------------------------
         SizedBox(
-          height: 50,
-        )
+          height: 10,
+        ),
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              Get.to(
+                () => MoshafScreen(
+                  fileURL: "https://qurancomplex.gov.sa/kfgqpc-quran-hafs-rubuyassen/",
+                ),
+              );
+            },
+            child: Container(
+              height: 50.h,
+              width: 0.5.sw,
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: blueDarkColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: CustomText(
+                  text: "مصحف مجمع الملك فهد",
+                  fontSize: 18.sp,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
       ],
     );
   }
