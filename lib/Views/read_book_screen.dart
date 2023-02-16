@@ -13,6 +13,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:theme_provider/theme_provider.dart';
+import 'package:welivewithquran/custom_widgets/custom_text.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/zTools/tools.dart';
 
@@ -296,10 +297,61 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
               'المؤلف: ' + argumentData[0]['author'],
             ),
             SizedBox(
-              height: 15,
+              height: 5,
             ),
             // _btnSection(),
             // ttsState == TtsState.playing ? _progressBar(end) : const Text(''),
+            SizedBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8),
+                    child: CustomText(
+                      text: "الصفحات المفضلة",
+                    ),
+                  ),
+                  SizedBox(
+                    height: 0.05.sh,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: savedPages.length,
+                      itemBuilder: (context, index) {
+                        final page = savedPages[index];
+                        return InkWell(
+                          onTap: () {
+                            _controller.jumpToPage(page);
+                          },
+                          child: Container(
+                            height: 45,
+                            width: 45,
+                            margin: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: blueDarkColor,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "$page",
+                                style: TextStyle(
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 24,
+            ),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),

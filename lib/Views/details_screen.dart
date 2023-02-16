@@ -340,7 +340,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           },
                                           child: Container(
                                             height: 50.h,
-                                            padding: EdgeInsets.all(8),
+                                            padding:
+                                                downloading ? EdgeInsets.zero : EdgeInsets.all(8),
                                             decoration: BoxDecoration(
                                               color: mainColor,
                                               borderRadius: BorderRadius.circular(10),
@@ -369,7 +370,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                           ),
                                                           progress != "100.0"
                                                               ? SizedBox(
-                                                                  width: 25,
                                                                   child: CircularProgressIndicator(
                                                                     color: Colors.white,
                                                                   ),
@@ -571,13 +571,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     Text(
-                                      book.bookTitle,
+                                      book.bookTitle.split(" ").length > 4
+                                          ? book.bookTitle.split(" ").getRange(0, 4).join(" ") +
+                                              "\n" +
+                                              book.bookTitle
+                                                  .split(" ")
+                                                  .getRange(4, book.bookTitle.split(" ").length)
+                                                  .join(" ")
+                                          : book.bookTitle,
                                       style: TextStyle(
                                         color: (ThemeProvider.themeOf(context).id == "dark_theme")
                                             ? whiteColor
                                             : mainColor,
                                         fontSize: 16.sp,
                                       ),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ],
                                 ),
