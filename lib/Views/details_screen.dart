@@ -293,13 +293,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ),
                           ),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
                                         children: [
@@ -327,6 +329,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                               //(progress != 'Completed' || fileExists == false)
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   (isDownloaded == null || !isDownloaded!)
 
@@ -442,9 +446,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         color: mainColor,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                      child: Center(
+                                      child: Align(
+                                        alignment: AlignmentDirectional.center,
                                         child: CustomText(
-                                          text: 'قراءة الكتاب أونلاين',
+                                          text: 'القراءة أونلاين',
                                           fontSize: 18.sp,
                                           color: Colors.white,
                                         ),

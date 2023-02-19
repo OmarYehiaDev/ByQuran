@@ -33,7 +33,6 @@ class _ReadOnlineScreenState extends State<ReadOnlineScreen> {
                 // )
                 SfPdfViewer.network(
               widget.fileURL,
-              pageLayoutMode: PdfPageLayoutMode.single,
               // onDocumentLoaded: (doc) {
               //   setState(() {
               //     showWidget = true;
