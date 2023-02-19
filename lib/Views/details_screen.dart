@@ -121,7 +121,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      height: context.height * 0.1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -140,7 +139,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             argumentData[1]["title"].toString().split(" ").length)
                                         .join(" ")
                                 : argumentData[1]["title"].toString(),
-                            fontSize: 20.sp,
+                            fontSize: 17.sp,
                             color: (ThemeProvider.themeOf(context).id == "dark_theme")
                                 ? whiteColor
                                 : mainColor,

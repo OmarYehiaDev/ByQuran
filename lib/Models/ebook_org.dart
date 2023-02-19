@@ -29,7 +29,7 @@ class Ebook {
     required this.catId,
     required this.aid,
     required this.bookTitle,
-    // required this.bookPages,
+    required this.bookPages,
     required this.bookDescription,
     required this.bookCoverImg,
     required this.bookBgImg,
@@ -51,7 +51,7 @@ class Ebook {
   String catId;
   String aid;
   String bookTitle;
-  // int bookPages;
+  int bookPages;
   String bookDescription;
   String bookCoverImg;
   String bookBgImg;
@@ -74,7 +74,7 @@ class Ebook {
         catId: json['cat_id'],
         aid: json['aid'],
         bookTitle: json['book_title'],
-        // bookPages: json['book_pages'],
+        bookPages: int.parse(json['book_pages']),
         bookDescription: json['book_description'],
         bookCoverImg: json['book_cover_img'].toString(),
         bookBgImg: json['book_bg_img'].toString(),
@@ -98,7 +98,7 @@ class Ebook {
         'cat_id': catId,
         'aid': aid,
         'book_title': bookTitle,
-        // 'book_pages': bookPages,
+        'book_pages': bookPages,
         'book_description': bookDescription,
         'book_cover_img': bookCoverImg,
         'book_bg_img': bookBgImg,

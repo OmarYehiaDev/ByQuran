@@ -391,7 +391,7 @@ class _MainScreenState extends State<MainScreen> {
                                       'bookCover': book.bookCoverImg,
                                     },
                                     {
-                                      'bookPages': book.id,
+                                      'bookPages': book.bookPages,
                                     },
                                     {
                                       'bookDescription': book.bookDescription,
@@ -494,7 +494,7 @@ class _MainScreenState extends State<MainScreen> {
                           'bookCover': bookController.latestBook[index].bookCoverImg,
                         },
                         {
-                          'bookPages': bookController.latestBook[index].id,
+                          'bookPages': bookController.latestBook[index].bookPages,
                         },
                         {
                           'bookDescription': bookController.latestBook[index].bookDescription,
@@ -547,7 +547,9 @@ class _MainScreenState extends State<MainScreen> {
                                               .length)
                                       .join(" ")
                               : bookController.latestBook[index].bookTitle,
-                          style: TextStyle(fontSize: 16.sp),
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -577,68 +579,78 @@ class _MainScreenState extends State<MainScreen> {
                       color: blueColor,
                     ),
                   )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: bookController.catList.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      Category cat = bookController.catList[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: InkWell(
-                          onTap: () async {
-                            Get.to(
-                              () => CategoryScreen(
-                                cat: cat,
-                                ctrl: bookController,
+                : Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: bookController.catList.map(
+                      (Category cat) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: InkWell(
+                            onTap: () async {
+                              Get.to(
+                                () => CategoryScreen(
+                                  cat: cat,
+                                  ctrl: bookController,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                    ? blueLightColor
+                                    : mainColor,
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                  ? blueLightColor
-                                  : mainColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                              child: Center(
-                                child: Text(
-                                  bookController.catList[index].categoryName,
-                                  style: TextStyle(
-                                    color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                        ? blueDarkColor
-                                        : Colors.white,
-                                    fontSize: 15.sp,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    cat.categoryName,
+                                    style: TextStyle(
+                                      color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                          ? blueDarkColor
+                                          : Colors.white,
+                                      fontSize: 15.sp,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ).toList(),
                   ),
           ),
         ),
         // --------------------------------------------------------------------
         SizedBox(
-          height: 10,
+          height: 15,
+        ),
+        Divider(
+          indent: 16,
+          endIndent: 16,
+          thickness: 1.25,
+          color: blueColor,
+          height: 16,
+        ),
+        SizedBox(
+          height: 15,
         ),
         Center(
           child: GestureDetector(
             onTap: () {
               Get.to(
                 () => MoshafScreen(
-                  fileURL: "https://qurancomplex.gov.sa/kfgqpc-quran-hafs-rubuyassen/",
+                  fileURL: "https://smartmediakw.com/zbook/quran/",
                 ),
               );
             },
             child: Container(
               height: 50.h,
               width: 0.5.sw,
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 color: blueDarkColor,
                 borderRadius: BorderRadius.circular(10),

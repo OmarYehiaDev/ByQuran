@@ -45,7 +45,7 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
 
   int end = 0;
 
-  String? _newVoiceText;
+  // String? _newVoiceText;
   TtsState ttsState = TtsState.stopped;
 
   get isPlaying => ttsState == TtsState.playing;
@@ -208,52 +208,53 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
     }
   }
 
-  Future _speak() async {
-    int chars;
-    desc.length > 4000 ? chars = 4000 : chars = desc.length;
-    setState(() {
-      _newVoiceText = desc.substring(0, chars);
-    });
-    if (_newVoiceText != null) {
-      await tts.awaitSpeakCompletion(true);
-      await tts.setQueueMode(1);
+  // Future _speak() async {
+  //   int chars;
+  //   desc.length > 4000 ? chars = 4000 : chars = desc.length;
+  //   setState(() {
+  //     _newVoiceText = desc.substring(0, chars);
+  //   });
+  //   if (_newVoiceText != null) {
+  //     await tts.awaitSpeakCompletion(true);
+  //     await tts.setQueueMode(1);
 
-      var count = _newVoiceText!.length;
-      var max = 2000;
-      var loopCount = count ~/ max;
-      for (var i = 0; i <= loopCount; i++) {
-        if (i != loopCount) {
-          await tts.speak(_newVoiceText!.substring(i * max, (i + 1) * max));
-        } else {
-          var end = (count - ((i * max)) + (i * max));
-          await tts.speak(_newVoiceText!.substring(i * max, end));
-        }
-      }
+  //     var count = _newVoiceText!.length;
+  //     var max = 2000;
+  //     var loopCount = count ~/ max;
+  //     for (var i = 0; i <= loopCount; i++) {
+  //       if (i != loopCount) {
+  //         await tts.speak(_newVoiceText!.substring(i * max, (i + 1) * max));
+  //       } else {
+  //         var end = (count - ((i * max)) + (i * max));
+  //         await tts.speak(_newVoiceText!.substring(i * max, end));
+  //       }
+  //     }
 
-      tts.setCompletionHandler(() {
-        tts.stop();
-      });
-    }
-  }
+  //     tts.setCompletionHandler(() {
+  //       tts.stop();
+  //     });
+  //   }
+  // }
 
-  Future _stop() async {
-    var result = await tts.stop();
-    if (result == 1)
-      setState(
-        () => ttsState = TtsState.stopped,
-      );
-  }
+  // Future _stop() async {
+  //   var result = await tts.stop();
+  //   if (result == 1)
+  //     setState(
+  //       () => ttsState = TtsState.stopped,
+  //     );
+  // }
 
-  Future _pause() async {
-    var result = await tts.pause();
-    if (result == 1)
-      setState(
-        () => ttsState = TtsState.paused,
-      );
-  }
+  // Future _pause() async {
+  //   var result = await tts.pause();
+  //   if (result == 1)
+  //     setState(
+  //       () => ttsState = TtsState.paused,
+  //     );
+  // }
 
   final prefs = Get.find<SharedPreferences>();
   final PdfViewerController _controller = PdfViewerController();
+  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -275,15 +276,30 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
         toolbarHeight: 70.h,
         actions: const [],
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: backgroundColor, size: 30.h),
+          icon: Icon(
+            Icons.arrow_back,
+            color: backgroundColor,
+            size: 30.h,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text(
-          BookTools.appName + ' - ' + argumentData[0]['title'],
+          argumentData[0]["title"].toString().split(" ").length > 4
+              ? BookTools.appName +
+                  ' - ' +
+                  argumentData[0]["title"].toString().split(" ").getRange(0, 4).join(" ") +
+                  "\n" +
+                  argumentData[0]["title"]
+                      .toString()
+                      .split(" ")
+                      .getRange(4, argumentData[0]["title"].toString().split(" ").length)
+                      .join(" ")
+              : BookTools.appName + ' - ' + argumentData[0]["title"].toString(),
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 24.sp,
+            fontSize: 15.sp,
             color: backgroundColor,
             fontWeight: FontWeight.w700,
           ),
@@ -301,54 +317,56 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
             ),
             // _btnSection(),
             // ttsState == TtsState.playing ? _progressBar(end) : const Text(''),
-            SizedBox(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8),
-                    child: CustomText(
-                      text: "الصفحات المفضلة",
+            if (savedPages.isNotEmpty)
+              SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                      child: CustomText(
+                        text: "الصفحات المفضلة",
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 0.05.sh,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: savedPages.length,
-                      itemBuilder: (context, index) {
-                        final page = savedPages[index];
-                        return InkWell(
-                          onTap: () {
-                            _controller.jumpToPage(page);
-                          },
-                          child: Container(
-                            height: 45,
-                            width: 45,
-                            margin: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: blueDarkColor,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "$page",
-                                style: TextStyle(
-                                  color: whiteColor,
-                                  fontWeight: FontWeight.w600,
+                    SizedBox(
+                      height: 0.05.sh,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: savedPages.length,
+                        itemBuilder: (context, index) {
+                          final page = savedPages[index];
+                          return InkWell(
+                            onTap: () {
+                              _controller.jumpToPage(page);
+                            },
+                            child: Container(
+                              height: 45,
+                              width: 45,
+                              margin: EdgeInsets.all(8),
+                              padding: EdgeInsets.symmetric(horizontal: 4),
+                              decoration: BoxDecoration(
+                                color: blueDarkColor,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "$page",
+                                  style: TextStyle(
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
             SizedBox(
               height: 24,
             ),
@@ -360,74 +378,93 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                 ),
                 child: Stack(
                   children: [
-                    widget.fromSearch
-                        ? SfPdfViewer.network(
-                            argumentData[0]['pdf'],
-                            controller: _controller,
-                            pageLayoutMode: isHorizontal
-                                ? PdfPageLayoutMode.single
-                                : PdfPageLayoutMode.continuous,
-                            enableDoubleTapZooming: true,
-                            onDocumentLoadFailed: (details) {
-                              print(details.description);
-                            },
-                            onPageChanged: (details) async {
-                              log(details.newPageNumber.toString());
-                              await prefs.setInt("currentPage", details.newPageNumber);
-                              setState(() {});
-                            },
-                            onTextSelectionChanged: (details) {
-                              log(details.selectedText ?? "NULL");
-                            },
-                          )
-                        : SfPdfViewer.file(
-                            File(argumentData[0]['pdf']),
-                            pageLayoutMode: isHorizontal
-                                ? PdfPageLayoutMode.single
-                                : PdfPageLayoutMode.continuous,
-                            enableDoubleTapZooming: true,
-                            controller: _controller,
-                            onPageChanged: (details) async {
-                              log(details.newPageNumber.toString());
-                              await prefs.setInt("currentPage", details.newPageNumber);
-                              setState(() {});
-                            },
-                            onDocumentLoadFailed: (details) {
-                              print(details.description);
-                            },
-                            onTextSelectionChanged: (details) {
-                              log(details.selectedText ?? "");
-                            },
-                          ),
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: widget.fromSearch
+                          ? SfPdfViewer.network(
+                              argumentData[0]['pdf'],
+                              controller: _controller,
+                              pageLayoutMode: isHorizontal
+                                  ? PdfPageLayoutMode.single
+                                  : PdfPageLayoutMode.continuous,
+                              enableDoubleTapZooming: true,
+                              onDocumentLoadFailed: (details) {
+                                print(details.description);
+                              },
+                              onPageChanged: (details) async {
+                                log(details.newPageNumber.toString() + " " + _controller.pageNumber.toString());
+
+                                // setState(() {
+                                //   currentPage = details.newPageNumber;
+                                // });
+                              },
+                              onTextSelectionChanged: (details) {
+                                log(details.selectedText ?? "NULL");
+                              },
+                            )
+                          : SfPdfViewer.file(
+                              File(argumentData[0]['pdf']),
+                              pageLayoutMode: isHorizontal
+                                  ? PdfPageLayoutMode.single
+                                  : PdfPageLayoutMode.continuous,
+                              enableDoubleTapZooming: true,
+                              controller: _controller,
+                              onPageChanged: (details) async {
+                                log(details.newPageNumber.toString() + " " + _controller.pageNumber.toString());
+                                
+                                // setState(() {
+                                //   currentPage = details.newPageNumber;
+                                // });
+                              },
+                              onDocumentLoadFailed: (details) {
+                                print(details.description);
+                              },
+                              onTextSelectionChanged: (details) {
+                                log(details.selectedText ?? "");
+                              },
+                            ),
+                    ),
                     Positioned.directional(
                       textDirection: TextDirection.rtl,
-                      start: 16,
-                      top: 16,
+                      start: 24,
+                      top: 14,
                       child: ButtonBar(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          IconButton(
-                              onPressed: () async {
-                                await ctrl.share(page ?? _controller.pageNumber, book?.id ?? id!);
-                              },
-                              icon: Icon(Icons.share),
-                              color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                  ? blueLightColor
-                                  : blueDarkColor
-                              // : Colors.grey,
-                              ),
+                          !ctrl.isLoading.value
+                              ? IconButton(
+                                  onPressed: () async {
+                                    log("SHARING");
+                                    await ctrl.share(
+                                      page ?? _controller.pageNumber,
+                                      book?.id ?? id!,
+                                    );
+                                  },
+                                  icon: Icon(Icons.share),
+                                  color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                      ? blueLightColor
+                                      : blueDarkColor
+                                  // : Colors.grey,
+                                  )
+                              : CircularProgressIndicator(),
                           !widget.fromSearch
                               ? IconButton(
                                   onPressed: () async {
                                     final isBookmarked = await ctrl.isPageBookmarked(
-                                        id!, prefs.getInt("currentPage") ?? 0);
+                                      id!,
+                                      _controller.pageNumber,
+                                    );
                                     bool? res;
                                     if (isBookmarked) {
                                       res = await ctrl.removeBookmarkPage(
-                                          id, prefs.getInt("currentPage") ?? 0);
+                                        id,
+                                        _controller.pageNumber,
+                                      );
                                     } else {
                                       res = await ctrl.bookmarkPage(
-                                          id, prefs.getInt("currentPage") ?? 0);
+                                        id,
+                                        _controller.pageNumber,
+                                      );
                                     }
                                     final data = await ctrl.getSavedPages(id);
                                     setState(() {
@@ -435,10 +472,14 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                                       savedPages = data;
                                     });
                                   },
-                                  icon: !savedPages.contains(prefs.getInt("currentPage") ?? 0)
+                                  icon: !savedPages.contains(
+                                    _controller.pageNumber,
+                                  )
                                       ? Icon(Icons.bookmark_outline)
                                       : Icon(Icons.bookmark),
-                                  color: savedPages.contains(prefs.getInt("currentPage") ?? 0)
+                                  color: savedPages.contains(
+                                    _controller.pageNumber,
+                                  )
                                       ? (ThemeProvider.themeOf(context).id == "dark_theme")
                                           ? blueLightColor
                                           : blueDarkColor
@@ -459,112 +500,112 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
     );
   }
 
-  Widget _progressBar(int end) => Container(
-        alignment: Alignment.topCenter,
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        child: LinearProgressIndicator(
-          minHeight: 4,
-          backgroundColor: blueDarkColor,
-          valueColor: const AlwaysStoppedAnimation<Color>(blueColor),
-          value: end / _newVoiceText!.length,
-        ),
-      );
+  // Widget _progressBar(int end) => Container(
+  //       alignment: Alignment.topCenter,
+  //       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+  //       child: LinearProgressIndicator(
+  //         minHeight: 4,
+  //         backgroundColor: blueDarkColor,
+  //         valueColor: const AlwaysStoppedAnimation<Color>(blueColor),
+  //         value: end / _newVoiceText!.length,
+  //       ),
+  //     );
 
-  Widget _btnSection() {
-    if (isAndroid) {
-      return Container(
-        height: 60.h,
-        width: 130.w,
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color:
-              (ThemeProvider.themeOf(context).id == "dark_theme") ? blueColor : blueBackgroundColor,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: 42.w,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.play_circle),
-                color: mainColor,
-                // splashColor: Colors.greenAccent,
-                onPressed: () => _speak(),
-              ),
-            ),
-            Container(
-              width: 42.w,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.stop_circle),
-                color: mainColor,
-                onPressed: _stop,
-              ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Container(
-        height: 50.h,
-        width: 160.w,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: blueBackgroundColor,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              width: 42.w,
-              height: 42.h,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.play_circle),
-                color: mainColor,
-                onPressed: _speak,
-              ),
-            ),
-            Container(
-              width: 42.w,
-              height: 42.h,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.pause_circle),
-                color: mainColor,
-                onPressed: _pause,
-              ),
-            ),
-            Container(
-              width: 42.w,
-              height: 42.h,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.stop_circle),
-                color: mainColor,
-                onPressed: _stop,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-  }
+  // Widget _btnSection() {
+  //   if (isAndroid) {
+  //     return Container(
+  //       height: 60.h,
+  //       width: 130.w,
+  //       padding: const EdgeInsets.symmetric(vertical: 4),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(10),
+  //         color:
+  //             (ThemeProvider.themeOf(context).id == "dark_theme") ? blueColor : blueBackgroundColor,
+  //       ),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //         children: [
+  //           Container(
+  //             width: 42.w,
+  //             decoration: BoxDecoration(
+  //               color: backgroundColor,
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //             child: IconButton(
+  //               icon: const Icon(Icons.play_circle),
+  //               color: mainColor,
+  //               // splashColor: Colors.greenAccent,
+  //               onPressed: () => _speak(),
+  //             ),
+  //           ),
+  //           Container(
+  //             width: 42.w,
+  //             decoration: BoxDecoration(
+  //               color: backgroundColor,
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //             child: IconButton(
+  //               icon: const Icon(Icons.stop_circle),
+  //               color: mainColor,
+  //               onPressed: _stop,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   } else {
+  //     return Container(
+  //       height: 50.h,
+  //       width: 160.w,
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(10),
+  //         color: blueBackgroundColor,
+  //       ),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //         children: [
+  //           Container(
+  //             width: 42.w,
+  //             height: 42.h,
+  //             decoration: BoxDecoration(
+  //               color: backgroundColor,
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //             child: IconButton(
+  //               icon: const Icon(Icons.play_circle),
+  //               color: mainColor,
+  //               onPressed: _speak,
+  //             ),
+  //           ),
+  //           Container(
+  //             width: 42.w,
+  //             height: 42.h,
+  //             decoration: BoxDecoration(
+  //               color: backgroundColor,
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //             child: IconButton(
+  //               icon: const Icon(Icons.pause_circle),
+  //               color: mainColor,
+  //               onPressed: _pause,
+  //             ),
+  //           ),
+  //           Container(
+  //             width: 42.w,
+  //             height: 42.h,
+  //             decoration: BoxDecoration(
+  //               color: backgroundColor,
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //             child: IconButton(
+  //               icon: const Icon(Icons.stop_circle),
+  //               color: mainColor,
+  //               onPressed: _stop,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
 }

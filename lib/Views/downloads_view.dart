@@ -89,9 +89,8 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                         padding: EdgeInsets.zero,
                         itemCount: bookSet.length,
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, //2
-                          childAspectRatio: .5, //.7
-                          mainAxisExtent: 200,
+                          crossAxisCount: 2, //2
+                          childAspectRatio: .9, //.7
                         ),
                         itemBuilder: (context, index) {
                           return GestureDetector(
@@ -109,7 +108,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                     'bookCover': bookSet.toList()[index].bookCoverImg,
                                   },
                                   {
-                                    'bookPages': bookSet.toList()[index].id,
+                                    'bookPages': bookSet.toList()[index].bookPages,
                                   },
                                   {
                                     'bookDescription': bookSet.toList()[index].bookDescription,
@@ -143,8 +142,6 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                 child: Column(
                                   children: [
                                     Container(
-                                      height: 0.035.sh,
-                                      width: 100.w,
                                       decoration: BoxDecoration(
                                         color: mainColor,
                                         borderRadius: BorderRadius.circular(7),
@@ -152,8 +149,14 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                       child: Center(
                                         child: Text(
                                           bookSet.toList()[index].bookTitle,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 16.sp, height: 1.0),
+                                            color: Colors.white,
+                                            fontSize: 13.5.sp,
+                                            height: 1.5,
+                                          ),
                                         ),
                                       ),
                                     ),

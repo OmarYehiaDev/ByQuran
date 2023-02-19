@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +32,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
+    // User? user = FirebaseAuth.instance.currentUser;
     return Container(
       decoration: BoxDecoration(
         color: ThemeProvider.themeOf(context).data.colorScheme.background,
@@ -166,23 +166,23 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  user != null && !user.isAnonymous
-                      ? CustomSettingItem(
-                          image: 'assets/icons/exit.svg',
-                          title: 'تسجيل خروج',
-                          onPress: () {
-                            logoutDialog(context);
-                          },
-                          icon: null,
-                        )
-                      : CustomSettingItem(
-                          image: 'assets/icons/exit.svg',
-                          title: 'تسجيل دخول',
-                          onPress: () {
-                            AuthController.instance.logOut();
-                          },
-                          icon: null,
-                        )
+                  // user != null && !user.isAnonymous
+                  //     ? CustomSettingItem(
+                  //         image: 'assets/icons/exit.svg',
+                  //         title: 'تسجيل خروج',
+                  //         onPress: () {
+                  //           logoutDialog(context);
+                  //         },
+                  //         icon: null,
+                  //       )
+                  //     : CustomSettingItem(
+                  //         image: 'assets/icons/exit.svg',
+                  //         title: 'تسجيل دخول',
+                  //         onPress: () {
+                  //           AuthController.instance.logOut();
+                  //         },
+                  //         icon: null,
+                  //       )
                 ],
               ),
             )

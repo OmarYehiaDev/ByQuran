@@ -75,7 +75,7 @@ class LibraryScreen extends StatelessWidget {
                                       'bookCover': bookController.bookList[index].bookCoverImg,
                                     },
                                     {
-                                      'bookPages': bookController.bookList[index].id,
+                                      'bookPages': bookController.bookList[index].bookPages,
                                     },
                                     {
                                       'bookDescription':
@@ -118,10 +118,12 @@ class LibraryScreen extends StatelessWidget {
                                         child: Center(
                                           child: Text(
                                             bookController.bookList[index].bookTitle,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 16.sp,
-                                              height: 1.0,
+                                              fontSize: 13.5.sp,
+                                              height: 1.5,
                                             ),
                                             textAlign: TextAlign.center,
                                           ),

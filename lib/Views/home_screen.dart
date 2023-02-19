@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,8 +29,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   PageController _pageController = PageController();
   GlobalKey<DrawerControllerState> drawerKey = GlobalKey<DrawerControllerState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  var androidLink = 'https://play.google.com/store/apps/details?id=com.smart.live_by_quran';
-  var iOSLink = 'https://apps.apple.com';
+  var appLink = 'https://smartmediakw.com/zbook/app/';
 
   Future<bool> setPushState() async {
     var device = await OneSignal.shared.getDeviceState();
@@ -94,9 +93,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   : Colors.transparent,
               toolbarHeight: 85.h,
               title: Text(
-                'لنحيا بالقران',
+                'لنحيا بالقران\nد.فاطمة بنت عمر نصيف',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24.sp,
+                  fontSize: 18.sp,
                   color: (ThemeProvider.themeOf(context).id == "dark_theme")
                       ? blueBackgroundColor
                       : mainColor,
@@ -104,16 +104,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ),
               centerTitle: true,
-              actions: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-                  child: Image.asset(
-                    'assets/images/app_bar_icon_new.png',
-                    width: 40.w,
-                    height: 40.h,
-                  ),
-                )
-              ],
+              // actions: [
+              //   Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+              //     child: Image.asset(
+              //       'assets/images/app_bar_icon_new.png',
+              //       width: 40.w,
+              //       height: 40.h,
+              //     ),
+              //   )
+              // ],
             ),
 
             /// Drawer
@@ -155,20 +155,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         CustomSettingItem(
                           title: 'مشاركة التطبيق',
                           onPress: () {
-                            if (Platform.isAndroid)
-                              zTools.share(
-                                'لنحيا بالقرآن',
-                                'لنحيا بالقرآن\n د. فاطمة بنت عمر نصيف',
-                                androidLink,
-                                'مشاركة: لنحيا بالقرآن',
-                              );
-                            else if (Platform.isIOS)
-                              zTools.share(
-                                'لنحيا بالقرآن',
-                                'لنحيا بالقرآن\n د. فاطمة بنت عمر نصيف',
-                                iOSLink,
-                                'مشاركة: لنحيا بالقرآن',
-                              );
+                            zTools.share(
+                              'لنحيا بالقرآن',
+                              'لنحيا بالقرآن\n د. فاطمة بنت عمر نصيف',
+                              appLink,
+                              'مشاركة: لنحيا بالقرآن',
+                            );
                           },
                           image: 'assets/icons/share.svg',
                         ),
@@ -238,14 +230,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        CustomSettingItem(
-                          image: 'assets/icons/exit.svg',
-                          title: 'تسجيل خروج',
-                          onPress: () {
-                            logoutDialog(context);
-                          },
-                          icon: null,
-                        )
+                        // CustomSettingItem(
+                        //   image: 'assets/icons/exit.svg',
+                        //   title: 'تسجيل خروج',
+                        //   onPress: () {
+                        //     logoutDialog(context);
+                        //   },
+                        //   icon: null,
+                        // )
                       ],
                     ),
                   );

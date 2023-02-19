@@ -78,9 +78,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                               padding: EdgeInsets.zero,
                               itemCount: bookController.bookMarks.length,
                               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3, //2
-                                childAspectRatio: .5, //.7
-                                mainAxisExtent: 200,
+                                crossAxisCount: 2, //2
+                                childAspectRatio: .9, //.7
                               ),
                               itemBuilder: (context, index) {
                                 return GestureDetector(
@@ -100,7 +99,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                               bookController.bookMarks.toList()[index].bookCoverImg,
                                         },
                                         {
-                                          'bookPages': bookController.bookMarks.toList()[index].id,
+                                          'bookPages':
+                                              bookController.bookMarks.toList()[index].bookPages,
                                         },
                                         {
                                           'bookDescription': bookController.bookMarks
@@ -139,8 +139,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       child: Column(
                                         children: [
                                           Container(
-                                            height: 0.035.sh,
-                                            width: 100.w,
+                                            padding: EdgeInsets.all(8),
                                             decoration: BoxDecoration(
                                               color: mainColor,
                                               borderRadius: BorderRadius.circular(
@@ -150,10 +149,13 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                             child: Center(
                                               child: Text(
                                                 bookController.bookMarks.toList()[index].bookTitle,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 16.sp,
-                                                  height: 1.0,
+                                                  fontSize: 13.5.sp,
+                                                  height: 1.5,
                                                 ),
                                               ),
                                             ),

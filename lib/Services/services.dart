@@ -113,7 +113,7 @@ class DataServices {
   }
 
   static Future<String?> getPageImage(int pageNum, String surah) async {
-    String url = baseUrl + "surah_no=$surah&pid=$pageNum";
+    String url = baseUrl + "surah_id=$surah&pid=$pageNum";
     final response = await http.get(
       Uri.parse(url),
       headers: {

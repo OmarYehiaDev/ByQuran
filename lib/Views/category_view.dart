@@ -63,9 +63,8 @@ class CategoryScreen extends StatelessWidget {
                               padding: EdgeInsets.zero,
                               itemCount: bookList.length,
                               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3, //2
-                                childAspectRatio: .5, //.7
-                                mainAxisExtent: 200,
+                                crossAxisCount: 2, //2
+                                childAspectRatio: .9, //.7
                               ),
                               itemBuilder: (context, index) {
                                 return GestureDetector(
@@ -83,7 +82,7 @@ class CategoryScreen extends StatelessWidget {
                                           'bookCover': bookList[index].bookCoverImg,
                                         },
                                         {
-                                          'bookPages': bookList[index].id,
+                                          'bookPages': bookList[index].bookPages,
                                         },
                                         {
                                           'bookDescription': bookList[index].bookDescription,
@@ -112,39 +111,48 @@ class CategoryScreen extends StatelessWidget {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(3.0),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 30.h,
-                                          width: 100.w,
-                                          decoration: BoxDecoration(
-                                            color: mainColor,
-                                            borderRadius: BorderRadius.circular(7),
-                                          ),
-                                          child: Center(
+                                    child: SizedBox(
+                                      height: 0.1.sh,
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: mainColor,
+                                              borderRadius: BorderRadius.circular(7),
+                                            ),
+                                            child: Center(
                                               child: Text(
-                                            bookList[index].bookTitle,
-                                            style: TextStyle(
-                                                color: Colors.white, fontSize: 16.sp, height: 1.0),
-                                          )),
-                                        ),
-                                        SizedBox(height: 7.h),
-                                        Expanded(
-                                          child: SizedBox(
-                                            height: 210.h,
-
-                                            /// lib book width
-                                            // width: 130.w,
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(7.0),
-                                              child: Image.network(
-                                                imagesUrl + bookList[index].bookCoverImg,
-                                                fit: BoxFit.fill,
+                                                bookList[index].bookTitle,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 13.5.sp,
+                                                  height: 1.5,
+                                                ),
+                                                textAlign: TextAlign.center,
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(height: 7.h),
+                                          Expanded(
+                                            child: SizedBox(
+                                              height: 210.h,
+
+                                              /// lib book width
+                                              // width: 130.w,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(7.0),
+                                                child: Image.network(
+                                                  imagesUrl + bookList[index].bookCoverImg,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
