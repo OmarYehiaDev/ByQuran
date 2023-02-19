@@ -46,7 +46,9 @@ class DataServices {
     });
     if (response.statusCode == 200) {
       ///data successfully
-      return fromJsonAPI(json.decode(response.body));
+      return fromJsonAPI(
+        json.decode(response.body),
+      );
     } else {
       ///error
       return null;

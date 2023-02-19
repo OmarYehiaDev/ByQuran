@@ -9,7 +9,7 @@ fromJson(Map<String, dynamic> json) =>
     List<Ebook>.from(json['EBOOK_APP'].map((x) => Ebook.fromJson(x)));
 
 fromJsonAPI(Map<String, dynamic> json) => List<Ebook>.from(
-      json['EBOOK_APP']['featured_books'].map(
+      json['EBOOK_APP'][0]['featured_books'].map(
         (x) => Ebook.fromJson(x),
       ),
     );

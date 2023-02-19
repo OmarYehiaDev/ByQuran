@@ -104,16 +104,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ),
               centerTitle: true,
-              // actions: [
-              //   Padding(
-              //     padding: EdgeInsets.symmetric(horizontal: 15.0.w),
-              //     child: Image.asset(
-              //       'assets/images/app_bar_icon_new.png',
-              //       width: 40.w,
-              //       height: 40.h,
-              //     ),
-              //   )
-              // ],
+              actions: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+                  child: Image.asset(
+                    'assets/images/app_bar_icon_new.png',
+                    width: 40.w,
+                    height: 40.h,
+                  ),
+                )
+              ],
             ),
 
             /// Drawer

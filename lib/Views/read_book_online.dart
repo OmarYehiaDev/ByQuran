@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 
 class ReadOnlineScreen extends StatefulWidget {
@@ -22,23 +23,29 @@ class _ReadOnlineScreenState extends State<ReadOnlineScreen> {
           backgroundColor: blueDarkColor,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: showWidget
-              ? SfPdfViewer.network(
-                  widget.fileURL,
-                  pageLayoutMode: PdfPageLayoutMode.single,
-                  onDocumentLoaded: (doc) {
-                    setState(() {
-                      showWidget = true;
-                    });
-                  },
-                )
-              : Center(
-                  child: CircularProgressIndicator(
-                    color: blueDarkColor,
-                  ),
-                ),
-        ),
+            padding: const EdgeInsets.all(24.0),
+            child:
+                // showWidget
+                //     ?
+                //     WebView(
+                //   initialUrl: "https://docs.google.com/viewer?url=" + widget.fileURL,
+                //   javascriptMode: JavascriptMode.unrestricted,
+                // )
+                SfPdfViewer.network(
+              widget.fileURL,
+              pageLayoutMode: PdfPageLayoutMode.single,
+              // onDocumentLoaded: (doc) {
+              //   setState(() {
+              //     showWidget = true;
+              //   });
+              // },
+            )
+            // : Center(
+            //     child: CircularProgressIndicator(
+            //       color: blueDarkColor,
+            //     ),
+            //   ),
+            ),
       ),
     );
   }

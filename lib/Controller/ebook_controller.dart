@@ -242,8 +242,8 @@ class BookController extends GetxController {
       var ebooks = await DataServices.getFeaturedEbooks();
       featuredList.value = ebooks!.toList();
     } catch (e) {
-      //log('Error while getting data is $e');
-      print('Error while getting data is $e');
+      log('Error while getting data is $e');
+      // print('Error while getting data is $e');
     } finally {
       isLoading(false);
     }

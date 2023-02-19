@@ -522,7 +522,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       'bookCover': book.bookCoverImg,
                                     },
                                     {
-                                      'bookPages': book.id,
+                                      'bookPages': book.bookPages,
                                     },
                                     {
                                       'bookDescription': book.bookDescription,
