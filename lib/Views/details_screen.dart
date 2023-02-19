@@ -503,14 +503,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ),
                 SizedBox(height: 5.h),
-                ctrl.featuredList.isNotEmpty
+                ctrl.popularList.isNotEmpty
                     ? SizedBox(
                         height: 0.3.sh,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: ctrl.featuredList.length,
+                          itemCount: ctrl.popularList.length,
                           itemBuilder: (context, index) {
-                            Ebook book = ctrl.featuredList.value[index];
+                            Ebook book = ctrl.popularList.value[index];
                             return GestureDetector(
                               onTap: () {
                                 Get.back();

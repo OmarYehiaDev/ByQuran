@@ -17,6 +17,7 @@ class BookController extends GetxController {
   final prefs = Get.find<SharedPreferences>();
 
   var featuredList = <Ebook>[].obs;
+  var popularList = <Ebook>[].obs;
   var downloadedList = Set<Ebook>().obs;
   var bookList = <Ebook>[].obs;
   var latestBook = <Ebook>[].obs;
@@ -33,6 +34,7 @@ class BookController extends GetxController {
     getCats();
     getBookmarks();
     getFeatured();
+    getPopular();
     getDownloaded();
     super.onInit();
   }
@@ -241,6 +243,19 @@ class BookController extends GetxController {
     try {
       var ebooks = await DataServices.getFeaturedEbooks();
       featuredList.value = ebooks!.toList();
+    } catch (e) {
+      log('Error while getting data is $e');
+      // print('Error while getting data is $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> getPopular() async {
+    isLoading(true);
+    try {
+      var ebooks = await DataServices.getPopularEbooks();
+      popularList.value = ebooks!.toList();
     } catch (e) {
       log('Error while getting data is $e');
       // print('Error while getting data is $e');

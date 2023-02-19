@@ -55,6 +55,25 @@ class DataServices {
     }
   }
 
+  static Future<List<Ebook>?> getPopularEbooks() async {
+    String url = baseUrl + home;
+    final response = await http.get(Uri.parse(url), headers: {
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+      // 'Content-Type': 'application/json'
+      // headers: {'app-id': '6218809df11d1d412af5bac4'}
+    });
+    if (response.statusCode == 200) {
+      ///data successfully
+      return fromJsonPopularAPI(
+        json.decode(response.body),
+      );
+    } else {
+      ///error
+      return null;
+    }
+  }
+
   static Future<List<Ebook>?> getEbooksFromCat(String id) async {
     String url = baseUrl + category + id;
     final response = await http.get(Uri.parse(url), headers: {
