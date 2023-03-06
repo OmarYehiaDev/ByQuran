@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -169,13 +170,28 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                               // width: 130.w,
                                               child: ClipRRect(
                                                 borderRadius: BorderRadius.circular(7.0),
-                                                child: Image.network(
-                                                  imagesUrl +
+                                                child: CachedNetworkImage(
+                                                  imageUrl: imagesUrl +
                                                       bookController.bookMarks
                                                           .toList()[index]
                                                           .bookCoverImg,
                                                   fit: BoxFit.fill,
+                                                  progressIndicatorBuilder:
+                                                      (context, url, downloadProgress) =>
+                                                          CircularProgressIndicator(
+                                                    value: downloadProgress.progress,
+                                                    color: mainColor,
+                                                  ),
+                                                  errorWidget: (context, url, error) =>
+                                                      Icon(Icons.error),
                                                 ),
+                                                // Image.network(
+                                                //   imagesUrl +
+                                                //       bookController.bookMarks
+                                                //           .toList()[index]
+                                                //           .bookCoverImg,
+                                                //   fit: BoxFit.fill,
+                                                // ),
                                               ),
                                             ),
                                           ),

@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -167,10 +168,22 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                         // width: 130.w,
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.circular(7.0),
-                                          child: Image.network(
-                                            imagesUrl + bookSet.toList()[index].bookCoverImg,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                imagesUrl + bookSet.toList()[index].bookCoverImg,
                                             fit: BoxFit.fill,
+                                            progressIndicatorBuilder:
+                                                (context, url, downloadProgress) =>
+                                                    CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: mainColor,
+                                            ),
+                                            errorWidget: (context, url, error) => Icon(Icons.error),
                                           ),
+                                          // Image.network(
+                                          //   imagesUrl + bookSet.toList()[index].bookCoverImg,
+                                          //   fit: BoxFit.fill,
+                                          // ),
                                         ),
                                       ),
                                     ),

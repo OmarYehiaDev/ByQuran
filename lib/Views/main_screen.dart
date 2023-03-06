@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -422,10 +423,20 @@ class _MainScreenState extends State<MainScreen> {
                                 // Navigator.of(context).push(_createRoute());
                               },
                               child: Center(
-                                child: Image.network(
-                                  imagesUrl + book.bookCoverImg,
+                                child: CachedNetworkImage(
+                                  imageUrl: imagesUrl + book.bookCoverImg,
                                   fit: BoxFit.fill,
+                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                      CircularProgressIndicator(
+                                    value: downloadProgress.progress,
+                                    color: mainColor,
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
                                 ),
+                                // Image.network(
+                                //   imagesUrl + book.bookCoverImg,
+                                //   fit: BoxFit.fill,
+                                // ),
                               ),
                             );
                           },
@@ -526,10 +537,20 @@ class _MainScreenState extends State<MainScreen> {
                     child: Column(
                       children: [
                         Expanded(
-                          child: Image.network(
-                            imagesUrl + bookController.latestBook[index].bookCoverImg,
+                          child: CachedNetworkImage(
+                            imageUrl: imagesUrl + bookController.latestBook[index].bookCoverImg,
                             fit: BoxFit.contain,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                              color: mainColor,
+                            ),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
                           ),
+                          // Image.network(
+                          //   imagesUrl + bookController.latestBook[index].bookCoverImg,
+                          //   fit: BoxFit.contain,
+                          // ),
                         ),
                         Text(
                           bookController.latestBook[index].bookTitle.split(" ").length > 4

@@ -9,6 +9,7 @@ import 'package:welivewithquran/Models/category.dart';
 import 'package:welivewithquran/models/ebook_org.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 import 'package:welivewithquran/custom_widgets/custom_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CategoryScreen extends StatelessWidget {
   final Category cat;
@@ -144,10 +145,23 @@ class CategoryScreen extends StatelessWidget {
                                               // width: 130.w,
                                               child: ClipRRect(
                                                 borderRadius: BorderRadius.circular(7.0),
-                                                child: Image.network(
-                                                  imagesUrl + bookList[index].bookCoverImg,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      imagesUrl + bookList[index].bookCoverImg,
                                                   fit: BoxFit.fill,
+                                                  progressIndicatorBuilder:
+                                                      (context, url, downloadProgress) =>
+                                                          CircularProgressIndicator(
+                                                    value: downloadProgress.progress,
+                                                    color: mainColor,
+                                                  ),
+                                                  errorWidget: (context, url, error) =>
+                                                      Icon(Icons.error),
                                                 ),
+                                                // Image.network(
+                                                //   imagesUrl + bookList[index].bookCoverImg,
+                                                //   fit: BoxFit.fill,
+                                                // ),
                                               ),
                                             ),
                                           ),

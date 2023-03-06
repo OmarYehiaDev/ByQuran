@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -285,11 +286,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(7.0),
-                              child: Image.network(
-                                imagesUrl + argumentData[2]['bookCover'].toString(),
-                                width: 0.525.sw,
+                              child: CachedNetworkImage(
+                                imageUrl: imagesUrl + argumentData[2]['bookCover'].toString(),
                                 fit: BoxFit.contain,
+                                width: 0.525.sw,
+                                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  color: mainColor,
+                                ),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
                               ),
+                              // Image.network(
+                              // imagesUrl + argumentData[2]['bookCover'].toString(),
+                              //   width: 0.525.sw,
+                              //   fit: BoxFit.contain,
+                              // ),
                             ),
                           ),
                           Column(
@@ -562,10 +574,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 child: Column(
                                   children: [
                                     Expanded(
-                                      child: Image.network(
-                                        imagesUrl + book.bookCoverImg,
+                                      child: CachedNetworkImage(
+                                        imageUrl: imagesUrl + book.bookCoverImg,
                                         fit: BoxFit.contain,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          color: mainColor,
+                                        ),
+                                        errorWidget: (context, url, error) => Icon(Icons.error),
                                       ),
+                                      // Image.network(
+                                      //   imagesUrl + book.bookCoverImg,
+                                      //   fit: BoxFit.contain,
+                                      // ),
                                     ),
                                     Text(
                                       book.authorName,

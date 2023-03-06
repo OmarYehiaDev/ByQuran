@@ -44,7 +44,7 @@ dependencies:
   flutter_tts: ^3.6.3
 
   flutter_svg: ^0.23.0+1
-  cached_network_image: ^3.2.1
+  cached_network_image: ^3.2.3
 
 
   dio: ^4.0.6 #dio 4.0.6
