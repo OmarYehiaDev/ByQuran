@@ -291,9 +291,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 fit: BoxFit.contain,
                                 width: 0.525.sw,
                                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  color: mainColor,
+                                    Padding(
+                                  padding: const EdgeInsets.all(32.0).add(
+                                    EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                  ),
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      color: blueDarkColor,
+                                    ),
+                                  ),
                                 ),
                                 errorWidget: (context, url, error) => Icon(Icons.error),
                               ),
@@ -578,10 +587,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         imageUrl: imagesUrl + book.bookCoverImg,
                                         fit: BoxFit.contain,
                                         progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          color: mainColor,
+                                            (context, url, downloadProgress) => Padding(
+                                          padding: const EdgeInsets.all(32.0),
+                                          child: SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              color: blueDarkColor,
+                                            ),
+                                          ),
                                         ),
                                         errorWidget: (context, url, error) => Icon(Icons.error),
                                       ),

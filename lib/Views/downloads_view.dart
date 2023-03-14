@@ -173,10 +173,18 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                                                 imagesUrl + bookSet.toList()[index].bookCoverImg,
                                             fit: BoxFit.fill,
                                             progressIndicatorBuilder:
-                                                (context, url, downloadProgress) =>
-                                                    CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                              color: mainColor,
+                                                (context, url, downloadProgress) => Padding(
+                                              padding: const EdgeInsets.all(32.0).add(
+                                                EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                                              ),
+                                              child: SizedBox(
+                                                height: 50,
+                                                width: 50,
+                                                child: CircularProgressIndicator(
+                                                  value: downloadProgress.progress,
+                                                  color: blueDarkColor,
+                                                ),
+                                              ),
                                             ),
                                             errorWidget: (context, url, error) => Icon(Icons.error),
                                           ),

@@ -427,9 +427,13 @@ class _MainScreenState extends State<MainScreen> {
                                   imageUrl: imagesUrl + book.bookCoverImg,
                                   fit: BoxFit.fill,
                                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                      CircularProgressIndicator(
-                                    value: downloadProgress.progress,
-                                    color: mainColor,
+                                      SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      color: blueDarkColor,
+                                    ),
                                   ),
                                   errorWidget: (context, url, error) => Icon(Icons.error),
                                 ),
@@ -536,14 +540,24 @@ class _MainScreenState extends State<MainScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Column(
                       children: [
-                        Expanded(
+                        SizedBox(
+                          height: context.height * 0.2,
+                          width: context.width * 0.65,
                           child: CachedNetworkImage(
                             imageUrl: imagesUrl + bookController.latestBook[index].bookCoverImg,
                             fit: BoxFit.contain,
-                            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                              value: downloadProgress.progress,
-                              color: mainColor,
+                            progressIndicatorBuilder: (context, url, downloadProgress) => Padding(
+                              padding: const EdgeInsets.all(32.0).add(
+                                EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+                              ),
+                              child: SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                  color: blueDarkColor,
+                                ),
+                              ),
                             ),
                             errorWidget: (context, url, error) => Icon(Icons.error),
                           ),
@@ -562,10 +576,11 @@ class _MainScreenState extends State<MainScreen> {
                                   bookController.latestBook[index].bookTitle
                                       .split(" ")
                                       .getRange(
-                                          4,
-                                          bookController.latestBook[index].bookTitle
-                                              .split(" ")
-                                              .length)
+                                        4,
+                                        bookController.latestBook[index].bookTitle
+                                            .split(" ")
+                                            .length,
+                                      )
                                       .join(" ")
                               : bookController.latestBook[index].bookTitle,
                           style: TextStyle(
