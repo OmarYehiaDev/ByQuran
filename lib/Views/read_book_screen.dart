@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -392,7 +393,9 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                                 print(details.description);
                               },
                               onPageChanged: (details) async {
-                                log(details.newPageNumber.toString() + " " + _controller.pageNumber.toString());
+                                log(details.newPageNumber.toString() +
+                                    " " +
+                                    _controller.pageNumber.toString());
 
                                 // setState(() {
                                 //   currentPage = details.newPageNumber;
@@ -410,8 +413,10 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                               enableDoubleTapZooming: true,
                               controller: _controller,
                               onPageChanged: (details) async {
-                                log(details.newPageNumber.toString() + " " + _controller.pageNumber.toString());
-                                
+                                log(details.newPageNumber.toString() +
+                                    " " +
+                                    _controller.pageNumber.toString());
+
                                 // setState(() {
                                 //   currentPage = details.newPageNumber;
                                 // });
@@ -435,10 +440,13 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                               ? IconButton(
                                   onPressed: () async {
                                     log("SHARING");
-                                    await ctrl.share(
-                                      page ?? _controller.pageNumber,
-                                      book?.id ?? id!,
+                                    await Share.share(
+                                      "تدبر كتاب \"${argumentData[0]["title"]}\" :\n ${argumentData[0]["fileUrl"]}",
                                     );
+                                    // await ctrl.share(
+                                    //   page ?? _controller.pageNumber,
+                                    //   book?.id ?? id!,
+                                    // );
                                   },
                                   icon: Icon(Icons.share),
                                   color: (ThemeProvider.themeOf(context).id == "dark_theme")

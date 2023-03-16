@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -123,107 +124,137 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   children: [
                     SizedBox(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          CustomText(
-                            text: argumentData[1]["title"].toString().split(" ").length > 4
-                                ? argumentData[1]["title"]
-                                        .toString()
-                                        .split(" ")
-                                        .getRange(0, 4)
-                                        .join(" ") +
-                                    "\n" +
-                                    argumentData[1]["title"]
-                                        .toString()
-                                        .split(" ")
-                                        .getRange(4,
-                                            argumentData[1]["title"].toString().split(" ").length)
-                                        .join(" ")
-                                : argumentData[1]["title"].toString(),
-                            fontSize: 17.sp,
-                            color: (ThemeProvider.themeOf(context).id == "dark_theme")
-                                ? whiteColor
-                                : mainColor,
-                            alignment: TextAlign.center,
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: CustomText(
+                                    text: argumentData[1]["title"].toString().split(" ").length > 4
+                                        ? argumentData[1]["title"]
+                                                .toString()
+                                                .split(" ")
+                                                .getRange(0, 4)
+                                                .join(" ") +
+                                            "\n" +
+                                            argumentData[1]["title"]
+                                                .toString()
+                                                .split(" ")
+                                                .getRange(
+                                                    4,
+                                                    argumentData[1]["title"]
+                                                        .toString()
+                                                        .split(" ")
+                                                        .length)
+                                                .join(" ")
+                                        : argumentData[1]["title"].toString(),
+                                    fontSize: 17.sp,
+                                    color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                                        ? whiteColor
+                                        : mainColor,
+                                    alignment: TextAlign.center,
+                                  ),
+                                ),
+
+                                /// ------------------------------ Favorite Button ------------------------
+                                Obx(
+                                  () => IconButton(
+                                    onPressed: () async {
+                                      bool res = false;
+                                      if (isFromFavs) {
+                                        if (storage.read(
+                                                  ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .bookTitle +
+                                                      ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .id,
+                                                ) !=
+                                                null &&
+                                            storage.read(
+                                              ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .bookTitle +
+                                                  ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .id,
+                                            )) {
+                                          res = await ctrl.removeEbook(
+                                            ctrl.bookMarks.value
+                                                .singleWhere((e) => e.id == book.id)
+                                                .id,
+                                          );
+                                        } else {
+                                          res = await ctrl.addEbook(
+                                            ctrl.bookList.value
+                                                .singleWhere(
+                                                  (e) => e.id == book.id,
+                                                )
+                                                .id,
+                                          );
+                                        }
+                                      } else {
+                                        if (ctrl.bookList.value
+                                            .singleWhere((e) => e.id == book.id)
+                                            .inFavorites) {
+                                          res = await ctrl.removeEbook(
+                                            ctrl.bookList.value
+                                                .singleWhere((e) => e.id == book.id)
+                                                .id,
+                                          );
+                                        } else {
+                                          res = await ctrl.addEbook(
+                                            ctrl.bookList.value
+                                                .singleWhere(
+                                                  (e) => e.id == book.id,
+                                                )
+                                                .id,
+                                          );
+                                        }
+                                      }
+                                      res ? setState(() {}) : () {};
+                                    },
+                                    icon: Icon(Icons.favorite),
+                                    color: storage.read(
+                                                  ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .bookTitle +
+                                                      ctrl.bookList.value
+                                                          .singleWhere((e) => e.id == book.id)
+                                                          .id,
+                                                ) !=
+                                                null &&
+                                            storage.read(
+                                              ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .bookTitle +
+                                                  ctrl.bookList.value
+                                                      .singleWhere((e) => e.id == book.id)
+                                                      .id,
+                                            )
+                                        ? (ThemeProvider.themeOf(context).id == "dark_theme")
+                                            ? blueLightColor
+                                            : blueDarkColor
+                                        : Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
 
-                          /// ------------------------------ Favorite Button ------------------------
-                          Obx(
-                            () => IconButton(
-                              onPressed: () async {
-                                bool res = false;
-                                if (isFromFavs) {
-                                  if (storage.read(
-                                            ctrl.bookList.value
-                                                    .singleWhere((e) => e.id == book.id)
-                                                    .bookTitle +
-                                                ctrl.bookList.value
-                                                    .singleWhere((e) => e.id == book.id)
-                                                    .id,
-                                          ) !=
-                                          null &&
-                                      storage.read(
-                                        ctrl.bookList.value
-                                                .singleWhere((e) => e.id == book.id)
-                                                .bookTitle +
-                                            ctrl.bookList.value
-                                                .singleWhere((e) => e.id == book.id)
-                                                .id,
-                                      )) {
-                                    res = await ctrl.removeEbook(
-                                      ctrl.bookMarks.value.singleWhere((e) => e.id == book.id).id,
-                                    );
-                                  } else {
-                                    res = await ctrl.addEbook(
-                                      ctrl.bookList.value
-                                          .singleWhere(
-                                            (e) => e.id == book.id,
-                                          )
-                                          .id,
-                                    );
-                                  }
-                                } else {
-                                  if (ctrl.bookList.value
-                                      .singleWhere((e) => e.id == book.id)
-                                      .inFavorites) {
-                                    res = await ctrl.removeEbook(
-                                      ctrl.bookList.value.singleWhere((e) => e.id == book.id).id,
-                                    );
-                                  } else {
-                                    res = await ctrl.addEbook(
-                                      ctrl.bookList.value
-                                          .singleWhere(
-                                            (e) => e.id == book.id,
-                                          )
-                                          .id,
-                                    );
-                                  }
-                                }
-                                res ? setState(() {}) : () {};
-                              },
-                              icon: Icon(Icons.favorite),
-                              color: storage.read(
-                                            ctrl.bookList.value
-                                                    .singleWhere((e) => e.id == book.id)
-                                                    .bookTitle +
-                                                ctrl.bookList.value
-                                                    .singleWhere((e) => e.id == book.id)
-                                                    .id,
-                                          ) !=
-                                          null &&
-                                      storage.read(
-                                        ctrl.bookList.value
-                                                .singleWhere((e) => e.id == book.id)
-                                                .bookTitle +
-                                            ctrl.bookList.value
-                                                .singleWhere((e) => e.id == book.id)
-                                                .id,
-                                      )
-                                  ? (ThemeProvider.themeOf(context).id == "dark_theme")
-                                      ? blueLightColor
-                                      : blueDarkColor
-                                  : Colors.grey,
-                            ),
+                          /// --------------------- Share Button --------------------------
+                          IconButton(
+                            icon: Icon(Icons.share),
+                            onPressed: () async {
+                              await Share.share(
+                                "تدبر كتاب \"${argumentData[1]["title"]}\" :\n $fileUrl",
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -430,6 +461,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                   'book': argumentData[8]["book"],
                                                   'books': argumentData[9]["books"],
                                                   "isHorizontal": book.bookTitle.contains("جدول"),
+                                                  "fileUrl": fileUrl,
                                                 },
                                               ],
                                             );

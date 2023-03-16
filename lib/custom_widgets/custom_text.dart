@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:welivewithquran/zTools/colors.dart';
 
@@ -21,16 +22,26 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text(
-        text,
-        maxLines: maxLines,
-        textDirection: textDirection,
-        textAlign: alignment,
-        style: TextStyle(
-          fontSize: fontSize,
-          color: color,
-          fontWeight: fontWeight,
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        alignment: Alignment.center,
+        child: Center(
+          child: AutoSizeText(
+            text,
+            maxLines: maxLines,
+            textDirection: textDirection,
+            softWrap: true,
+            maxFontSize: 35,
+            minFontSize: 12,
+            wrapWords: true,
+            textAlign: alignment,
+            style: TextStyle(
+              fontSize: fontSize,
+              color: color,
+              fontWeight: fontWeight,
+            ),
+          ),
         ),
       ),
     );
