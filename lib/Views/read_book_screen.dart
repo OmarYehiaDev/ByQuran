@@ -440,9 +440,16 @@ class _ReadBookScreenState extends State<ReadBookScreen> with WidgetsBindingObse
                               ? IconButton(
                                   onPressed: () async {
                                     log("SHARING");
-                                    await Share.share(
-                                      "تدبر كتاب \"${argumentData[0]["title"]}\" :\n ${argumentData[0]["fileUrl"]}",
-                                    );
+                                    if (!widget.fromSearch) {
+                                      await Share.share(
+                                        "تدبر كتاب \"${argumentData[0]["title"]}\" :\n ${argumentData[0]["fileUrl"]}",
+                                      );
+                                    } else {
+                                      await Share.share(
+                                        "تدبر كتاب \"${argumentData[0]["title"]}\" :\n ${argumentData[0]['pdf']}",
+                                      );
+                                    }
+
                                     // await ctrl.share(
                                     //   page ?? _controller.pageNumber,
                                     //   book?.id ?? id!,

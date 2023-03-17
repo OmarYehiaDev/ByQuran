@@ -487,7 +487,7 @@ class _MainScreenState extends State<MainScreen> {
             horizontal: 8.0,
           ),
           child: SizedBox(
-            height: 0.275.sh,
+            height: 0.28.sh,
             child:
                 // Get Random eBook API
                 ListView.builder(
