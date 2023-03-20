@@ -36,7 +36,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       : whiteColor,
                   child: Center(
                     child: CustomText(
-                      text: "لا توجد سور مفضلة حتى الآن",
+                      text: "لا توجد سور مفضلة.",
                       fontSize: 26.sp,
                       color: (ThemeProvider.themeOf(context).id == "dark_theme")
                           ? blueLightColor
@@ -134,7 +134,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                     // Navigator.of(context).push(_createRoute());
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
+                                    padding: const EdgeInsets.all(3.0),
                                     child: SizedBox(
                                       height: 0.1.sh,
                                       child: Column(
@@ -180,7 +180,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                       (context, url, downloadProgress) => Padding(
                                                     padding: const EdgeInsets.all(32.0).add(
                                                       EdgeInsets.symmetric(
-                                                          horizontal: 32, vertical: 8),
+                                                        horizontal: 32,
+                                                        vertical: 8,
+                                                      ),
                                                     ),
                                                     child: SizedBox(
                                                       height: 50,

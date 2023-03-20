@@ -502,7 +502,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       child: Align(
                                         alignment: AlignmentDirectional.center,
                                         child: CustomText(
-                                          text: 'القراءة أونلاين',
+                                          text: 'قراءة بدون تحميل',
                                           fontSize: 18.sp,
                                           color: Colors.white,
                                         ),
@@ -540,7 +540,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       CustomText(
-                        text: 'اقرأ ايضا',
+                        text: 'اقرأ أيضًا',
                         fontSize: 18.sp,
                         color: (ThemeProvider.themeOf(context).id == "dark_theme")
                             ? whiteColor

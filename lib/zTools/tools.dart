@@ -1,16 +1,12 @@
-
-
-class BookTools{
-  static const appName= 'لنحيا بالقران';
-  static const bookHeight= 260;
-  static const bookWidth= 130;
+class BookTools {
+  static const appName = 'لنحيا بالقرآن';
+  static const bookHeight = 260;
+  static const bookWidth = 130;
 
   static String stripHtml(String text) {
     return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ' ');
   }
-
 }
-
 
 class Command {
   static final all = [email, browser1, browser2];

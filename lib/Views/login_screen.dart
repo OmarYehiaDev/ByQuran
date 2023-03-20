@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
             // SvgPicture.asset("assets/icons/appbar_icon.svg"),
           ],
           title: Text(
-            'لنحيا بالقران',
+            'لنحيا بالقرآن',
             style: TextStyle(
               fontSize: 24.sp,
               color: mainColor,

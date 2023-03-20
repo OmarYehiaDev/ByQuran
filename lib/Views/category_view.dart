@@ -45,11 +45,15 @@ class CategoryScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 70.h),
-            CustomText(
-              text: cat.categoryName,
-              fontSize: 38.sp,
-              color:
-                  (ThemeProvider.themeOf(context).id == "dark_theme") ? blueLightColor : mainColor,
+            Center(
+              child: CustomText(
+                text: cat.categoryName,
+                fontSize: 32.sp,
+                color: (ThemeProvider.themeOf(context).id == "dark_theme")
+                    ? blueLightColor
+                    : mainColor,
+                alignment: TextAlign.center,
+              ),
             ),
             FutureBuilder<List<Ebook>?>(
               future: DataServices.getEbooksFromCat(cat.cid),
@@ -153,7 +157,9 @@ class CategoryScreen extends StatelessWidget {
                                                       (context, url, downloadProgress) => Padding(
                                                     padding: const EdgeInsets.all(32.0).add(
                                                       EdgeInsets.symmetric(
-                                                          horizontal: 32, vertical: 8),
+                                                        horizontal: 32,
+                                                        vertical: 8,
+                                                      ),
                                                     ),
                                                     child: SizedBox(
                                                       height: 50,

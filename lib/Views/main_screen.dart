@@ -103,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
                               ),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: 'أبحث هنا',
+                                hintText: 'ابحث هنا',
                                 hintStyle: TextStyle(
                                   fontSize: 16.sp,
                                   color: (ThemeProvider.themeOf(context).id == "dark_theme")
@@ -370,6 +370,7 @@ class _MainScreenState extends State<MainScreen> {
                                 currentPage = page;
                               });
                             },
+                            reverse: true,
                             viewportFraction: .5,
                             autoPlay: true,
                             aspectRatio: 2.0,
@@ -602,7 +603,7 @@ class _MainScreenState extends State<MainScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 4),
           child: Text(
-            'الاقسام',
+            'الأقسام',
             style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
           ),
         ),

@@ -137,7 +137,7 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
                               // Navigator.of(context).push(_createRoute());
                             },
                             child: Padding(
-                              padding: const EdgeInsets.all(5.0),
+                              padding: const EdgeInsets.all(3.0),
                               child: SizedBox(
                                 height: 0.1.sh,
                                 child: Column(

@@ -93,10 +93,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   : Colors.transparent,
               toolbarHeight: 85.h,
               title: Text(
-                'لنحيا بالقران\nد.فاطمة بنت عمر نصيف',
+                'لنحيا بالقرآن\nد.فاطمة بنت عمر نصيف',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 15.sp,
                   color: (ThemeProvider.themeOf(context).id == "dark_theme")
                       ? blueBackgroundColor
                       : mainColor,
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'لنحيا بالقران',
+                              'لنحيا بالقرآن',
                               style: TextStyle(
                                 fontSize: 24.sp,
                                 color: (ThemeProvider.themeOf(context).id == "dark_theme")
@@ -185,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   },
                                 ),
                                 CustomText(
-                                  text: 'تفعيل الاشعارات',
+                                  text: 'تفعيل الإشعارات',
                                   color: blueColor,
                                   fontSize: 17.sp,
                                 )
@@ -286,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   // activeIcon: SvgPicture.asset('assets/icons/explore_colored.svg',
                 ),
                 const BottomNavigationBarItem(
-                  label: 'الاعدادات',
+                  label: 'الإعدادات',
                   icon: Icon(
                     Icons.settings,
                     color: Color(0xff305F71),
