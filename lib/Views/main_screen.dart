@@ -488,7 +488,7 @@ class _MainScreenState extends State<MainScreen> {
             horizontal: 8.0,
           ),
           child: SizedBox(
-            height: 0.28.sh,
+            height: 0.3.sh,
             child:
                 // Get Random eBook API
                 ListView.builder(
@@ -689,13 +689,14 @@ class _MainScreenState extends State<MainScreen> {
               width: 0.5.sw,
               padding: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: blueDarkColor,
+                color:
+                    (ThemeProvider.themeOf(context).id == "dark_theme") ? mainColor : blueDarkColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Center(
                 child: CustomText(
                   text: "مصحف مجمع الملك فهد",
-                  fontSize: 18.sp,
+                  fontSize: 16.sp,
                   color: Colors.white,
                 ),
               ),
