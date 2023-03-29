@@ -563,7 +563,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           scrollDirection: Axis.horizontal,
                           itemCount: ctrl.popularList.length,
                           itemBuilder: (context, index) {
-                            Ebook book = ctrl.popularList.value[index];
+                            Ebook _book = ctrl.popularList.value[index];
+                            if (_book.id == book.id) {
+                              return SizedBox();
+                            }
                             return GestureDetector(
                               onTap: () {
                                 Get.back();
@@ -571,31 +574,31 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   () => DetailsScreen(),
                                   arguments: [
                                     {
-                                      'id': book.id,
+                                      'id': _book.id,
                                     },
                                     {
-                                      'title': book.bookTitle,
+                                      'title': _book.bookTitle,
                                     },
                                     {
-                                      'bookCover': book.bookCoverImg,
+                                      'bookCover': _book.bookCoverImg,
                                     },
                                     {
-                                      'bookPages': book.bookPages,
+                                      'bookPages': _book.bookPages,
                                     },
                                     {
-                                      'bookDescription': book.bookDescription,
+                                      'bookDescription': _book.bookDescription,
                                     },
                                     {
-                                      'bookFile': book.bookFileUrl,
+                                      'bookFile': _book.bookFileUrl,
                                     },
                                     {
-                                      'authorName': book.authorName,
+                                      'authorName': _book.authorName,
                                     },
                                     {
-                                      'categoryName': book.categoryName,
+                                      'categoryName': _book.categoryName,
                                     },
                                     {
-                                      "book": book,
+                                      "book": _book,
                                     },
                                     {
                                       "books": ctrl,
@@ -604,7 +607,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       "condition": false,
                                     },
                                     {
-                                      'isHorizontal': book.bookTitle.contains("جدول"),
+                                      'isHorizontal': _book.bookTitle.contains("جدول"),
                                     },
                                   ],
                                 );
@@ -616,7 +619,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     Expanded(
                                       child: CachedNetworkImage(
-                                        imageUrl: imagesUrl + book.bookCoverImg,
+                                        imageUrl: imagesUrl + _book.bookCoverImg,
                                         fit: BoxFit.contain,
                                         progressIndicatorBuilder:
                                             (context, url, downloadProgress) => Padding(
@@ -638,21 +641,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       // ),
                                     ),
                                     Text(
-                                      book.authorName,
+                                      _book.authorName,
                                       style: TextStyle(
                                         color: blueColor,
                                         fontSize: 12.sp,
                                       ),
                                     ),
                                     Text(
-                                      book.bookTitle.split(" ").length > 4
-                                          ? book.bookTitle.split(" ").getRange(0, 4).join(" ") +
+                                      _book.bookTitle.split(" ").length > 4
+                                          ? _book.bookTitle.split(" ").getRange(0, 4).join(" ") +
                                               "\n" +
-                                              book.bookTitle
+                                              _book.bookTitle
                                                   .split(" ")
-                                                  .getRange(4, book.bookTitle.split(" ").length)
+                                                  .getRange(4, _book.bookTitle.split(" ").length)
                                                   .join(" ")
-                                          : book.bookTitle,
+                                          : _book.bookTitle,
                                       style: TextStyle(
                                         color: (ThemeProvider.themeOf(context).id == "dark_theme")
                                             ? whiteColor
