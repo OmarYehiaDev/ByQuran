@@ -697,8 +697,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<String> getFilePath(String url) async {
     String fileName = url.substring(url.lastIndexOf('/') + 1);
-    final dir = await getExternalStorageDirectory();
-    File file = File('${dir!.path}/$fileName');
+    final dir = await getApplicationDocumentsDirectory();
+    File file = File('${dir.path}/$fileName');
     return file.path;
   }
 
@@ -712,7 +712,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     try {
       var httpClient = HttpClient();
       String fileName = url.substring(url.lastIndexOf('/') + 1);
-      final dir = await getExternalStorageDirectory();
+      final dir = await getApplicationDocumentsDirectory();
       await Helper.getStoragePermission();
       setState(() {
         downloading = true;
@@ -728,7 +728,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           });
         },
       );
-      File file = File('${dir!.path}/$fileName');
+      File file = File('${dir.path}/$fileName');
       final finalFile = await file.writeAsBytes(bytes);
       // File finalFile = await zTools.downloadFile(url, fileName);
       setState(() {

@@ -49,8 +49,8 @@ class BookController extends GetxController {
 
   Future<List<Ebook>> _read() async {
     try {
-      final directory = await getExternalStorageDirectory();
-      final file = File('${directory!.path}/favs.txt');
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/favs.txt');
       String text = await file.readAsString();
       print(text);
       return fromJsonString(text);
@@ -135,8 +135,8 @@ class BookController extends GetxController {
   }
 
   Future<bool> _save(List<Ebook> books) async {
-    final directory = await getExternalStorageDirectory();
-    print(directory!.path);
+    final directory = await getApplicationDocumentsDirectory();
+    print(directory.path);
 
     final file = File('${directory.path}/favs.txt');
     final text = json.encode(
